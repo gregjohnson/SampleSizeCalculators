@@ -2,11 +2,87 @@
 
 <head>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
     <script type="text/javascript" src="calculator.js"></script>
+
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
 </head>
 
 <body>
-    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+    <!-- calculator type -->
+    <select id="calculator_type">
+        <option value="a" selected="selected">Calculator A</option>
+    </select>
+
+    <script>
+    $("#calculator_type").change(function ()
+    {
+        calculatorType = $("#calculator_type").val();
+        calculatorRefresh();
+    })
+    </script>
+
+    <br style="clear:both;" />
+    <br style="clear:both;" />
+
+    <!-- input: assumed prevalence p -->
+    <div style="width: 800px;">
+        <input type="text" id="calculator_input_p" style="border:0; font-weight:bold; float:right;" />
+        <div id="calculator_input_p_slider" style="float:right; width:60%;"></div>
+        <label style="float:right; padding-right:5px;" for="calculator_input_p">Assumed prevalence</label>
+
+        <script>
+            $(function() {
+                $("#calculator_input_p_slider").slider({
+                    value:0.10,
+                    min: 0.01,
+                    max: 0.30,
+                    step: 0.01,
+                    slide: function(event, ui) {
+                        $("#calculator_input_p").val(ui.value);
+                        calculatorInputP = parseFloat($("#calculator_input_p").val());
+                        calculatorRefresh();
+                    }
+                });
+
+                $("#calculator_input_p").val($("#calculator_input_p_slider").slider("value"));
+            });
+        </script>
+    </div>
+
+    <br style="clear:both;" />
+
+    <!-- input: second value (meaning depends on calculator mode) -->
+    <div style="width: 800px;">
+        <input type="text" id="calculator_second_input" style="border:0; font-weight:bold; float:right;" />
+        <div id="calculator_second_input_slider" style="float:right; width:60%;"></div>
+        <label style="float:right; padding-right:5px;" for="calculator_second_input">Confidence level</label>
+
+        <script>
+            $(function() {
+                $("#calculator_second_input_slider").slider({
+                    value:0.95,
+                    min: 0.80,
+                    max: 0.99,
+                    step: 0.01,
+                    slide: function(event, ui) {
+                        $("#calculator_second_input").val(ui.value);
+                        calculatorSecondInput = parseFloat($("#calculator_second_input").val());
+                        calculatorRefresh();
+                    }
+                });
+
+                $("#calculator_second_input").val($("#calculator_second_input_slider").slider("value"));
+            });
+        </script>
+    </div>
+
+    <!-- chart and table -->
+    <div style="height:300px;">
+        <div id="chart_div" style="float:left; width: 500px; height: 300px;"></div>
+        <div id="table_div" style="float:left; width: 300px; height: 200px; padding-top: 50px;"></div>
+    </div>
 </body>
 
 </html>
