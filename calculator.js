@@ -12,29 +12,42 @@ var calculatorInputP = 0.1;
 // second input
 var calculatorSecondInput = 0.95;
 
-// based on http://stackoverflow.com/questions/5259421/cumulative-distribution-function-in-javascript
-function normalCDF(to) 
+// from http://stackoverflow.com/questions/12556685/is-there-a-javascript-implementation-of-the-inverse-error-function-akin-to-matl
+function erfinv(x)
 {
-    var mean = 0.0;
-    var sigma = 1.0;
-
-    var z = (to-mean)/Math.sqrt(2*sigma*sigma);
-    var t = 1/(1+0.3275911*Math.abs(z));
-    var a1 =  0.254829592;
-    var a2 = -0.284496736;
-    var a3 =  1.421413741;
-    var a4 = -1.453152027;
-    var a5 =  1.061405429;
-    var erf = 1-(((((a5*t + a4)*t) + a3)*t + a2)*t + a1)*t*Math.exp(-z*z);
-
-    var sign = 1;
-
-    if(z < 0)
+    var z;
+    var a = 0.147;
+    var the_sign_of_x;
+    if(0 == x)
     {
-        sign = -1;
+        the_sign_of_x = 0;
+    }
+    else if(x > 0)
+    {
+        the_sign_of_x = 1;
+    }
+    else
+    {
+        the_sign_of_x = -1;
     }
 
-    return (1/2)*(1+sign*erf);
+    if(0 != x)
+    {
+        var ln_1minus_x_sqrd = Math.log(1-x*x);
+        var ln_1minusxx_by_a = ln_1minus_x_sqrd / a;
+        var ln_1minusxx_by_2 = ln_1minus_x_sqrd / 2;
+        var ln_etc_by2_plus2 = ln_1minusxx_by_2 + (2/(Math.PI * a));
+        var first_sqrt = Math.sqrt((ln_etc_by2_plus2*ln_etc_by2_plus2)-ln_1minusxx_by_a);
+        var second_sqrt = Math.sqrt(first_sqrt - ln_etc_by2_plus2);
+        z = second_sqrt * the_sign_of_x;
+    }
+    else
+    {
+        // x is zero
+        z = 0;
+    }
+
+    return z;
 }
 
 // converts labels and array data to Google Data Table
@@ -80,8 +93,12 @@ function drawChartAndTable(labels, x, y)
 function evaluateTypeA_n_vs_epsilon(epsilon)
 {
     // calculatorSecondInput => confidence level
-    var alpha = 1. - calculatorSecondInput;
-    var z = 1. / normalCDF(alpha*0.5)
+    var errorPercentile = 1. - calculatorSecondInput
+    var alpha = 1. - 0.5*errorPercentile;
+
+    // this is the inverse cumulative distribution function
+    var z = Math.sqrt(2.) * erfinv(2.*alpha - 1.)
+
     var n = (calculatorInputP*z*z - calculatorInputP*calculatorInputP*z*z) / (epsilon*epsilon);
 
     return Math.round(n);
