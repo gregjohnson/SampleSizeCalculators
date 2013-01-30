@@ -64,26 +64,26 @@
             </ul>
 
             <div id="tabs-1" class="calculatorFullWidth calculatorSubArea">
-                <!-- input: second value (meaning depends on calculator mode) -->
-                <input type="text" id="calculator_second_input" class="calculatorSliderInput" />
-                <div id="calculator_second_input_slider" class="calculatorSlider"></div>
-                <label for="calculator_second_input" class="calculatorSliderLabel calculatorTooltip" title="This is a description of confidence level. More words. More words. More words. More words. More words. More words. More words. More words. More words. More words.">Confidence level</label>
+                <!-- input: confidence level -->
+                <input type="text" id="calculatur_input_confidence_level" class="calculatorSliderInput" />
+                <div id="calculatur_input_confidence_level_slider" class="calculatorSlider"></div>
+                <label for="calculatur_input_confidence_level" class="calculatorSliderLabel calculatorTooltip" title="This is a description of confidence level. More words. More words. More words. More words. More words. More words. More words. More words. More words. More words.">Confidence level</label>
 
                 <script>
                     $(function() {
-                        $("#calculator_second_input_slider").slider({
+                        $("#calculatur_input_confidence_level_slider").slider({
                             value:95,
                             min: 80,
                             max: 99,
                             step: 1,
                             slide: function(event, ui) {
-                                $("#calculator_second_input").val(ui.value + "%");
-                                calculatorSecondInput = parseFloat($("#calculator_second_input").val());
+                                $("#calculatur_input_confidence_level").val(ui.value + "%");
+                                calculatorInputConfidenceLevel = parseFloat($("#calculatur_input_confidence_level").val());
                                 calculatorRefresh();
                             }
                         });
 
-                        $("#calculator_second_input").val($("#calculator_second_input_slider").slider("value") + "%");
+                        $("#calculatur_input_confidence_level").val($("#calculatur_input_confidence_level_slider").slider("value") + "%");
                     });
                 </script>
 

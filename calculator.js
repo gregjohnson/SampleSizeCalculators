@@ -7,11 +7,11 @@ google.setOnLoadCallback(onLoad);
 // calculator type
 var calculatorType = 'a';
 
-// input: assumed prevalence p
+// input: assumed prevalence p (%)
 var calculatorInputP = 10;
 
-// second input
-var calculatorSecondInput = 95;
+// input: confidence level (%)
+var calculatorInputConfidenceLevel = 95;
 
 // from http://stackoverflow.com/questions/12556685/is-there-a-javascript-implementation-of-the-inverse-error-function-akin-to-matl
 function erfinv(x)
@@ -133,7 +133,8 @@ function drawBigTable()
 
 function evaluateTypeA_n_vs_epsilon(epsilon)
 {
-    // calculatorSecondInput => confidence level
+    // this object contains parameter values
+
     var errorPercentile = 100. - this.confidenceLevel;
     var alpha = 1. - 0.5*errorPercentile/100.;
 
@@ -173,7 +174,7 @@ function calculatorRefresh()
 
         // use a parameters object to pass in any other input parameters to the evaluation function
         var parameters = new Object();
-        parameters.confidenceLevel = calculatorSecondInput;
+        parameters.confidenceLevel = calculatorInputConfidenceLevel;
         parameters.p = calculatorInputP;
 
         calculatorY = calculatorX.map(evaluateTypeA_n_vs_epsilon, parameters);
