@@ -1,0 +1,12 @@
+.calculatorTooltip { color:blue; }
+.calculatorTabsContainer { width:850px; }
+.calculatorFullWidth { width:800px; }
+.calculatorSubArea { margin:0px; padding:15px; border-style:dotted; border-width:1px; }
+.calculatorSliderInput { border:0; font-weight:bold; float:right; }
+.calculatorSlider { float:right; width:400px; }
+.calculatorSliderLabel { float:right; padding-right:5px; }
+.calculatorSmallChart { float:left; width: 480px; height:300px; }
+.calculatorSmallTable { float:left; width: 300px; }
+.calculatorBigTable { clear: both; float:left; width: 800px; height: 300px; }
+body { font-size:0.85em; } /* adjust jquery UI font sizes */
+.ui-widget{ font-size:1.0em !important; } /* adjust jquery UI font sizes */

@@ -1,16 +1,17 @@
 
 google.load("visualization", "1", {packages:["corechart", "table"]});
 
-google.setOnLoadCallback(calculatorRefresh);
+google.setOnLoadCallback(onLoad);
+
 
 // calculator type
 var calculatorType = 'a';
 
 // input: assumed prevalence p
-var calculatorInputP = 0.1;
+var calculatorInputP = 10;
 
 // second input
-var calculatorSecondInput = 0.95;
+var calculatorSecondInput = 95;
 
 // from http://stackoverflow.com/questions/12556685/is-there-a-javascript-implementation-of-the-inverse-error-function-akin-to-matl
 function erfinv(x)
@@ -76,9 +77,13 @@ function drawChartAndTable(labels, x, y)
 {
     var data = arraysToDataTable(labels, [x, y]);
 
+    // format first column as percentage
+    var formatter = new google.visualization.NumberFormat( {pattern: "#.##'%'"} );
+    formatter.format(data, 0);
+
     var options = {
         title: labels[1] + ' vs ' + labels[0],
-        hAxis : { title: labels[0] },
+        hAxis : { title: labels[0], format: "#.##'%'" },
         vAxis : { title: labels[1] },
         legend : { position: 'none' }
     };
@@ -90,16 +95,55 @@ function drawChartAndTable(labels, x, y)
     table.draw(data);
 }
 
+function drawBigTable()
+{
+    var epsilons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    var confidenceLevels = [95, 90, 85, 80, 75, 70];
+    var confidenceLevelsLabels = ['95%', '90%', '85%', '80%', '75%', '70%'];
+
+    var dataArrays = []
+
+    dataArrays[0] = epsilons;
+
+    for(var c=0; c<confidenceLevels.length; c++)
+    {
+        // use a parameters object to pass in any other input parameters to the evaluation function
+        var parameters = new Object();
+        parameters.confidenceLevel = confidenceLevels[c];
+        parameters.p = calculatorInputP;
+
+        dataArray = epsilons.map(evaluateTypeA_n_vs_epsilon, parameters);
+
+        dataArrays[c+1] = dataArray;
+    }
+
+    var columnLabels = ['Margin of Error / Confidence'].concat(confidenceLevelsLabels);
+
+    var data = arraysToDataTable(columnLabels, dataArrays);
+
+    // format first column as percentage
+    var formatter = new google.visualization.NumberFormat( {pattern: "#.##'%'"} );
+    formatter.format(data, 0);
+
+    $("#big_table_description_div").html("The table below is shown for an assumed prevalance of " + calculatorInputP + "%. More explanation text here. More explanation text here. More explanation text here. More explanation text here. More explanation text here.");
+
+    var table = new google.visualization.Table(document.getElementById('big_table_div'));
+    table.draw(data);
+}
+
 function evaluateTypeA_n_vs_epsilon(epsilon)
 {
     // calculatorSecondInput => confidence level
-    var errorPercentile = 1. - calculatorSecondInput
-    var alpha = 1. - 0.5*errorPercentile;
+    var errorPercentile = 100. - this.confidenceLevel;
+    var alpha = 1. - 0.5*errorPercentile/100.;
 
     // this is the inverse cumulative distribution function
     var z = Math.sqrt(2.) * erfinv(2.*alpha - 1.)
 
-    var n = (calculatorInputP*z*z - calculatorInputP*calculatorInputP*z*z) / (epsilon*epsilon);
+    var episilonDecimal = epsilon / 100.;
+    var calculatorInputPDecimal = this.p / 100.;
+
+    var n = (calculatorInputPDecimal*z*z - calculatorInputPDecimal*calculatorInputPDecimal*z*z) / (episilonDecimal*episilonDecimal);
 
     return Math.round(n);
 }
@@ -112,21 +156,29 @@ function calculatorRefresh()
 
     if(calculatorType == 'a')
     {
-        calculatorLabels = ['Error Interval', 'Number of Samples'];
+        calculatorLabels = ['Margin of Error', 'Target Number of Samples'];
 
         // range: epsilon
-        var min = 0.01;
-        var max = 0.10;
+        var min = 1;
+        var max = 10;
         var numValues = 91;
 
         for(var i=0; i<numValues; i++)
         {
             var value = min + i/(numValues-1)*(max-min);
 
-            calculatorX.push(Math.round(value*1000)/1000);
+            // round to the nearest 100th
+            calculatorX.push(Math.round(value*100)/100);
         }
 
-        calculatorY = calculatorX.map(evaluateTypeA_n_vs_epsilon);
+        // use a parameters object to pass in any other input parameters to the evaluation function
+        var parameters = new Object();
+        parameters.confidenceLevel = calculatorSecondInput;
+        parameters.p = calculatorInputP;
+
+        calculatorY = calculatorX.map(evaluateTypeA_n_vs_epsilon, parameters);
+
+        $("#chart_table_description_div").html("The chart and table below are shown for an assumed prevalance of " + parameters.p + "% and a confidence level of " + parameters.confidenceLevel + "%. More explanation text here. More explanation text here. More explanation text here. More explanation text here. More explanation text here.");
     }
     else
     {
@@ -135,4 +187,18 @@ function calculatorRefresh()
     }
 
     drawChartAndTable(calculatorLabels, calculatorX, calculatorY);
+
+    drawBigTable();
+}
+
+function onLoad()
+{
+    // create tooltips
+    $(document).tooltip();
+
+    // create tabs; trigger a refresh on activation so charts are correctly sized
+    $("#tabs").tabs({ activate: function(event, ui) { calculatorRefresh(); } });
+
+    // first refresh of calculator
+    calculatorRefresh();
 }
