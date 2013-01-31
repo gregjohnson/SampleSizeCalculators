@@ -1,17 +1,31 @@
 
+// load required google visualization packages
 google.load("visualization", "1", {packages:["corechart", "table"]});
 
+// set the on load callback
 google.setOnLoadCallback(onLoad);
 
+// calculator type A inputs: population, assumed prevalence p (%), confidence level (%)
+var calculatorTypeAInputs = {
+    population:1,
+    p:10,
+    confidenceLevel:95
+};
 
-// calculator type
-var calculatorType = 'a';
+// data
+var statePopulations = {
+        "texas": 26059203,
+        "oklahoma": 3814820
+    };
 
-// input: assumed prevalence p (%)
-var calculatorInputP = 10;
-
-// input: confidence level (%)
-var calculatorInputConfidenceLevel = 95;
+// return number with commas added
+// from: http://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
+function numberWithCommas(x)
+{
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+}
 
 // from http://stackoverflow.com/questions/12556685/is-there-a-javascript-implementation-of-the-inverse-error-function-akin-to-matl
 function erfinv(x)
@@ -72,9 +86,53 @@ function arraysToDataTable(labels, arrays)
     return google.visualization.arrayToDataTable(dataTableArray);
 }
 
-// draw chart and table given labels, x series, y series
-function drawChartAndTable(labels, x, y)
+function evaluateTypeA_n_vs_epsilon(epsilon)
 {
+    // this object contains parameter values
+
+    var errorPercentile = 100. - this.confidenceLevel;
+    var alpha = 1. - 0.5*errorPercentile/100.;
+
+    // this is the inverse cumulative distribution function
+    var z = Math.sqrt(2.) * erfinv(2.*alpha - 1.)
+
+    var episilonDecimal = epsilon / 100.;
+    var pDecimal = this.p / 100.;
+
+    var n = (pDecimal*z*z - pDecimal*pDecimal*z*z) / (episilonDecimal*episilonDecimal);
+
+    return Math.round(n);
+}
+
+// draw chart and table given labels, x series, y series
+function drawTypeAChartAndTable()
+{
+    var labels = ['Margin of Error', 'Target Number of Samples'];
+    var x = [];
+    var y;
+
+    // range: epsilon
+    var min = 1;
+    var max = 10;
+    var numValues = 91;
+
+    for(var i=0; i<numValues; i++)
+    {
+        var value = min + i/(numValues-1)*(max-min);
+
+        // round to the nearest 100th
+        x.push(Math.round(value*100)/100);
+    }
+
+    // use a parameters object to pass in any other input parameters to the evaluation function
+    var parameters = new Object();
+    parameters.population = calculatorTypeAInputs.population;
+    parameters.p = calculatorTypeAInputs.p;
+    parameters.confidenceLevel = calculatorTypeAInputs.confidenceLevel;
+
+    // evaluation for each x
+    y = x.map(evaluateTypeA_n_vs_epsilon, parameters);
+
     var data = arraysToDataTable(labels, [x, y]);
 
     // format first column as percentage
@@ -82,20 +140,22 @@ function drawChartAndTable(labels, x, y)
     formatter.format(data, 0);
 
     var options = {
-        title: labels[1] + ' vs ' + labels[0],
+        title: 'Target Number of Samples',
         hAxis : { title: labels[0], format: "#.##'%'" },
         vAxis : { title: labels[1] },
         legend : { position: 'none' }
     };
 
-    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+    $("#calculatorA_chart_table_description_div").html("The chart and table below are shown for a population of " + numberWithCommas(parameters.population) + ", assumed prevalance of " + parameters.p + "% and a confidence level of " + parameters.confidenceLevel + "%. More explanation text here. More explanation text here. More explanation text here. More explanation text here. More explanation text here.");
+
+    var chart = new google.visualization.LineChart(document.getElementById('calculatorA_chart_div'));
     chart.draw(data, options);
 
-    var table = new google.visualization.Table(document.getElementById('table_div'));
+    var table = new google.visualization.Table(document.getElementById('calculatorA_table_div'));
     table.draw(data);
 }
 
-function drawBigTable()
+function drawTypeABigTable()
 {
     var epsilons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     var confidenceLevels = [95, 90, 85, 80, 75, 70];
@@ -109,8 +169,9 @@ function drawBigTable()
     {
         // use a parameters object to pass in any other input parameters to the evaluation function
         var parameters = new Object();
+        parameters.population = calculatorTypeAInputs.population;
+        parameters.p = calculatorTypeAInputs.p;
         parameters.confidenceLevel = confidenceLevels[c];
-        parameters.p = calculatorInputP;
 
         dataArray = epsilons.map(evaluateTypeA_n_vs_epsilon, parameters);
 
@@ -125,81 +186,103 @@ function drawBigTable()
     var formatter = new google.visualization.NumberFormat( {pattern: "#.##'%'"} );
     formatter.format(data, 0);
 
-    $("#big_table_description_div").html("The table below is shown for an assumed prevalance of " + calculatorInputP + "%. More explanation text here. More explanation text here. More explanation text here. More explanation text here. More explanation text here.");
+    $("#calculatorA_big_table_description_div").html("The table below is shown for a population of " + numberWithCommas(calculatorTypeAInputs.population) + " and assumed prevalance of " + calculatorTypeAInputs.p + "%. More explanation text here. More explanation text here. More explanation text here. More explanation text here. More explanation text here.");
 
-    var table = new google.visualization.Table(document.getElementById('big_table_div'));
+    var table = new google.visualization.Table(document.getElementById('calculatorA_big_table_div'));
     table.draw(data);
 }
 
-function evaluateTypeA_n_vs_epsilon(epsilon)
+function calculatorTypeAInitialize()
 {
-    // this object contains parameter values
+    // initialize UI elements and events
 
-    var errorPercentile = 100. - this.confidenceLevel;
-    var alpha = 1. - 0.5*errorPercentile/100.;
+    // population selection
+    $("#calculatorA_select_population, #calculatorA_input_population").change(function() {
+        // selected state and population for that state
+        var state = $("#calculatorA_select_population :selected").val();
+        var population = 0;
 
-    // this is the inverse cumulative distribution function
-    var z = Math.sqrt(2.) * erfinv(2.*alpha - 1.)
-
-    var episilonDecimal = epsilon / 100.;
-    var calculatorInputPDecimal = this.p / 100.;
-
-    var n = (calculatorInputPDecimal*z*z - calculatorInputPDecimal*calculatorInputPDecimal*z*z) / (episilonDecimal*episilonDecimal);
-
-    return Math.round(n);
-}
-
-function calculatorRefresh()
-{
-    var calculatorLabels;
-    var calculatorX = [];
-    var calculatorY;
-
-    if(calculatorType == 'a')
-    {
-        calculatorLabels = ['Margin of Error', 'Target Number of Samples'];
-
-        // range: epsilon
-        var min = 1;
-        var max = 10;
-        var numValues = 91;
-
-        for(var i=0; i<numValues; i++)
+        if(state == "other")
         {
-            var value = min + i/(numValues-1)*(max-min);
+            // hide number label and show number input
+            $("#calculatorA_select_population_number_label").hide();
+            $("#calculatorA_input_population").show();
 
-            // round to the nearest 100th
-            calculatorX.push(Math.round(value*100)/100);
+            population = $("#calculatorA_input_population").val();
+        }
+        else
+        {
+            // show number label and hide number input
+            $("#calculatorA_select_population_number_label").show();
+            $("#calculatorA_input_population").hide();
+
+            population = statePopulations[state];
+
+            // update the number label
+            $("#calculatorA_select_population_number_label").html(numberWithCommas(population));
         }
 
-        // use a parameters object to pass in any other input parameters to the evaluation function
-        var parameters = new Object();
-        parameters.confidenceLevel = calculatorInputConfidenceLevel;
-        parameters.p = calculatorInputP;
+        // save the value
+        calculatorTypeAInputs.population = population;
 
-        calculatorY = calculatorX.map(evaluateTypeA_n_vs_epsilon, parameters);
+        // refresh
+        calculatorTypeARefresh();
+    });
 
-        $("#chart_table_description_div").html("The chart and table below are shown for an assumed prevalance of " + parameters.p + "% and a confidence level of " + parameters.confidenceLevel + "%. More explanation text here. More explanation text here. More explanation text here. More explanation text here. More explanation text here.");
-    }
-    else
-    {
-        alert("unknown calculator type");
-        return;
-    }
+    // force an initial update event (since we have no current value for population)
+    $("#calculatorA_select_population").change();
 
-    drawChartAndTable(calculatorLabels, calculatorX, calculatorY);
 
-    drawBigTable();
+    // assumed prevalence slider
+    $("#calculatorA_input_p_slider").slider({
+        value:calculatorTypeAInputs.p,
+        min: 1,
+        max: 30,
+        step: 1,
+        slide: function(event, ui) {
+            $("#calculatorA_input_p").val(ui.value + "%");
+            calculatorTypeAInputs.p = parseFloat($("#calculatorA_input_p").val());
+            calculatorTypeARefresh();
+        }
+    });
+
+    $("#calculatorA_input_p").val($("#calculatorA_input_p_slider").slider("value") + "%");
+
+
+    // confidence level slider
+    $("#calculatorA_input_confidence_level_slider").slider({
+        value:calculatorTypeAInputs.confidenceLevel,
+        min: 80,
+        max: 99,
+        step: 1,
+        slide: function(event, ui) {
+            $("#calculatorA_input_confidence_level").val(ui.value + "%");
+            calculatorTypeAInputs.confidenceLevel = parseFloat($("#calculatorA_input_confidence_level").val());
+            calculatorTypeARefresh();
+        }
+    });
+
+    $("#calculatorA_input_confidence_level").val($("#calculatorA_input_confidence_level_slider").slider("value") + "%");
+}
+
+function calculatorTypeARefresh()
+{
+    drawTypeAChartAndTable();
+    drawTypeABigTable();
 }
 
 function onLoad()
 {
+    // create accordion
+    $("#calculator_accordion").accordion({ heightStyle: "content" });
+
+    // create calculator A tabs; trigger a refresh on activation so charts are correctly sized
+    $("#calculatorA_tabs").tabs({ activate: function(event, ui) { calculatorTypeARefresh(); } });
+
     // create tooltips
     $(document).tooltip();
 
-    // create tabs; trigger a refresh on activation so charts are correctly sized
-    $("#tabs").tabs({ activate: function(event, ui) { calculatorRefresh(); } });
-
-    // first refresh of calculator
-    calculatorRefresh();
+    // initialize and refresh calculator A
+    calculatorTypeAInitialize();
+    calculatorTypeARefresh();
 }

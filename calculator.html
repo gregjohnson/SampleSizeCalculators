@@ -11,102 +11,84 @@
 </head>
 
 <body>
-    <div class="ui-widget calculatorFullWidth"> <!-- div containing the entire calculator -->
+    <div class="ui-widget"> <!-- div containing the entire calculator -->
 
-        <!-- calculator type -->
-        <select id="calculator_type">
-            <option value="a" selected="selected">Calculator A</option>
-        </select>
+        <div id="calculator_accordion" class="calculatorAccordionContainer">
 
-        <script>
-        $("#calculator_type").change(function ()
-        {
-            calculatorType = $("#calculator_type").val();
-            calculatorRefresh();
-        })
-        </script>
+            <!-- Calculator A -->
+            <h3>Calculator A</h3>
+            <div>
+                <!-- input: population -->
+                <div class="calculatorInputArea">
+                    <label for="calculatorA_select_population" class="calculatorLabel calculatorTooltip" title="This is a description of population. More words. More words. More words. More words. More words. More words. More words. More words. More words. More words.">Population</label>
+                    <select id="calculatorA_select_population" class="calculatorSelect">
+                        <option value="texas">Texas</option>
+                        <option value="oklahoma">Oklahoma</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <span id="calculatorA_select_population_number_label" class="calculatorSelectNumberLabel"> </span>
+                    <input id="calculatorA_input_population" type="number" class="calculatorSelectInput" style="display:none;" value="1000000" />
+                </div>
 
-        <br style="clear:both;" />
-        <br style="clear:both;" />
-
-        <!-- input: assumed prevalence p -->
-        <div class="calculatorFullWidth">
-            <input type="text" id="calculator_input_p" class="calculatorSliderInput" />
-            <div id="calculator_input_p_slider" class="calculatorSlider"></div>
-            <label for="calculator_input_p" class="calculatorSliderLabel calculatorTooltip" title="This is a description of assumed prevalence. More words. More words. More words. More words. More words. More words. More words. More words. More words. More words.">Assumed prevalence</label>
-
-            <script>
-                $(function() {
-                    $("#calculator_input_p_slider").slider({
-                        value:10,
-                        min: 1,
-                        max: 30,
-                        step: 1,
-                        slide: function(event, ui) {
-                            $("#calculator_input_p").val(ui.value + "%");
-                            calculatorInputP = parseFloat($("#calculator_input_p").val());
-                            calculatorRefresh();
-                        }
-                    });
-
-                    $("#calculator_input_p").val($("#calculator_input_p_slider").slider("value") + "%");
-                });
-            </script>
-        </div>
-
-        <br style="clear:both;" />
-        <br style="clear:both;" />
-
-        <div id="tabs" class="calculatorTabsContainer">
-            <ul>
-                <li><a href="#tabs-1">Distribution View</a></li>
-                <li><a href="#tabs-2">Table View</a></li>
-            </ul>
-
-            <div id="tabs-1" class="calculatorFullWidth calculatorSubArea">
-                <!-- input: confidence level -->
-                <input type="text" id="calculatur_input_confidence_level" class="calculatorSliderInput" />
-                <div id="calculatur_input_confidence_level_slider" class="calculatorSlider"></div>
-                <label for="calculatur_input_confidence_level" class="calculatorSliderLabel calculatorTooltip" title="This is a description of confidence level. More words. More words. More words. More words. More words. More words. More words. More words. More words. More words.">Confidence level</label>
-
-                <script>
-                    $(function() {
-                        $("#calculatur_input_confidence_level_slider").slider({
-                            value:95,
-                            min: 80,
-                            max: 99,
-                            step: 1,
-                            slide: function(event, ui) {
-                                $("#calculatur_input_confidence_level").val(ui.value + "%");
-                                calculatorInputConfidenceLevel = parseFloat($("#calculatur_input_confidence_level").val());
-                                calculatorRefresh();
-                            }
-                        });
-
-                        $("#calculatur_input_confidence_level").val($("#calculatur_input_confidence_level_slider").slider("value") + "%");
-                    });
-                </script>
+                <!-- input: assumed prevalence p -->
+                <div class="calculatorInputArea">
+                    <label for="calculatorA_input_p" class="calculatorLabel calculatorTooltip" title="This is a description of assumed prevalence. More words. More words. More words. More words. More words. More words. More words. More words. More words. More words.">Assumed prevalence</label>
+                    <div id="calculatorA_input_p_slider" class="calculatorSlider"></div>
+                    <input type="text" id="calculatorA_input_p" class="calculatorSliderInput" />
+                </div>
 
                 <br style="clear:both;" />
                 <br style="clear:both;" />
-                <div id="chart_table_description_div"> </div>
 
-                <!-- chart and table -->
-                <div id="chart_div" class="calculatorSmallChart"></div>
+                <div id="calculatorA_tabs" class="calculatorTabsContainer">
+                    <ul>
+                        <li><a href="#calculatorA_tabs-1">Distribution View</a></li>
+                        <li><a href="#calculatorA_tabs-2">Table View</a></li>
+                        <li><a href="#calculatorA_tabs-3">Given Sample Size</a></li>
+                    </ul>
 
-                <!-- the table ignores height specification in class so must specify it here -->
-                <div id="table_div" class="calculatorSmallTable" style="height:200px; padding-top:50px;"></div>
+                    <div id="calculatorA_tabs-1">
+                        <!-- input: confidence level -->
+                        <div class="calculatorInputArea">
+                            <label for="calculatorA_input_confidence_level" class="calculatorLabel calculatorTooltip" title="This is a description of confidence level. More words. More words. More words. More words. More words. More words. More words. More words. More words. More words.">Confidence level</label>
+                            <div id="calculatorA_input_confidence_level_slider" class="calculatorSlider"></div>
+                            <input type="text" id="calculatorA_input_confidence_level" class="calculatorSliderInput" />
+                        </div>
 
-                <br style="clear:both;" />
-            </div> <!-- end tabs-1 -->
+                        <br style="clear:both;" />
+                        <br style="clear:both;" />
+                        <div id="calculatorA_chart_table_description_div"> </div>
 
-            <div id="tabs-2" class="calculatorFullWidth calculatorSubArea">
-                <div id="big_table_description_div"> </div>
-                <br style="clear:both;" />
-                <div id="big_table_div" class="calculatorBigTable"> </div>
-                <br style="clear:both;"/>
-            </div> <!-- end tabs-2 -->
-        </div> <!-- end tabs -->
+                        <!-- chart and table -->
+                        <div id="calculatorA_chart_div" class="calculatorSmallChart"></div>
+
+                        <!-- the table ignores height specification in class so must specify it here -->
+                        <div id="calculatorA_table_div" class="calculatorSmallTable" style="height:200px; padding-top:50px;"></div>
+
+                        <br style="clear:both;" />
+                    </div> <!-- end tabs-1 -->
+
+                    <div id="calculatorA_tabs-2">
+                        <div id="calculatorA_big_table_description_div"> </div>
+                        <br style="clear:both;" />
+                        <div id="calculatorA_big_table_div" class="calculatorBigTable"> </div>
+                        <br style="clear:both;"/>
+                    </div> <!-- end tabs-2 -->
+
+                    <div id="calculatorA_tabs-3">
+                        The third section of Calculator A. Given a sample size, ...
+                    </div> <!-- end tabs-3 -->
+                </div> <!-- end tabs -->
+            </div> <!-- end Calculator A -->
+
+            <!-- Calculator B -->
+            <h3>Calculator B</h3>
+            <div> </div>
+
+            <!-- Calculator C -->
+            <h3>Calculator C</h3>
+            <div> </div>
+        </div> <!-- end accordion -->
     </div> <!-- end div containing the entire calculator -->
 
 </body>
