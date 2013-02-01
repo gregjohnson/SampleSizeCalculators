@@ -14,8 +14,52 @@ var calculatorTypeAInputs = {
 
 // data
 var statePopulations = {
-        "texas": 26059203,
-        "oklahoma": 3814820
+        "Alabama": 4822023,
+        "Alaska": 731449,
+        "Arizona": 6553255,
+        "Arkansas": 2949131,
+        "California": 38041430,
+        "Colorado": 5187582,
+        "Connecticut": 3590347,
+        "Delaware": 917092,
+        "District Of Columbia": 632323,
+        "Florida": 19317568,
+        "Georgia": 9919945,
+        "Hawaii": 1392313,
+        "Idaho": 1595728,
+        "Illinois": 12875255,
+        "Indiana": 6537334,
+        "Iowa": 3074186,
+        "Kansas": 2885905,
+        "Kentucky": 4380415,
+        "Louisiana": 4601893,
+        "Maine": 1329192,
+        "Maryland": 5884563,
+        "Massachusetts": 6646144,
+        "Michigan": 9883360,
+        "Minnesota": 5379139,
+        "Mississippi": 2984926,
+        "Missouri": 6021988,
+        "Montana": 1005141,
+        "Nebraska": 1855525,
+        "Nevada": 2758931,
+        "New Hampshire": 1320718,
+        "New Jersey": 8864590,
+        "New Mexico": 2085538,
+        "New York": 19570261,
+        "North Carolina": 9752073,
+        "North Dakota": 699628,
+        "Ohio": 11544225,
+        "Oklahoma": 3814820,
+        "Oregon": 3899353,
+        "Pennsylvania": 12763536,
+        "Rhode Island": 1050292,
+        "South Carolina": 4723723,
+        "South Dakota": 833354,
+        "Tennessee": 6456243,
+        "Texas": 26059203,
+        "Utah": 2855287,
+        "Vermont": 626011
     };
 
 // return number with commas added
@@ -196,13 +240,22 @@ function calculatorTypeAInitialize()
 {
     // initialize UI elements and events
 
+    // population options
+    var populationOptions = $("#calculatorA_select_population");
+
+    $.each(statePopulations, function(key, value) {
+        populationOptions.append($("<option />").val(key).text(key));
+    });
+
+    populationOptions.append($("<option />").val("Other").text("Other"));
+
     // population selection
     $("#calculatorA_select_population, #calculatorA_input_population").change(function() {
         // selected state and population for that state
         var state = $("#calculatorA_select_population :selected").val();
         var population = 0;
 
-        if(state == "other")
+        if(state == "Other")
         {
             // hide number label and show number input
             $("#calculatorA_select_population_number_label").hide();
