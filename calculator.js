@@ -13,6 +13,8 @@ var calculatorTypeAInputs = {
 };
 
 // data
+var populationToILIFactor = 0.00084615;
+
 var statePopulations = {
         "Alabama": 4822023,
         "Alaska": 731449,
@@ -145,7 +147,11 @@ function evaluateTypeA_n_vs_epsilon(epsilon)
 
     var n = (pDecimal*z*z - pDecimal*pDecimal*z*z) / (episilonDecimal*episilonDecimal);
 
-    return Math.round(n);
+    // finite population correction
+    var populationILI = this.population * populationToILIFactor;
+    var nStar = (n * populationILI) / (n + populationILI - 1.);
+
+    return Math.round(nStar);
 }
 
 // draw chart and table given labels, x series, y series
