@@ -13,14 +13,21 @@
 <body>
     <div class="ui-widget"> <!-- div containing the entire calculator -->
 
+        <h3>Abbreviations</h3>
+        Ma : medically attended <br />
+        ILI+ : influenza-like-illness positive <br />
+        Flu+ : influenza positive <br />
+
+        <h3>Calculators</h3>
+
         <div id="calculator_accordion" class="calculatorAccordionContainer">
 
             <!-- Calculator A -->
-            <h3>Calculator A</h3>
+            <h3>Samples required to measure Flu+ / Ma-ILI+</h3>
             <div>
                 <!-- input: population; select options populated in javascript -->
                 <div class="calculatorInputArea">
-                    <label for="calculatorA_select_population" class="calculatorLabel calculatorTooltip" title="This is a description of population. More words. More words. More words. More words. More words. More words. More words. More words. More words. More words.">Population</label>
+                    <label for="calculatorA_select_population" class="calculatorLabel calculatorTooltip" title="The total population under consideration, including both the medically attended (Ma) and non-medically attended (non-Ma). The calculator does an internal conversion starting from this total population number to compute the expected medically attended population.">Total Population</label>
                     <select id="calculatorA_select_population" class="calculatorSelect"> </select>
                     <span id="calculatorA_select_population_number_label" class="calculatorSelectNumberLabel"> </span>
                     <input id="calculatorA_input_population" type="number" class="calculatorNumberInput" style="display:none;" value="1000000" />
@@ -28,7 +35,7 @@
 
                 <!-- input: assumed prevalence p -->
                 <div class="calculatorInputArea">
-                    <label for="calculatorA_input_p" class="calculatorLabel calculatorTooltip" title="This is a description of assumed prevalence. More words. More words. More words. More words. More words. More words. More words. More words. More words. More words.">Assumed prevalence</label>
+                    <label for="calculatorA_input_p" class="calculatorLabel calculatorTooltip" title="Expected fraction of flu positive (Flu+) over the medically attended influenza-like-illness positive (Ma-ILI+) patients, expressed as a percentage. This depends on the progression of the influenza season. For example, towards the beginning of the season, the fraction may be about 10%. Towards the height of the season, more ILI+ patients would be Flu+, and the fraction would be higher. The true fraction is likely different from this expectation, which is is used only as a baseline.">Expected Flu+ / Ma-ILI+</label>
                     <div id="calculatorA_input_p_slider" class="calculatorSlider"></div>
                     <input type="text" id="calculatorA_input_p" class="calculatorSliderInput" />
                 </div>
@@ -38,15 +45,15 @@
 
                 <div id="calculatorA_tabs" class="calculatorTabsContainer">
                     <ul>
-                        <li><a href="#calculatorA_tabs-1">Confidence Level Distribution</a></li>
-                        <li><a href="#calculatorA_tabs-2">Table View</a></li>
-                        <li><a href="#calculatorA_tabs-3">Sample Size Distribution</a></li>
+                        <li><a href="#calculatorA_tabs-1">Fixed Measurement Confidence</a></li>
+                        <li><a href="#calculatorA_tabs-2">Variable Measurement Interval / Confidence</a></li>
+                        <li><a href="#calculatorA_tabs-3">Fixed Number of Samples</a></li>
                     </ul>
 
                     <div id="calculatorA_tabs-1">
                         <!-- input: confidence level -->
                         <div class="calculatorInputArea">
-                            <label for="calculatorA_input_confidence_level" class="calculatorLabel calculatorTooltip" title="This is a description of confidence level. More words. More words. More words. More words. More words. More words. More words. More words. More words. More words.">Confidence level</label>
+                            <label for="calculatorA_input_confidence_level" class="calculatorLabel calculatorTooltip" title="The confidence we have in the measurement resulting from sampling. Sampling returns an interval: for example 10% plus or minus 2%--stated differently 8% to 12%. The measurement confidence describes the likelihood the true value lies within the interval. Intuitively, high confidence and small intervals require many samples, while low confidence or large intervals require a few samples.">Measurement confidence</label>
                             <div id="calculatorA_input_confidence_level_slider" class="calculatorSlider"></div>
                             <input type="text" id="calculatorA_input_confidence_level" class="calculatorSliderInput" />
                         </div>
@@ -74,7 +81,7 @@
                     <div id="calculatorA_tabs-3">
                         <!-- input: number of samples -->
                         <div class="calculatorInputArea">
-                            <label for="calculatorA_input_num_samples" class="calculatorLabel calculatorTooltip" title="This is a description of number of samples. More words. More words. More words. More words. More words. More words. More words. More words. More words. More words.">Number of Samples</label>
+                            <label for="calculatorA_input_num_samples" class="calculatorLabel calculatorTooltip" title="The number of samples collected from the medically attended influenza-like-illness population (Ma-ILI+).">Number of Samples</label>
                             <input id="calculatorA_input_num_samples" type="number" class="calculatorNumberInput" />
                         </div>
 

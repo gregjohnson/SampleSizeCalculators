@@ -16,6 +16,13 @@ var calculatorTypeAInputs = {
 // data
 var populationToILIFactor = 0.00084615;
 
+// note: check the HTML as well if you change these tooltips!
+var tooltipTargetNumberOfSamples = "The number of samples to collect from the medically attended influenza-like-illness population (Ma-ILI+) to achieve the desired measurement interval size, and measurement confidence.";
+
+var tooltipMeasurementInterval = "The size of the returned measurement interval. For example, if this value is 2%, and 5% of the collected samples are Flu+, then the measurement claims that the fraction of Flu+ / Ma-ILI+ is between 3% and 7%--stated differently the interval is 5% plus or minus 2%. Whether the true fraction is within the returned interval also depends on the measurement confidence. Intuitively, high confidence and small intervals require many samples, while low confidence or large intervals require a few samples.";
+
+var tooltipMeasurementConfidence = "The confidence we have in the measurement resulting from sampling. Sampling returns an interval: for example 10% plus or minus 2%--stated differently 8% to 12%. The measurement confidence describes the likelihood the true value lies within the interval. Intuitively, high confidence and small intervals require many samples, while low confidence or large intervals require a few samples.";
+
 var statePopulations = {
         "Alabama": 4822023,
         "Alaska": 731449,
@@ -232,7 +239,7 @@ function evaluateTypeA_epsilon_vs_ConfidenceLevel(confidenceLevel)
 // draw chart and table given labels, x series, y series
 function drawTypeAChartAndTable()
 {
-    var labels = ['Margin of Error', 'Target Number of Samples'];
+    var labels = ['Measurement Interval', 'Target Number of Samples'];
     var x = [];
     var y;
 
@@ -271,7 +278,7 @@ function drawTypeAChartAndTable()
         legend : { position: 'none' }
     };
 
-    $("#calculatorA_chart_table_description_div").html("The chart and table below are shown for a population of " + numberWithCommas(parameters.population) + ", assumed prevalance of " + parameters.p + "% and a confidence level of " + parameters.confidenceLevel + "%. More explanation text here. More explanation text here. More explanation text here. More explanation text here. More explanation text here.");
+    $("#calculatorA_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipMeasurementInterval + "'>Measurement interval</span> and <span class='calculatorTooltip' title='" + tooltipTargetNumberOfSamples + "'>target number of samples</span> for a fixed total population of " + numberWithCommas(parameters.population) + ", expected fraction of Flu+/Ma-ILI+ of " + parameters.p + "% and a measurement confidence of " + parameters.confidenceLevel + "%.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorA_chart_div'));
     chart.draw(data, options);
@@ -303,7 +310,7 @@ function drawTypeABigTable()
         dataArrays[c+1] = dataArray;
     }
 
-    var columnLabels = ['Margin of Error / Confidence'].concat(confidenceLevelsLabels);
+    var columnLabels = ['Measurement Interval / Confidence'].concat(confidenceLevelsLabels);
 
     var data = arraysToDataTable(columnLabels, dataArrays);
 
@@ -311,7 +318,7 @@ function drawTypeABigTable()
     var formatter = new google.visualization.NumberFormat( {pattern: "#.##'%'"} );
     formatter.format(data, 0);
 
-    $("#calculatorA_big_table_description_div").html("The table below is shown for a population of " + numberWithCommas(calculatorTypeAInputs.population) + " and assumed prevalance of " + calculatorTypeAInputs.p + "%. More explanation text here. More explanation text here. More explanation text here. More explanation text here. More explanation text here.");
+    $("#calculatorA_big_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTargetNumberOfSamples + "'>Target number of samples</span> for a fixed total population of " + numberWithCommas(calculatorTypeAInputs.population) + ", and expected fraction of Flu+/Ma-ILI+ of " + calculatorTypeAInputs.p + "%. The table describes the target number of samples, where the column specifies the <span class='calculatorTooltip' title='" + tooltipMeasurementConfidence + "'>measurement confidence</span> and the row specifies <span class='calculatorTooltip' title='" + tooltipMeasurementInterval + "'>measurement interval</span>.");
 
     var table = new google.visualization.Table(document.getElementById('calculatorA_big_table_div'));
     table.draw(data);
@@ -320,7 +327,7 @@ function drawTypeABigTable()
 // draw chart and table given labels, x series, y series
 function drawTypeAChartAndTable2()
 {
-    var labels = ['Confidence Level', 'Margin of Error'];
+    var labels = ['Measurement Confidence', 'Measurement Interval'];
     var x = [];
     var y;
 
@@ -356,13 +363,13 @@ function drawTypeAChartAndTable2()
     formatter.format(data, 1);
 
     var options = {
-        title: 'Margin of Error vs. Confidence Level',
+        title: 'Measurement Interval vs. Confidence',
         hAxis : { title: labels[0], format: "#.##'%'" },
         vAxis : { title: labels[1], format: "#.##'%'" },
         legend : { position: 'none' }
     };
 
-    $("#calculatorA_chart_table_2_description_div").html("The chart and table below are shown for a population of " + numberWithCommas(parameters.population) + ", assumed prevalance of " + parameters.p + "% and " + parameters.numSamples + " samples. More explanation text here. More explanation text here. More explanation text here. More explanation text here. More explanation text here.");
+    $("#calculatorA_chart_table_2_description_div").html("<span class='calculatorTooltip' title='" + tooltipMeasurementInterval + "'>Measurement interval</span> and <span class='calculatorTooltip' title='" + tooltipMeasurementConfidence + "'>measurement confidence</span> for a fixed total population of " + numberWithCommas(parameters.population) + ", expected fraction of Flu+/Ma-ILI+ of " + parameters.p + "% and a fixed number of " + parameters.numSamples + " samples.  The confidence and interval are involved in a trade-off -- higher confidence means a larger interval.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorA_chart_2_div'));
     chart.draw(data, options);
