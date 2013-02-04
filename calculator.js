@@ -9,7 +9,8 @@ google.setOnLoadCallback(onLoad);
 var calculatorTypeAInputs = {
     population:1,
     p:10,
-    confidenceLevel:95
+    confidenceLevel:95,
+    numSamples:100
 };
 
 // data
@@ -71,6 +72,36 @@ function numberWithCommas(x)
     var parts = x.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
+}
+
+// from http://stackoverflow.com/questions/457408/is-there-an-easily-available-implementation-of-erf-for-python
+function erf(x)
+{
+    // save the sign of x
+    var sign;
+    if(x >= 0)
+    {
+        sign = 1;
+    }
+    else
+    {
+        sign = -1;
+    }
+
+    x = Math.abs(x);
+
+    // constants
+    var a1 =  0.254829592;
+    var a2 = -0.284496736;
+    var a3 =  1.421413741;
+    var a4 = -1.453152027;
+    var a5 =  1.061405429;
+    var p  =  0.3275911;
+
+    // A&S formula 7.1.26
+    t = 1.0/(1.0 + p*x);
+    y = 1.0 - (((((a5*t + a4)*t) + a3)*t + a2)*t + a1)*t*Math.exp(-x*x);
+    return sign*y; // erf(-x) = -erf(x)
 }
 
 // from http://stackoverflow.com/questions/12556685/is-there-a-javascript-implementation-of-the-inverse-error-function-akin-to-matl
@@ -152,6 +183,50 @@ function evaluateTypeA_n_vs_epsilon(epsilon)
     var nStar = (n * populationILI) / (n + populationILI - 1.);
 
     return Math.round(nStar);
+}
+
+function evaluateTypeA_ConfidenceLevel_vs_epsilon(epsilon)
+{
+    // this object contains parameter values
+    var numSamplesStar = this.numSamples;
+    var p = this.p / 100.;
+
+    var epsilonDecimal = epsilon / 100.;
+
+    // finite population correction (inverse)
+    var populationILI = this.population * populationToILIFactor;
+
+    // equations not valid when we have more samples than our population
+    // return 100% confidence in this case
+    if(numSamplesStar >= populationILI)
+    {
+        return 100.;
+    }
+
+    var numSamples = numSamplesStar*(populationILI - 1.) / (populationILI - numSamplesStar);
+
+    return Math.round(100. * erf( Math.sqrt(numSamples*epsilonDecimal*epsilonDecimal/(2.*(p-p*p))) ));
+}
+
+function evaluateTypeA_epsilon_vs_ConfidenceLevel(confidenceLevel)
+{
+    // this object contains parameter values
+    var numSamplesStar = this.numSamples;
+    var p = this.p / 100.;
+
+    // finite population correction (inverse)
+    var populationILI = this.population * populationToILIFactor;
+
+    // equations not valid when we have more samples than our population
+    // return 0% margin of error in this case
+    if(numSamplesStar >= populationILI)
+    {
+        return 0.;
+    }
+
+    var numSamples = numSamplesStar*(populationILI - 1.) / (populationILI - numSamplesStar);
+
+    return 100. * Math.sqrt(2.*(p-p*p) / numSamples) * erfinv(confidenceLevel/100.);
 }
 
 // draw chart and table given labels, x series, y series
@@ -242,6 +317,60 @@ function drawTypeABigTable()
     table.draw(data);
 }
 
+// draw chart and table given labels, x series, y series
+function drawTypeAChartAndTable2()
+{
+    var labels = ['Confidence Level', 'Margin of Error'];
+    var x = [];
+    var y;
+
+    // use a parameters object to pass in any other input parameters to the evaluation function
+    var parameters = new Object();
+    parameters.population = calculatorTypeAInputs.population;
+    parameters.p = calculatorTypeAInputs.p;
+    parameters.numSamples = calculatorTypeAInputs.numSamples;
+
+    var min = 80;
+    var max = 99;
+    var numValues = 20;
+
+    for(var i=0; i<numValues; i++)
+    {
+        var value = min + i/(numValues-1)*(max-min);
+
+        // round to the nearest 100th
+        x.push(Math.round(value*100)/100);
+    }
+
+    // add 99.9%
+    x.push(99.9);
+
+    // evaluation for each x
+    y = x.map(evaluateTypeA_epsilon_vs_ConfidenceLevel, parameters);
+
+    var data = arraysToDataTable(labels, [x, y]);
+
+    // format first and second columns as percentage
+    var formatter = new google.visualization.NumberFormat( {pattern: "#.##'%'"} );
+    formatter.format(data, 0);
+    formatter.format(data, 1);
+
+    var options = {
+        title: 'Margin of Error vs. Confidence Level',
+        hAxis : { title: labels[0], format: "#.##'%'" },
+        vAxis : { title: labels[1], format: "#.##'%'" },
+        legend : { position: 'none' }
+    };
+
+    $("#calculatorA_chart_table_2_description_div").html("The chart and table below are shown for a population of " + numberWithCommas(parameters.population) + ", assumed prevalance of " + parameters.p + "% and " + parameters.numSamples + " samples. More explanation text here. More explanation text here. More explanation text here. More explanation text here. More explanation text here.");
+
+    var chart = new google.visualization.LineChart(document.getElementById('calculatorA_chart_2_div'));
+    chart.draw(data, options);
+
+    var table = new google.visualization.Table(document.getElementById('calculatorA_table_2_div'));
+    table.draw(data);
+}
+
 function calculatorTypeAInitialize()
 {
     // initialize UI elements and events
@@ -322,12 +451,22 @@ function calculatorTypeAInitialize()
     });
 
     $("#calculatorA_input_confidence_level").val($("#calculatorA_input_confidence_level_slider").slider("value") + "%");
+
+
+    // num samples input
+    $("#calculatorA_input_num_samples").change(function() {
+        calculatorTypeAInputs.numSamples = parseFloat($("#calculatorA_input_num_samples").val());
+        calculatorTypeARefresh();
+    });
+
+    $("#calculatorA_input_num_samples").val(calculatorTypeAInputs.numSamples);
 }
 
 function calculatorTypeARefresh()
 {
     drawTypeAChartAndTable();
     drawTypeABigTable();
+    drawTypeAChartAndTable2();
 }
 
 function onLoad()

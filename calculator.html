@@ -23,7 +23,7 @@
                     <label for="calculatorA_select_population" class="calculatorLabel calculatorTooltip" title="This is a description of population. More words. More words. More words. More words. More words. More words. More words. More words. More words. More words.">Population</label>
                     <select id="calculatorA_select_population" class="calculatorSelect"> </select>
                     <span id="calculatorA_select_population_number_label" class="calculatorSelectNumberLabel"> </span>
-                    <input id="calculatorA_input_population" type="number" class="calculatorSelectInput" style="display:none;" value="1000000" />
+                    <input id="calculatorA_input_population" type="number" class="calculatorNumberInput" style="display:none;" value="1000000" />
                 </div>
 
                 <!-- input: assumed prevalence p -->
@@ -38,9 +38,9 @@
 
                 <div id="calculatorA_tabs" class="calculatorTabsContainer">
                     <ul>
-                        <li><a href="#calculatorA_tabs-1">Distribution View</a></li>
+                        <li><a href="#calculatorA_tabs-1">Confidence Level Distribution</a></li>
                         <li><a href="#calculatorA_tabs-2">Table View</a></li>
-                        <li><a href="#calculatorA_tabs-3">Given Sample Size</a></li>
+                        <li><a href="#calculatorA_tabs-3">Sample Size Distribution</a></li>
                     </ul>
 
                     <div id="calculatorA_tabs-1">
@@ -72,7 +72,23 @@
                     </div> <!-- end tabs-2 -->
 
                     <div id="calculatorA_tabs-3">
-                        The third section of Calculator A. Given a sample size, ...
+                        <!-- input: number of samples -->
+                        <div class="calculatorInputArea">
+                            <label for="calculatorA_input_num_samples" class="calculatorLabel calculatorTooltip" title="This is a description of number of samples. More words. More words. More words. More words. More words. More words. More words. More words. More words. More words.">Number of Samples</label>
+                            <input id="calculatorA_input_num_samples" type="number" class="calculatorNumberInput" />
+                        </div>
+
+                        <br style="clear:both;" />
+                        <br style="clear:both;" />
+                        <div id="calculatorA_chart_table_2_description_div"> </div>
+
+                        <!-- chart and table -->
+                        <div id="calculatorA_chart_2_div" class="calculatorSmallChart"></div>
+
+                        <!-- the table ignores height specification in class so must specify it here -->
+                        <div id="calculatorA_table_2_div" class="calculatorSmallTable" style="height:200px; padding-top:50px;"></div>
+
+                        <br style="clear:both;" />
                     </div> <!-- end tabs-3 -->
                 </div> <!-- end tabs -->
             </div> <!-- end Calculator A -->
