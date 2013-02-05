@@ -11,5 +11,6 @@
 .calculatorSmallChart { float:left; width: 375px; height:300px; }
 .calculatorSmallTable { float:left; width: 225px; }
 .calculatorBigTable { clear: both; float:left; width: 600px; height: 300px; }
+.calculatorTextParameter { font-weight: bold; }
 body { font-size:0.8em; } /* adjust jquery UI font sizes */
 .ui-widget{ font-size:1.0em !important; } /* adjust jquery UI font sizes */
