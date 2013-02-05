@@ -271,13 +271,19 @@ function drawTypeAChartAndTable()
     // evaluation for each x
     y = x.map(evaluateTypeA_SampleSize_vs_epsilon, parameters);
 
-    var data = arraysToDataTable(labels, [x, y]);
+    // separate DataTable objects for chart / table to allow for formatting
+    var dataChart = arraysToDataTable(labels, [x, y]);
+    var dataTable = dataChart.clone();
 
-    // format first column as percentage
-    var formatter = new google.visualization.NumberFormat( {pattern: "#.##'%'"} );
-    formatter.format(data, 0);
+    // chart: format first column as percentage with prefix
+    var formatterChart = new google.visualization.NumberFormat( {pattern: "Margin of Error: #.##'%'"} );
+    formatterChart.format(dataChart, 0);
 
-    var options = {
+    // table: format first column as percentage
+    var formatterTable = new google.visualization.NumberFormat( {pattern: "#.##'%'"} );
+    formatterTable.format(dataTable, 0);
+
+    var optionsChart = {
         title: '',
         hAxis : { title: labels[0], format: "#.##'%'" },
         vAxis : { title: labels[1] },
@@ -287,10 +293,10 @@ function drawTypeAChartAndTable()
     $("#calculatorA_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipMinimumSampleSize + "'>Minimum sample size</span> needed to estimate the fraction of Flu+/MA-ILI+ with a specified <span class='calculatorTooltip' title='" + tooltipMarginOfError + "'>margin of error</span> and confidence level " + formatTextParameter(parameters.confidenceLevel + "%") + ". (This calculation assumes that the estimated level of Flu+/MA-ILI+ will be close to " + formatTextParameter(parameters.p + "%") + " and the total population under surveillance is " + formatTextParameter(numberWithCommas(parameters.population)) + "). Use your mouse to view values in the sample size graph and scroll through sample size table.")
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorA_chart_div'));
-    chart.draw(data, options);
+    chart.draw(dataChart, optionsChart);
 
     var table = new google.visualization.Table(document.getElementById('calculatorA_table_div'));
-    table.draw(data);
+    table.draw(dataTable);
 }
 
 function drawTypeABigTable()
@@ -361,14 +367,21 @@ function drawTypeAChartAndTable2()
     // evaluation for each x
     y = x.map(evaluateTypeA_epsilon_vs_ConfidenceLevel, parameters);
 
-    var data = arraysToDataTable(labels, [x, y]);
+    // separate DataTable objects for chart / table to allow for formatting
+    var dataChart = arraysToDataTable(labels, [x, y]);
+    var dataTable = dataChart.clone();
 
-    // format first and second columns as percentage
-    var formatter = new google.visualization.NumberFormat( {pattern: "#.##'%'"} );
-    formatter.format(data, 0);
-    formatter.format(data, 1);
+    // format columns of chart and table, using confidence level prefix as needed
+    var formatterConfidenceLevel = new google.visualization.NumberFormat( {pattern: "Confidence Level: #.##'%'"} );
+    var formatterPercentage = new google.visualization.NumberFormat( {pattern: "#.##'%'"} );
 
-    var options = {
+    formatterConfidenceLevel.format(dataChart, 0);
+    formatterPercentage.format(dataChart, 1);
+
+    formatterPercentage.format(dataTable, 0);
+    formatterPercentage.format(dataTable, 1);
+
+    var optionsChart = {
         title: '',
         hAxis : { title: labels[0], format: "#.##'%'", gridlines : { count : 6 } },
         vAxis : { title: labels[1], format: "#.##'%'" },
@@ -378,10 +391,10 @@ function drawTypeAChartAndTable2()
     $("#calculatorA_chart_table_2_description_div").html("Enter your sample size in the box above (number of MA-ILI+ specimens to be tested). The graph and table show the best combinations of <span class='calculatorTooltip' title='" + tooltipMarginOfError + "'>margin of error</span> and <span class='calculatorTooltip' title='" + tooltipConfidenceLevel + "'>confidence level</span> achievable with " + formatTextParameter(parameters.sampleSize) + " samples. (This calculation assumes that the estimated level of Flu+/MA-ILI+ will be close to " + formatTextParameter(parameters.p + "%") + " and the total population under surveillance is " + formatTextParameter(numberWithCommas(parameters.population)) + ".) There is a trade-off between confidence level and margin of error. The higher the confidence level, the larger the margin of error, and vice versa. Use your mouse to view values in the graph and scroll through the table.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorA_chart_2_div'));
-    chart.draw(data, options);
+    chart.draw(dataChart, optionsChart);
 
     var table = new google.visualization.Table(document.getElementById('calculatorA_table_2_div'));
-    table.draw(data);
+    table.draw(dataTable);
 }
 
 function calculatorTypeAInitialize()
