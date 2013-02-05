@@ -14,20 +14,19 @@
     <div class="ui-widget"> <!-- div containing the entire calculator -->
 
         <h3>Abbreviations</h3>
-        Ma : medically attended <br />
-        ILI+ : influenza-like-illness positive <br />
-        Flu+ : influenza positive <br />
+        MA-ILI+ : number of medically attended patients diagnosed with influenza-like-illness <br />
+        Flu+ : number of medically attended patients diagnosed with influenza-like-illness that have influenza <br />
 
         <h3>Calculators</h3>
 
         <div id="calculator_accordion" class="calculatorAccordionContainer">
 
             <!-- Calculator A -->
-            <h3>Samples required to measure Flu+ / Ma-ILI+</h3>
+            <h3>Sample Calculator for Flu+/MA-ILI+</h3>
             <div>
                 <!-- input: population; select options populated in javascript -->
                 <div class="calculatorInputArea">
-                    <label for="calculatorA_select_population" class="calculatorLabel calculatorTooltip" title="The total population under consideration, including both the medically attended (Ma) and non-medically attended (non-Ma). The calculator does an internal conversion starting from this total population number to compute the expected medically attended population.">Total Population</label>
+                    <label for="calculatorA_select_population" class="calculatorLabel calculatorTooltip" title="The total population size under surveillance. For labs representing entire states, simply select the name of the state. This will automatically provide the 2012 census projection of the state population. For labs collecting specimens from subsets of state populations or populations that cross multiple states, choose “Other” and enter the estimated size of the entire population under consideration. The calculator uses these numbers to estimate the weekly number of medically attended ILI cases in your juristiction (MA-ILI+).">Total Population</label>
                     <select id="calculatorA_select_population" class="calculatorSelect"> </select>
                     <span id="calculatorA_select_population_number_label" class="calculatorSelectNumberLabel"> </span>
                     <input id="calculatorA_input_population" type="number" class="calculatorNumberInput" style="display:none;" value="1000000" />
@@ -35,7 +34,7 @@
 
                 <!-- input: assumed prevalence p -->
                 <div class="calculatorInputArea">
-                    <label for="calculatorA_input_p" class="calculatorLabel calculatorTooltip" title="Expected fraction of flu positive (Flu+) over the medically attended influenza-like-illness positive (Ma-ILI+) patients, expressed as a percentage. This depends on the progression of the influenza season. For example, towards the beginning of the season, the fraction may be about 10%. Towards the height of the season, more ILI+ patients would be Flu+, and the fraction would be higher. The true fraction is likely different from this expectation, which is is used only as a baseline.">Expected Flu+ / Ma-ILI+</label>
+                    <label for="calculatorA_input_p" class="calculatorLabel calculatorTooltip" title="This is your surveillance target: the level of Flu+/MA-ILI+ you would like to be able estimate accurately. For example, if you would like to detect when Flu+/MA-ILI+ crosses the 10% threshold at the beginning of the flu season, then move the slider to 10%. If, instead, you plan to use the data to estimate Flu+/MA-ILI+ later in the season, when it is closer to 30%, then move the slider closer to 30%. Although the actual fraction of Flu+ over MA-ILI+ may differ from the value you choose, this approximation still provides an important baseline for determining sample sizes.">Expected Flu+/MA-ILI+</label>
                     <div id="calculatorA_input_p_slider" class="calculatorSlider"></div>
                     <input type="text" id="calculatorA_input_p" class="calculatorSliderInput" />
                 </div>
@@ -45,15 +44,15 @@
 
                 <div id="calculatorA_tabs" class="calculatorTabsContainer">
                     <ul>
-                        <li><a href="#calculatorA_tabs-1">Fixed Measurement Confidence</a></li>
-                        <li><a href="#calculatorA_tabs-2">Variable Measurement Interval / Confidence</a></li>
-                        <li><a href="#calculatorA_tabs-3">Fixed Number of Samples</a></li>
+                        <li><a href="#calculatorA_tabs-1">Sample Size Calculator</a></li>
+                        <li><a href="#calculatorA_tabs-2">Sample Size Table</a></li>
+                        <li><a href="#calculatorA_tabs-3">Sample Power Calculator</a></li>
                     </ul>
 
                     <div id="calculatorA_tabs-1">
                         <!-- input: confidence level -->
                         <div class="calculatorInputArea">
-                            <label for="calculatorA_input_confidence_level" class="calculatorLabel calculatorTooltip" title="The confidence we have in the measurement resulting from sampling. Sampling returns an interval: for example 10% plus or minus 2%--stated differently 8% to 12%. The measurement confidence describes the likelihood the true value lies within the interval. Intuitively, high confidence and small intervals require many samples, while low confidence or large intervals require a few samples.">Measurement confidence</label>
+                            <label for="calculatorA_input_confidence_level" class="calculatorLabel calculatorTooltip" title="The desired confidence that the sample will yield an estimated level of Flu+/MA-ILI+ that is close to the true value. When using laboratory samples to estimate Flu+/MA-ILI+, you will calculate an expected value plus or minus a margin of error. For example, you might calculate 10% plus or minus 2%, which means that you estimate Flu+/MA-ILI+ to fall somewhere between 8% to 12%). The higher the confidence level, the more confident you can be that the true level of Flu+/MA-ILI+ in your population falls within the estimated interval. Intuitively, high confidence levels and small margins of error require many samples, while low confidence levels or large margins of error require fewer samples.">Confidence level</label>
                             <div id="calculatorA_input_confidence_level_slider" class="calculatorSlider"></div>
                             <input type="text" id="calculatorA_input_confidence_level" class="calculatorSliderInput" />
                         </div>
@@ -81,8 +80,8 @@
                     <div id="calculatorA_tabs-3">
                         <!-- input: number of samples -->
                         <div class="calculatorInputArea">
-                            <label for="calculatorA_input_num_samples" class="calculatorLabel calculatorTooltip" title="The number of samples collected from the medically attended influenza-like-illness population (Ma-ILI+).">Number of Samples</label>
-                            <input id="calculatorA_input_num_samples" type="number" class="calculatorNumberInput" />
+                            <label for="calculatorA_input_sample_size" class="calculatorLabel calculatorTooltip" title="The number of samples collected from the medically attended influenza-like-illness population (MA-ILI+).">Sample Size</label>
+                            <input id="calculatorA_input_sample_size" type="number" class="calculatorNumberInput" />
                         </div>
 
                         <br style="clear:both;" />

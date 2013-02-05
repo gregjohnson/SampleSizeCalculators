@@ -10,18 +10,18 @@ var calculatorTypeAInputs = {
     population:1,
     p:10,
     confidenceLevel:95,
-    numSamples:100
+    sampleSize:100
 };
 
 // data
 var populationToILIFactor = 0.00084615;
 
 // note: check the HTML as well if you change these tooltips!
-var tooltipTargetNumberOfSamples = "The number of samples to collect from the medically attended influenza-like-illness population (Ma-ILI+) to achieve the desired measurement interval size, and measurement confidence.";
+var tooltipMinimumSampleSize = "The minimum number of samples to collect from the medically attended influenza-like-illness population (MA-ILI+) to produce estimates of Flu+/MA-ILI+ with the desired confidence level and margin of error.";
 
-var tooltipMeasurementInterval = "The size of the returned measurement interval. For example, if this value is 2%, and 5% of the collected samples are Flu+, then the measurement claims that the fraction of Flu+ / Ma-ILI+ is between 3% and 7%--stated differently the interval is 5% plus or minus 2%. Whether the true fraction is within the returned interval also depends on the measurement confidence. Intuitively, high confidence and small intervals require many samples, while low confidence or large intervals require a few samples.";
+var tooltipMarginOfError = "The desired margin of error (or width of the confidence interval) around the estimated value of Flu+/ILI+. When using laboratory samples to estimate Flu+/MA-ILI+, you will calculate an expected value plus or minus a margin of error. For example, you might calculate 10% plus or minus 2%, which means that you estimate Flu+/MA-ILI+ to fall somewhere between 8% to 12%). The smaller the margin of error, the more precise your estimate of Flu+/MA-ILI+. Intuitively, high confidence levels and small margins of error require many samples, while low confidence levels or large margins of error require fewer samples.";
 
-var tooltipMeasurementConfidence = "The confidence we have in the measurement resulting from sampling. Sampling returns an interval: for example 10% plus or minus 2%--stated differently 8% to 12%. The measurement confidence describes the likelihood the true value lies within the interval. Intuitively, high confidence and small intervals require many samples, while low confidence or large intervals require a few samples.";
+var tooltipConfidenceLevel = "The desired confidence that the sample will yield an estimated level of Flu+/MA-ILI+ that is close to the true value. When using laboratory samples to estimate Flu+/MA-ILI+, you will calculate an expected value plus or minus a margin of error. For example, you might calculate 10% plus or minus 2%, which means that you estimate Flu+/MA-ILI+ to fall somewhere between 8% to 12%). The higher the confidence level, the more confident you can be that the true level of Flu+/MA-ILI+ in your population falls within the estimated interval. Intuitively, high confidence levels and small margins of error require many samples, while low confidence levels or large margins of error require fewer samples.";
 
 var statePopulations = {
         "Alabama": 4822023,
@@ -170,7 +170,7 @@ function arraysToDataTable(labels, arrays)
     return google.visualization.arrayToDataTable(dataTableArray);
 }
 
-function evaluateTypeA_n_vs_epsilon(epsilon)
+function evaluateTypeA_SampleSize_vs_epsilon(epsilon)
 {
     // this object contains parameter values
 
@@ -183,19 +183,19 @@ function evaluateTypeA_n_vs_epsilon(epsilon)
     var episilonDecimal = epsilon / 100.;
     var pDecimal = this.p / 100.;
 
-    var n = (pDecimal*z*z - pDecimal*pDecimal*z*z) / (episilonDecimal*episilonDecimal);
+    var sampleSize = (pDecimal*z*z - pDecimal*pDecimal*z*z) / (episilonDecimal*episilonDecimal);
 
     // finite population correction
     var populationILI = this.population * populationToILIFactor;
-    var nStar = (n * populationILI) / (n + populationILI - 1.);
+    var sampleSizeStar = (sampleSize * populationILI) / (sampleSize + populationILI - 1.);
 
-    return Math.round(nStar);
+    return Math.round(sampleSizeStar);
 }
 
 function evaluateTypeA_ConfidenceLevel_vs_epsilon(epsilon)
 {
     // this object contains parameter values
-    var numSamplesStar = this.numSamples;
+    var sampleSizeStar = this.sampleSize;
     var p = this.p / 100.;
 
     var epsilonDecimal = epsilon / 100.;
@@ -205,20 +205,20 @@ function evaluateTypeA_ConfidenceLevel_vs_epsilon(epsilon)
 
     // equations not valid when we have more samples than our population
     // return 100% confidence in this case
-    if(numSamplesStar >= populationILI)
+    if(sampleSizeStar >= populationILI)
     {
         return 100.;
     }
 
-    var numSamples = numSamplesStar*(populationILI - 1.) / (populationILI - numSamplesStar);
+    var sampleSize = sampleSizeStar*(populationILI - 1.) / (populationILI - sampleSizeStar);
 
-    return Math.round(100. * erf( Math.sqrt(numSamples*epsilonDecimal*epsilonDecimal/(2.*(p-p*p))) ));
+    return Math.round(100. * erf( Math.sqrt(sampleSize*epsilonDecimal*epsilonDecimal/(2.*(p-p*p))) ));
 }
 
 function evaluateTypeA_epsilon_vs_ConfidenceLevel(confidenceLevel)
 {
     // this object contains parameter values
-    var numSamplesStar = this.numSamples;
+    var sampleSizeStar = this.sampleSize;
     var p = this.p / 100.;
 
     // finite population correction (inverse)
@@ -226,20 +226,20 @@ function evaluateTypeA_epsilon_vs_ConfidenceLevel(confidenceLevel)
 
     // equations not valid when we have more samples than our population
     // return 0% margin of error in this case
-    if(numSamplesStar >= populationILI)
+    if(sampleSizeStar >= populationILI)
     {
         return 0.;
     }
 
-    var numSamples = numSamplesStar*(populationILI - 1.) / (populationILI - numSamplesStar);
+    var sampleSize = sampleSizeStar*(populationILI - 1.) / (populationILI - sampleSizeStar);
 
-    return 100. * Math.sqrt(2.*(p-p*p) / numSamples) * erfinv(confidenceLevel/100.);
+    return 100. * Math.sqrt(2.*(p-p*p) / sampleSize) * erfinv(confidenceLevel/100.);
 }
 
 // draw chart and table given labels, x series, y series
 function drawTypeAChartAndTable()
 {
-    var labels = ['Measurement Interval', 'Target Number of Samples'];
+    var labels = ['Margin of Error', 'Minimum Sample Size'];
     var x = [];
     var y;
 
@@ -263,7 +263,7 @@ function drawTypeAChartAndTable()
     parameters.confidenceLevel = calculatorTypeAInputs.confidenceLevel;
 
     // evaluation for each x
-    y = x.map(evaluateTypeA_n_vs_epsilon, parameters);
+    y = x.map(evaluateTypeA_SampleSize_vs_epsilon, parameters);
 
     var data = arraysToDataTable(labels, [x, y]);
 
@@ -272,13 +272,13 @@ function drawTypeAChartAndTable()
     formatter.format(data, 0);
 
     var options = {
-        title: 'Target Number of Samples',
+        title: 'Minimum Sample Size',
         hAxis : { title: labels[0], format: "#.##'%'" },
         vAxis : { title: labels[1] },
         legend : { position: 'none' }
     };
 
-    $("#calculatorA_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipMeasurementInterval + "'>Measurement interval</span> and <span class='calculatorTooltip' title='" + tooltipTargetNumberOfSamples + "'>target number of samples</span> for a fixed total population of " + numberWithCommas(parameters.population) + ", expected fraction of Flu+/Ma-ILI+ of " + parameters.p + "% and a measurement confidence of " + parameters.confidenceLevel + "%.");
+    $("#calculatorA_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipMinimumSampleSize + "'>Minimum sample size</span> needed to estimate the fraction of Flu+/MA-ILI+ with a specified <span class='calculatorTooltip' title='" + tooltipMarginOfError + "'>margin of error</span> and confidence level " + parameters.confidenceLevel + "%. (This calculation assumes that the estimated level of Flu+/MA-ILI+ will be close to " + parameters.p + "% and the total population under surveillance is " + numberWithCommas(parameters.population) + ".")
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorA_chart_div'));
     chart.draw(data, options);
@@ -305,12 +305,12 @@ function drawTypeABigTable()
         parameters.p = calculatorTypeAInputs.p;
         parameters.confidenceLevel = confidenceLevels[c];
 
-        dataArray = epsilons.map(evaluateTypeA_n_vs_epsilon, parameters);
+        dataArray = epsilons.map(evaluateTypeA_SampleSize_vs_epsilon, parameters);
 
         dataArrays[c+1] = dataArray;
     }
 
-    var columnLabels = ['Measurement Interval / Confidence'].concat(confidenceLevelsLabels);
+    var columnLabels = ['Margin of Error / Confidence Level'].concat(confidenceLevelsLabels);
 
     var data = arraysToDataTable(columnLabels, dataArrays);
 
@@ -318,7 +318,7 @@ function drawTypeABigTable()
     var formatter = new google.visualization.NumberFormat( {pattern: "#.##'%'"} );
     formatter.format(data, 0);
 
-    $("#calculatorA_big_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTargetNumberOfSamples + "'>Target number of samples</span> for a fixed total population of " + numberWithCommas(calculatorTypeAInputs.population) + ", and expected fraction of Flu+/Ma-ILI+ of " + calculatorTypeAInputs.p + "%. The table describes the target number of samples, where the column specifies the <span class='calculatorTooltip' title='" + tooltipMeasurementConfidence + "'>measurement confidence</span> and the row specifies <span class='calculatorTooltip' title='" + tooltipMeasurementInterval + "'>measurement interval</span>.");
+    $("#calculatorA_big_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipMinimumSampleSize + "'>Minimum sample sizes</span> needed to estimate the fraction of Flu+/MA-ILI+ with a specified <span class='calculatorTooltip' title='" + tooltipMarginOfError + "'>margin of error</span> (rows) and <span class='calculatorTooltip' title='" + tooltipConfidenceLevel + "'>confidence level</span> (columns). (This calculation assumes that the estimated level of Flu+/MA-ILI+ will be close to " + calculatorTypeAInputs.p + "% and the total population under surveillance is " + numberWithCommas(calculatorTypeAInputs.population) + ".)");
 
     var table = new google.visualization.Table(document.getElementById('calculatorA_big_table_div'));
     table.draw(data);
@@ -327,7 +327,7 @@ function drawTypeABigTable()
 // draw chart and table given labels, x series, y series
 function drawTypeAChartAndTable2()
 {
-    var labels = ['Measurement Confidence', 'Measurement Interval'];
+    var labels = ['Confidence Level', 'Margin of Error'];
     var x = [];
     var y;
 
@@ -335,7 +335,7 @@ function drawTypeAChartAndTable2()
     var parameters = new Object();
     parameters.population = calculatorTypeAInputs.population;
     parameters.p = calculatorTypeAInputs.p;
-    parameters.numSamples = calculatorTypeAInputs.numSamples;
+    parameters.sampleSize = calculatorTypeAInputs.sampleSize;
 
     var min = 80;
     var max = 99;
@@ -363,13 +363,13 @@ function drawTypeAChartAndTable2()
     formatter.format(data, 1);
 
     var options = {
-        title: 'Measurement Interval vs. Confidence',
+        title: 'Margin of Error vs. Confidence Level',
         hAxis : { title: labels[0], format: "#.##'%'" },
         vAxis : { title: labels[1], format: "#.##'%'" },
         legend : { position: 'none' }
     };
 
-    $("#calculatorA_chart_table_2_description_div").html("<span class='calculatorTooltip' title='" + tooltipMeasurementInterval + "'>Measurement interval</span> and <span class='calculatorTooltip' title='" + tooltipMeasurementConfidence + "'>measurement confidence</span> for a fixed total population of " + numberWithCommas(parameters.population) + ", expected fraction of Flu+/Ma-ILI+ of " + parameters.p + "% and a fixed number of " + parameters.numSamples + " samples.  The confidence and interval are involved in a trade-off -- higher confidence means a larger interval.");
+    $("#calculatorA_chart_table_2_description_div").html("For a specified sample size, the best possible combinations of <span class='calculatorTooltip' title='" + tooltipMarginOfError + "'>margin of error</span> and <span class='calculatorTooltip' title='" + tooltipConfidenceLevel + "'>confidence level</span>. (This calculation assumes that the estimated level of Flu+/MA-ILI+ will be close to " + parameters.p + "% and the total population under surveillance is " + numberWithCommas(parameters.population) + ".)  There is a trade-off between confidence level and margin of error. The higher the confidence level, the larger the margin of error, and vice versa.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorA_chart_2_div'));
     chart.draw(data, options);
@@ -461,12 +461,12 @@ function calculatorTypeAInitialize()
 
 
     // num samples input
-    $("#calculatorA_input_num_samples").change(function() {
-        calculatorTypeAInputs.numSamples = parseFloat($("#calculatorA_input_num_samples").val());
+    $("#calculatorA_input_sample_size").change(function() {
+        calculatorTypeAInputs.sampleSize = parseFloat($("#calculatorA_input_sample_size").val());
         calculatorTypeARefresh();
     });
 
-    $("#calculatorA_input_num_samples").val(calculatorTypeAInputs.numSamples);
+    $("#calculatorA_input_sample_size").val(calculatorTypeAInputs.sampleSize);
 }
 
 function calculatorTypeARefresh()
