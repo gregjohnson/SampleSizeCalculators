@@ -9,7 +9,7 @@
 .calculatorSlider { float:left; width:300px; }
 .calculatorSliderInput { float:left; margin-left:10px; width:60px; border:0; font-weight:bold;  }
 .calculatorSmallChart { float:left; width: 375px; height:300px; }
-.calculatorSmallTable { float:left; width: 225px; }
+.calculatorSmallTable { float:left; }
 .calculatorBigTable { clear: both; float:left; width: 600px; height: 300px; }
 .calculatorTextParameter { font-weight: bold; }
 body { font-size:0.8em; } /* adjust jquery UI font sizes */

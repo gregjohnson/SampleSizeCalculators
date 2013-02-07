@@ -1,4 +1,15 @@
 
+// add support for the map function for browsers that don't support it (like IE)
+if(!('map' in Array.prototype)) {
+    Array.prototype.map = function(mapper, that /*opt*/) {
+        var other = new Array(this.length);
+        for(var i=0, n=this.length; i<n; i++)
+            if(i in this)
+                other[i] = mapper.call(that, this[i], i, this);
+        return other;
+    };
+}
+
 // load required google visualization packages
 google.load("visualization", "1", {packages:["corechart", "table"]});
 
@@ -290,13 +301,18 @@ function drawTypeAChartAndTable()
         legend : { position: 'none' }
     };
 
+    // need to specify width here (rather than in CSS) for IE
+    var optionsTable = {
+        width: '225px'
+    };
+
     $("#calculatorA_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipMinimumSampleSize + "'>Minimum sample size</span> needed to estimate the fraction of Flu+/MA-ILI+ with a specified <span class='calculatorTooltip' title='" + tooltipMarginOfError + "'>margin of error</span> and confidence level " + formatTextParameter(parameters.confidenceLevel + "%") + ". (This calculation assumes that the estimated level of Flu+/MA-ILI+ will be close to " + formatTextParameter(parameters.p + "%") + " and the total population under surveillance is " + formatTextParameter(numberWithCommas(parameters.population)) + "). Use your mouse to view values in the sample size graph and scroll through sample size table.")
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorA_chart_div'));
     chart.draw(dataChart, optionsChart);
 
     var table = new google.visualization.Table(document.getElementById('calculatorA_table_div'));
-    table.draw(dataTable);
+    table.draw(dataTable, optionsTable);
 }
 
 function drawTypeABigTable()
@@ -388,13 +404,18 @@ function drawTypeAChartAndTable2()
         legend : { position: 'none' }
     };
 
+    // need to specify width here (rather than in CSS) for IE
+    var optionsTable = {
+        width: '225px'
+    };
+
     $("#calculatorA_chart_table_2_description_div").html("Enter your sample size in the box above (number of MA-ILI+ specimens to be tested). The graph and table show the best combinations of <span class='calculatorTooltip' title='" + tooltipMarginOfError + "'>margin of error</span> and <span class='calculatorTooltip' title='" + tooltipConfidenceLevel + "'>confidence level</span> achievable with " + formatTextParameter(parameters.sampleSize) + " samples. (This calculation assumes that the estimated level of Flu+/MA-ILI+ will be close to " + formatTextParameter(parameters.p + "%") + " and the total population under surveillance is " + formatTextParameter(numberWithCommas(parameters.population)) + ".) There is a trade-off between confidence level and margin of error. The higher the confidence level, the larger the margin of error, and vice versa. Use your mouse to view values in the graph and scroll through the table.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorA_chart_2_div'));
     chart.draw(dataChart, optionsChart);
 
     var table = new google.visualization.Table(document.getElementById('calculatorA_table_2_div'));
-    table.draw(dataTable);
+    table.draw(dataTable, optionsTable);
 }
 
 function calculatorTypeAInitialize()
@@ -411,7 +432,7 @@ function calculatorTypeAInitialize()
     populationOptions.append($("<option />").val("Other").text("Other"));
 
     // population selection
-    $("#calculatorA_select_population, #calculatorA_input_population").change(function() {
+    $("#calculatorA_select_population, #calculatorA_input_population").bind('keyup mouseup change', function(e) {
         // selected state and population for that state
         var state = $("#calculatorA_select_population :selected").val();
         var population = 0;
@@ -480,7 +501,7 @@ function calculatorTypeAInitialize()
 
 
     // num samples input
-    $("#calculatorA_input_sample_size").change(function() {
+    $("#calculatorA_input_sample_size").bind('keyup mouseup change', function(e) {
         calculatorTypeAInputs.sampleSize = parseFloat($("#calculatorA_input_sample_size").val());
         calculatorTypeARefresh();
     });
