@@ -27,12 +27,18 @@ var calculatorTypeAInputs = {
 // data
 var populationToILIFactor = 0.00084615;
 
-// note: check the HTML as well if you change these tooltips!
-var tooltipMinimumSampleSize = "The minimum number of samples to collect from the medically attended influenza-like-illness population (MA-ILI+) to produce estimates of Flu+/MA-ILI+ with the desired confidence level and margin of error.";
+// tooltip text
+var tooltipTypeATotalPopulation = "The total population size under surveillance. For labs representing entire states, simply select the name of the state. This will automatically provide the 2012 census projection of the state population. For labs collecting specimens from subsets of state populations or populations that cross multiple states, choose 'Other' and enter the estimated size of the entire population under consideration. The calculator uses these numbers to estimate the weekly number of medically attended ILI cases in your jurisdiction (MA-ILI+).";
 
-var tooltipMarginOfError = "The desired margin of error (or width of the confidence interval) around the estimated value of Flu+/ILI+. When using laboratory samples to estimate Flu+/MA-ILI+, you will calculate an expected value plus or minus a margin of error. For example, you might calculate 10% plus or minus 2%, which means that you estimate Flu+/MA-ILI+ to fall somewhere between 8% to 12%). The smaller the margin of error, the more precise your estimate of Flu+/MA-ILI+. Intuitively, high confidence levels and small margins of error require many samples, while low confidence levels or large margins of error require fewer samples.";
+var tooltipTypeAExpectedFluMAILI = "This is your surveillance target: the level of Flu+/MA-ILI+ you would like to be able estimate accurately. For example, if you would like to detect when Flu+/MA-ILI+ crosses the 10% threshold at the beginning of the flu season, then move the slider to 10%. If, instead, you plan to use the data to estimate Flu+/MA-ILI+ later in the season, when it is closer to 30%, then move the slider closer to 30%. Although the actual fraction of Flu+ over MA-ILI+ may differ from the value you choose, this approximation still provides an important baseline for determining sample sizes.";
 
-var tooltipConfidenceLevel = "The desired confidence that the sample will yield an estimated level of Flu+/MA-ILI+ that is close to the true value. When using laboratory samples to estimate Flu+/MA-ILI+, you will calculate an expected value plus or minus a margin of error. For example, you might calculate 10% plus or minus 2%, which means that you estimate Flu+/MA-ILI+ to fall somewhere between 8% to 12%. The higher the confidence level, the more confident you can be that the true level of Flu+/MA-ILI+ in your population falls within the estimated interval. Intuitively, high confidence levels and small margins of error require many samples, while low confidence levels or large margins of error require fewer samples.";
+var tooltipTypeAMinimumSampleSize = "The minimum number of samples to collect from the medically attended influenza-like-illness population (MA-ILI+) to produce estimates of Flu+/MA-ILI+ with the desired confidence level and margin of error.";
+
+var tooltipTypeAMarginOfError = "The desired margin of error (or width of the confidence interval) around the estimated value of Flu+/ILI+. When using laboratory samples to estimate Flu+/MA-ILI+, you will calculate an expected value plus or minus a margin of error. For example, you might calculate 10% plus or minus 2%, which means that you estimate Flu+/MA-ILI+ to fall somewhere between 8% to 12%). The smaller the margin of error, the more precise your estimate of Flu+/MA-ILI+. Intuitively, high confidence levels and small margins of error require many samples, while low confidence levels or large margins of error require fewer samples.";
+
+var tooltipTypeAConfidenceLevel = "The desired confidence that the sample will yield an estimated level of Flu+/MA-ILI+ that is close to the true value. When using laboratory samples to estimate Flu+/MA-ILI+, you will calculate an expected value plus or minus a margin of error. For example, you might calculate 10% plus or minus 2%, which means that you estimate Flu+/MA-ILI+ to fall somewhere between 8% to 12%. The higher the confidence level, the more confident you can be that the true level of Flu+/MA-ILI+ in your population falls within the estimated interval. Intuitively, high confidence levels and small margins of error require many samples, while low confidence levels or large margins of error require fewer samples.";
+
+var tooltipTypeASampleSize = "The number of samples collected from the medically attended influenza-like-illness population (MA-ILI+).";
 
 var statePopulations = {
         "Alabama": 4822023,
@@ -306,7 +312,7 @@ function drawTypeAChartAndTable()
         width: '225px'
     };
 
-    $("#calculatorA_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipMinimumSampleSize + "'>Minimum sample size</span> needed to estimate the fraction of Flu+/MA-ILI+ with a specified <span class='calculatorTooltip' title='" + tooltipMarginOfError + "'>margin of error</span> and confidence level " + formatTextParameter(parameters.confidenceLevel + "%") + ". (This calculation assumes that the estimated level of Flu+/MA-ILI+ will be close to " + formatTextParameter(parameters.p + "%") + " and the total population under surveillance is " + formatTextParameter(numberWithCommas(parameters.population)) + "). Use your mouse to view values in the sample size graph and scroll through sample size table.")
+    $("#calculatorA_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeAMinimumSampleSize + "'>Minimum sample size</span> needed to estimate the fraction of Flu+/MA-ILI+ with a specified <span class='calculatorTooltip' title='" + tooltipTypeAMarginOfError + "'>margin of error</span> and confidence level " + formatTextParameter(parameters.confidenceLevel + "%") + ". (This calculation assumes that the estimated level of Flu+/MA-ILI+ will be close to " + formatTextParameter(parameters.p + "%") + " and the total population under surveillance is " + formatTextParameter(numberWithCommas(parameters.population)) + "). Use your mouse to view values in the sample size graph and scroll through sample size table.")
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorA_chart_div'));
     chart.draw(dataChart, optionsChart);
@@ -346,7 +352,7 @@ function drawTypeABigTable()
     var formatter = new google.visualization.NumberFormat( {pattern: "#.##'%'"} );
     formatter.format(data, 0);
 
-    $("#calculatorA_big_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipMinimumSampleSize + "'>Minimum sample sizes</span> needed to estimate the fraction of Flu+/MA-ILI+ with a specified <span class='calculatorTooltip' title='" + tooltipMarginOfError + "'>margin of error</span> (rows) and <span class='calculatorTooltip' title='" + tooltipConfidenceLevel + "'>confidence level</span> (columns). (This calculation assumes that the estimated level of Flu+/MA-ILI+ will be close to " + formatTextParameter(calculatorTypeAInputs.p + "%") + " and the total population under surveillance is " + formatTextParameter(numberWithCommas(calculatorTypeAInputs.population)) + ".)");
+    $("#calculatorA_big_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeAMinimumSampleSize + "'>Minimum sample sizes</span> needed to estimate the fraction of Flu+/MA-ILI+ with a specified <span class='calculatorTooltip' title='" + tooltipTypeAMarginOfError + "'>margin of error</span> (rows) and <span class='calculatorTooltip' title='" + tooltipTypeAConfidenceLevel + "'>confidence level</span> (columns). (This calculation assumes that the estimated level of Flu+/MA-ILI+ will be close to " + formatTextParameter(calculatorTypeAInputs.p + "%") + " and the total population under surveillance is " + formatTextParameter(numberWithCommas(calculatorTypeAInputs.population)) + ".)");
 
     var table = new google.visualization.Table(document.getElementById('calculatorA_big_table_div'));
     table.draw(data);
@@ -409,7 +415,7 @@ function drawTypeAChartAndTable2()
         width: '225px'
     };
 
-    $("#calculatorA_chart_table_2_description_div").html("Enter your sample size in the box above (number of MA-ILI+ specimens to be tested). The graph and table show the best combinations of <span class='calculatorTooltip' title='" + tooltipMarginOfError + "'>margin of error</span> and <span class='calculatorTooltip' title='" + tooltipConfidenceLevel + "'>confidence level</span> achievable with " + formatTextParameter(parameters.sampleSize) + " samples. (This calculation assumes that the estimated level of Flu+/MA-ILI+ will be close to " + formatTextParameter(parameters.p + "%") + " and the total population under surveillance is " + formatTextParameter(numberWithCommas(parameters.population)) + ".) There is a trade-off between confidence level and margin of error. The higher the confidence level, the larger the margin of error, and vice versa. Use your mouse to view values in the graph and scroll through the table.");
+    $("#calculatorA_chart_table_2_description_div").html("Enter your sample size in the box above (number of MA-ILI+ specimens to be tested). The graph and table show the best combinations of <span class='calculatorTooltip' title='" + tooltipTypeAMarginOfError + "'>margin of error</span> and <span class='calculatorTooltip' title='" + tooltipTypeAConfidenceLevel + "'>confidence level</span> achievable with " + formatTextParameter(parameters.sampleSize) + " samples. (This calculation assumes that the estimated level of Flu+/MA-ILI+ will be close to " + formatTextParameter(parameters.p + "%") + " and the total population under surveillance is " + formatTextParameter(numberWithCommas(parameters.population)) + ".) There is a trade-off between confidence level and margin of error. The higher the confidence level, the larger the margin of error, and vice versa. Use your mouse to view values in the graph and scroll through the table.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorA_chart_2_div'));
     chart.draw(dataChart, optionsChart);
@@ -421,6 +427,12 @@ function drawTypeAChartAndTable2()
 function calculatorTypeAInitialize()
 {
     // initialize UI elements and events
+
+    // tooltips
+    $(".tooltipTypeATotalPopulation").attr("title", tooltipTypeATotalPopulation);
+    $(".tooltipTypeAExpectedFluMAILI").attr("title", tooltipTypeAExpectedFluMAILI);
+    $(".tooltipTypeAConfidenceLevel").attr("title", tooltipTypeAConfidenceLevel);
+    $(".tooltipTypeASampleSize").attr("title", tooltipTypeASampleSize);
 
     // population options
     var populationOptions = $("#calculatorA_select_population");
