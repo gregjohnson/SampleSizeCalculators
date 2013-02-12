@@ -40,6 +40,8 @@ var tooltipTypeAConfidenceLevel = "The desired confidence that the sample will y
 
 var tooltipTypeASampleSize = "The number of samples collected from the medically attended influenza-like-illness population (MA-ILI+).";
 
+var nationalPopulation = 290672938;
+
 var statePopulations = {
         "Alabama": 4822023,
         "Alaska": 731449,
@@ -88,6 +90,21 @@ var statePopulations = {
         "Utah": 2855287,
         "Vermont": 626011
     };
+
+// special Google visualization formatter for different values and labels
+// the labelMap specifies the label for a given value (value -> label)
+var labelFormatter = function(labelMap) {
+    this.labelMap = labelMap;
+}
+
+labelFormatter.prototype.format = function(dt, column) {
+    for(var i=0; i<dt.getNumberOfRows(); i++)
+    {
+        var formattedValue = this.labelMap[dt.getValue(i, column)];
+        var htmlString = formattedValue;
+        dt.setFormattedValue(i, column, htmlString);
+    }
+}
 
 // return number with commas added
 // from: http://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
@@ -312,7 +329,7 @@ function drawTypeAChartAndTable()
         width: '225px'
     };
 
-    $("#calculatorA_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeAMinimumSampleSize + "'>Minimum sample size</span> needed to estimate the fraction of Flu+/MA-ILI+ with a specified <span class='calculatorTooltip' title='" + tooltipTypeAMarginOfError + "'>margin of error</span> and confidence level of " + formatTextParameter(parameters.confidenceLevel + "%") + ". (This calculation assumes that the estimated level of Flu+/MA-ILI+ will be close to " + formatTextParameter(parameters.p + "%") + " and the total population under surveillance is " + formatTextParameter(numberWithCommas(parameters.population)) + "). Use your mouse to view values in the sample size graph and scroll through sample size table.")
+    $("#calculatorA_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeAMinimumSampleSize + "'>Minimum sample size</span> needed to estimate the fraction of Flu+/MA-ILI+ with a specified <span class='calculatorTooltip' title='" + tooltipTypeAMarginOfError + "'>margin of error</span> and confidence level of " + formatTextParameter(parameters.confidenceLevel + "%") + ". (This calculation assumes that the estimated level of Flu+/MA-ILI+ will be close to " + formatTextParameter(parameters.p + "%") + " and the total population under surveillance is " + formatTextParameter(numberWithCommas(parameters.population)) + "). Use your mouse to view values in the sample size graph and scroll through sample size table.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorA_chart_div'));
     chart.draw(dataChart, optionsChart);
@@ -528,18 +545,555 @@ function calculatorTypeARefresh()
     drawTypeAChartAndTable2();
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// CALCULATOR B /////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// calculator type B inputs: population, confidence level (%)
+var calculatorTypeBInputs = {
+    population:1,
+    confidenceLevel1:95,
+    confidenceLevel2:95,
+    p2:10,
+    confidenceLevel3:95,
+    p3:10,
+    detectionThreshold3:1,
+    fluSampleSize4:1,
+    MAILISampleSize4:0,
+    p4:10
+};
+
+// tooltip text
+var tooltipTypeBTotalPopulation = "Total population description.";
+var tooltipTypeBConfidenceLevel = "Confidence level description.";
+var tooltipTypeBExpectedFluMAILI = "Execpted Flu+/MA-ILI+ description.";
+var tooltipTypeBDetectionThreshold = "Detection threshold (Rare+/Flu+) description.";
+var tooltipTypeBMinimumFluSampleSize = "Minimum Flu+ sample size description.";
+var tooltipTypeBMinimumMAILISampleSize = "Minimum MA-ILI+ sample size description.";
+
+function evaluateTypeB_FluSampleSize_vs_detectionThreshold(detectionThreshold)
+{
+    // this object contains parameter values
+
+    // scaled by population / nationalPopulation
+    var sampleSize = Math.log(1. - this.confidenceLevel/100.) / Math.log(1. - detectionThreshold/100.) * this.population / nationalPopulation;
+
+    return Math.ceil(sampleSize);
+}
+
+function evaluateTypeB_MAILISampleSize_vs_detectionThreshold(detectionThreshold)
+{
+    // this object contains parameter values
+
+    // scaled by population / nationalPopulation and expected Flu+/MA-ILI+ (p)
+    var sampleSize = Math.log(1. - this.confidenceLevel/100.) / Math.log(1. - detectionThreshold/100.) * this.population / nationalPopulation * (100. / this.p);
+
+    return Math.ceil(sampleSize);
+}
+
+function evaluateTypeB_MAILISampleSize_vs_FluSampleSize(fluSampleSize)
+{
+    var idealFluSampleSize = Math.log(1. - this.confidenceLevel/100.) / Math.log(1. - this.detectionThreshold/100.) * this.population / nationalPopulation;
+
+    var neededAdditionalFluSampleSize = idealFluSampleSize - fluSampleSize;
+
+    if(neededAdditionalFluSampleSize <= 0.)
+    {
+        return 0.;
+    }
+
+    return Math.ceil(neededAdditionalFluSampleSize * (100. / this.p));
+}
+
+function evaluateTypeB_detectionThreshold_vs_confidenceLevel(confidenceLevel)
+{
+    var idealFluSampleSize = this.fluSampleSize + this.p/100. * this.MAILISampleSize;
+
+    var detectionThreshold = 100.*( 1. - Math.pow(1. - confidenceLevel/100., this.population / (idealFluSampleSize * nationalPopulation)) );
+
+    // round to the nearest 100th
+    return Math.round(detectionThreshold*100)/100;
+}
+
+// draw chart and table given labels, x series, y series
+function drawTypeBTab1()
+{
+    var labels = ['Detection Threshold (Rare+/Flu+)', 'Minimum Flu+ Sample Size'];
+    var x = [];
+    var xChartLabelMap = {};
+    var xTableLabelMap = {};
+    var y;
+
+    // range: detection threshhold
+    var min = 0.25;
+    var max = 3;
+    var numValues = 12;
+
+    for(var i=0; i<numValues; i++)
+    {
+        var value = min + i/(numValues-1)*(max-min);
+
+        // round to the nearest 100th
+        x.push(Math.round(value*100)/100);
+
+        // labels
+        xChartLabelMap[value] = "Detection Threshhold: " + value + "% (1/" + Math.round(100. / value) + ")";
+        xTableLabelMap[value] = value + "% (1/" + Math.round(100. / value) + ")";
+    }
+
+    // use a parameters object to pass in any other input parameters to the evaluation function
+    var parameters = new Object();
+    parameters.population = calculatorTypeBInputs.population;
+    parameters.confidenceLevel = calculatorTypeBInputs.confidenceLevel1;
+
+    // evaluation for each x
+    y = x.map(evaluateTypeB_FluSampleSize_vs_detectionThreshold, parameters);
+
+    // separate DataTable objects for chart / table to allow for formatting
+    var dataChart = arraysToDataTable(labels, [x, y]);
+    var dataTable = dataChart.clone();
+
+    // chart: use xChartLabelMap as the x label
+    var formatterChart = new labelFormatter(xChartLabelMap);
+    formatterChart.format(dataChart, 0);
+
+    // table: use xTableLabelMap as the x label
+    var formatterChart = new labelFormatter(xTableLabelMap);
+    formatterChart.format(dataTable, 0);
+
+    var optionsChart = {
+        title: '',
+        hAxis : { title: labels[0], format: "#.##'%'" },
+        vAxis : { title: labels[1] },
+        legend : { position: 'none' }
+    };
+
+    // need to specify width here (rather than in CSS) for IE
+    var optionsTable = {
+        width: '225px'
+    };
+
+    $("#calculatorB1_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeBMinimumFluSampleSize + "'>Minimum Flu+ sample size</span> vs <span class='calculatorTooltip' title='" + tooltipTypeBDetectionThreshold + "'>detection threshold (Rare+/Flu+)</span>. Description with confidence level " + formatTextParameter(parameters.confidenceLevel + "%") + ".");
+
+    var chart = new google.visualization.LineChart(document.getElementById('calculatorB1_chart_div'));
+    chart.draw(dataChart, optionsChart);
+
+    var table = new google.visualization.Table(document.getElementById('calculatorB1_table_div'));
+    table.draw(dataTable, optionsTable);
+}
+
+// draw chart and table given labels, x series, y series
+function drawTypeBTab2()
+{
+    var labels = ['Detection Threshold (Rare+/Flu+)', 'Minimum MA-ILI+ Sample Size'];
+    var x = [];
+    var xChartLabelMap = {};
+    var xTableLabelMap = {};
+    var y;
+
+    // range: detection threshhold
+    var min = 0.25;
+    var max = 3;
+    var numValues = 12;
+
+    for(var i=0; i<numValues; i++)
+    {
+        var value = min + i/(numValues-1)*(max-min);
+
+        // round to the nearest 100th
+        x.push(Math.round(value*100)/100);
+
+        // labels
+        xChartLabelMap[value] = "Detection Threshhold: " + value + "% (1/" + Math.round(100. / value) + ")";
+        xTableLabelMap[value] = value + "% (1/" + Math.round(100. / value) + ")";
+    }
+
+    // use a parameters object to pass in any other input parameters to the evaluation function
+    var parameters = new Object();
+    parameters.population = calculatorTypeBInputs.population;
+    parameters.confidenceLevel = calculatorTypeBInputs.confidenceLevel2;
+    parameters.p = calculatorTypeBInputs.p2;
+
+    // evaluation for each x
+    y = x.map(evaluateTypeB_MAILISampleSize_vs_detectionThreshold, parameters);
+
+    // separate DataTable objects for chart / table to allow for formatting
+    var dataChart = arraysToDataTable(labels, [x, y]);
+    var dataTable = dataChart.clone();
+
+    // chart: use xChartLabelMap as the x label
+    var formatterChart = new labelFormatter(xChartLabelMap);
+    formatterChart.format(dataChart, 0);
+
+    // table: use xTableLabelMap as the x label
+    var formatterChart = new labelFormatter(xTableLabelMap);
+    formatterChart.format(dataTable, 0);
+
+    var optionsChart = {
+        title: '',
+        hAxis : { title: labels[0], format: "#.##'%'" },
+        vAxis : { title: labels[1] },
+        legend : { position: 'none' }
+    };
+
+    // need to specify width here (rather than in CSS) for IE
+    var optionsTable = {
+        width: '225px'
+    };
+
+    $("#calculatorB2_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeBMinimumMAILISampleSize + "'>Minimum MA-ILI+ sample size</span> vs <span class='calculatorTooltip' title='" + tooltipTypeBDetectionThreshold + "'>detection threshold (Rare+/Flu+)</span>. Description with confidence level " + formatTextParameter(parameters.confidenceLevel + "%") + " and expected Flu+/MA-ILI+ " + formatTextParameter(parameters.p) + "%.");
+
+    var chart = new google.visualization.LineChart(document.getElementById('calculatorB2_chart_div'));
+    chart.draw(dataChart, optionsChart);
+
+    var table = new google.visualization.Table(document.getElementById('calculatorB2_table_div'));
+    table.draw(dataTable, optionsTable);
+}
+
+// draw chart and table given labels, x series, y series
+function drawTypeBTab3()
+{
+    var labels = ['Flu+ Sample Size', 'MA-ILI+ Sample Size'];
+    var x = [];
+    var y;
+
+    // use a parameters object to pass in any other input parameters to the evaluation function
+    var parameters = new Object();
+    parameters.population = calculatorTypeBInputs.population;
+    parameters.confidenceLevel = calculatorTypeBInputs.confidenceLevel3;
+    parameters.p = calculatorTypeBInputs.p3;
+    parameters.detectionThreshold = calculatorTypeBInputs.detectionThreshold3;
+
+    // dynamically set range based on parameters
+    var idealFluSampleSize = Math.log(1. - parameters.confidenceLevel/100.) / Math.log(1. - parameters.detectionThreshold/100.) * parameters.population / nationalPopulation;
+
+    // range: Flu+ sample size
+    var min = 0;
+    var max = Math.ceil(idealFluSampleSize);
+    var numValues = max - min + 1;
+
+    for(var i=0; i<numValues; i++)
+    {
+        var value = min + i/(numValues-1)*(max-min);
+
+        // round to the nearest 100th
+        x.push(Math.round(value*100)/100);
+    }
+
+    // evaluation for each x
+    y = x.map(evaluateTypeB_MAILISampleSize_vs_FluSampleSize, parameters);
+
+    // separate DataTable objects for chart / table to allow for formatting
+    var dataChart = arraysToDataTable(labels, [x, y]);
+    var dataTable = dataChart.clone();
+
+    // chart: use x label in tooltip
+    var formatterChart = new google.visualization.NumberFormat( {pattern: "Flu+ Sample Size: #"} );
+    formatterChart.format(dataChart, 0);
+
+    var optionsChart = {
+        title: '',
+        hAxis : { title: labels[0] },
+        vAxis : { title: labels[1] },
+        legend : { position: 'none' }
+    };
+
+    // need to specify width here (rather than in CSS) for IE
+    var optionsTable = {
+        width: '225px'
+    };
+
+    $("#calculatorB3_chart_table_description_div").html("Acceptable <span class='calculatorTooltip' title='" + tooltipTypeBMinimumFluSampleSize + "'>Flu+</span> and <span class='calculatorTooltip' title='" + tooltipTypeBMinimumMAILISampleSize + "'>MA-ILI+</span> sample sizes. Description with confidence level " + formatTextParameter(parameters.confidenceLevel + "%") + ", expected Flu+/MA-ILI+ " + formatTextParameter(parameters.p) + "% and detection threshold (Rare+/Flu+) " + formatTextParameter(parameters.detectionThreshold) + "%.");
+
+    var chart = new google.visualization.LineChart(document.getElementById('calculatorB3_chart_div'));
+    chart.draw(dataChart, optionsChart);
+
+    var table = new google.visualization.Table(document.getElementById('calculatorB3_table_div'));
+    table.draw(dataTable, optionsTable);
+}
+
+// draw chart and table given labels, x series, y series
+function drawTypeBTab4()
+{
+    var labels = ['Confidence Level', 'Detection Threshold (Rare+/Flu+)'];
+    var x = [];
+    var y;
+    var yLabelMap = {};
+
+    // range: confidence level (%)
+    var min = 70;
+    var max = 99;
+    var numValues = 30;
+
+    for(var i=0; i<numValues; i++)
+    {
+        var value = min + i/(numValues-1)*(max-min);
+
+        // round to the nearest 100th
+        x.push(Math.round(value*100)/100);
+    }
+
+    // add 99.9%
+    x.push(99.9);
+
+    // use a parameters object to pass in any other input parameters to the evaluation function
+    var parameters = new Object();
+    parameters.population = calculatorTypeBInputs.population;
+    parameters.fluSampleSize = calculatorTypeBInputs.fluSampleSize4;
+    parameters.MAILISampleSize = calculatorTypeBInputs.MAILISampleSize4;
+    parameters.p = calculatorTypeBInputs.p4;
+
+    // evaluation for each x
+    y = x.map(evaluateTypeB_detectionThreshold_vs_confidenceLevel, parameters);
+
+    // determine y labels
+    for(var i=0; i<y.length; i++)
+    {
+        yLabelMap[y[i]] = y[i] + "% (1/" + Math.round(100. / y[i]) + ")";
+    }
+
+    // separate DataTable objects for chart / table to allow for formatting
+    var dataChart = arraysToDataTable(labels, [x, y]);
+    var dataTable = dataChart.clone();
+
+    // chart: format first column as percentage with prefix
+    var formatterChart = new google.visualization.NumberFormat( {pattern: "Confidence Level: #.##'%'"} );
+    formatterChart.format(dataChart, 0);
+
+    // table: format first column as percentage
+    var formatterTable = new google.visualization.NumberFormat( {pattern: "#.##'%'"} );
+    formatterTable.format(dataTable, 0);
+
+    // format y value with label
+    var formatterY = new labelFormatter(yLabelMap);
+    formatterY.format(dataChart, 1);
+    formatterY.format(dataTable, 1);
+
+    var optionsChart = {
+        title: '',
+        hAxis : { title: labels[0], format: "#.##'%'", gridlines : { count : 6 } },
+        vAxis : { title: labels[1], format: "#.##'%'" },
+        legend : { position: 'none' }
+    };
+
+    // need to specify width here (rather than in CSS) for IE
+    var optionsTable = {
+        width: '225px'
+    };
+
+    $("#calculatorB4_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeBDetectionThreshold + "'>Detection threshold (Rare+/Flu+)</span> vs <span class='calculatorTooltip' title='" + tooltipTypeBConfidenceLevel + "'>confidence level</span>. Description with Flu+ sample size " + formatTextParameter(parameters.fluSampleSize) + ", MA-ILI+ sample size " + formatTextParameter(parameters.MAILISampleSize) + " and expected Flu+/MA-ILI+ " + formatTextParameter(parameters.p) + "%.");
+
+    var chart = new google.visualization.LineChart(document.getElementById('calculatorB4_chart_div'));
+    chart.draw(dataChart, optionsChart);
+
+    var table = new google.visualization.Table(document.getElementById('calculatorB4_table_div'));
+    table.draw(dataTable, optionsTable);
+}
+
+function calculatorTypeBInitialize()
+{
+    // initialize UI elements and events
+
+    // tooltips
+    $(".tooltipTypeBTotalPopulation").attr("title", tooltipTypeBTotalPopulation);
+    $(".tooltipTypeBConfidenceLevel").attr("title", tooltipTypeBConfidenceLevel);
+    $(".tooltipTypeBExpectedFluMAILI").attr("title", tooltipTypeBExpectedFluMAILI);
+    $(".tooltipTypeBDetectionThreshold").attr("title", tooltipTypeBDetectionThreshold);
+    $(".tooltipTypeBMinimumFluSampleSize").attr("title", tooltipTypeBMinimumFluSampleSize);
+    $(".tooltipTypeBMinimumMAILISampleSize").attr("title", tooltipTypeBMinimumMAILISampleSize);
+
+    // population options
+    var populationOptions = $("#calculatorB_select_population");
+
+    $.each(statePopulations, function(key, value) {
+        populationOptions.append($("<option />").val(key).text(key));
+    });
+
+    populationOptions.append($("<option />").val("Other").text("Other"));
+
+    // population selection
+    $("#calculatorB_select_population, #calculatorB_input_population").bind('keyup mouseup change', function(e) {
+        // selected state and population for that state
+        var state = $("#calculatorB_select_population :selected").val();
+        var population = 0;
+
+        if(state == "Other")
+        {
+            // hide number label and show number input
+            $("#calculatorB_select_population_number_label").hide();
+            $("#calculatorB_input_population").show();
+
+            population = $("#calculatorB_input_population").val();
+        }
+        else
+        {
+            // show number label and hide number input
+            $("#calculatorB_select_population_number_label").show();
+            $("#calculatorB_input_population").hide();
+
+            population = statePopulations[state];
+
+            // update the number label
+            $("#calculatorB_select_population_number_label").html(numberWithCommas(population));
+        }
+
+        // save the value
+        calculatorTypeBInputs.population = population;
+
+        // refresh
+        calculatorTypeBRefresh();
+    });
+
+    // force an initial update event (since we have no current value for population)
+    $("#calculatorB_select_population").change();
+
+    // tab 1: confidence level slider
+    $("#calculatorB1_input_confidence_level_slider").slider({
+        value:calculatorTypeBInputs.confidenceLevel1,
+        min: 80,
+        max: 99,
+        step: 1,
+        slide: function(event, ui) {
+            $("#calculatorB1_input_confidence_level").val(ui.value + "%");
+            calculatorTypeBInputs.confidenceLevel1 = parseFloat($("#calculatorB1_input_confidence_level").val());
+            calculatorTypeBRefresh();
+        }
+    });
+
+    $("#calculatorB1_input_confidence_level").val($("#calculatorB1_input_confidence_level_slider").slider("value") + "%");
+
+    // tab 2: confidence level slider
+    $("#calculatorB2_input_confidence_level_slider").slider({
+        value:calculatorTypeBInputs.confidenceLevel2,
+        min: 80,
+        max: 99,
+        step: 1,
+        slide: function(event, ui) {
+            $("#calculatorB2_input_confidence_level").val(ui.value + "%");
+            calculatorTypeBInputs.confidenceLevel2 = parseFloat($("#calculatorB2_input_confidence_level").val());
+            calculatorTypeBRefresh();
+        }
+    });
+
+    $("#calculatorB2_input_confidence_level").val($("#calculatorB2_input_confidence_level_slider").slider("value") + "%");
+
+    // tab 2: assumed prevalence slider
+    $("#calculatorB2_input_p_slider").slider({
+        value:calculatorTypeBInputs.p2,
+        min: 1,
+        max: 30,
+        step: 1,
+        slide: function(event, ui) {
+            $("#calculatorB2_input_p").val(ui.value + "%");
+            calculatorTypeBInputs.p2 = parseFloat($("#calculatorB2_input_p").val());
+            calculatorTypeBRefresh();
+        }
+    });
+
+    $("#calculatorB2_input_p").val($("#calculatorB2_input_p_slider").slider("value") + "%");
+
+    // tab 3: confidence level slider
+    $("#calculatorB3_input_confidence_level_slider").slider({
+        value:calculatorTypeBInputs.confidenceLevel3,
+        min: 80,
+        max: 99,
+        step: 1,
+        slide: function(event, ui) {
+            $("#calculatorB3_input_confidence_level").val(ui.value + "%");
+            calculatorTypeBInputs.confidenceLevel3 = parseFloat($("#calculatorB3_input_confidence_level").val());
+            calculatorTypeBRefresh();
+        }
+    });
+
+    $("#calculatorB3_input_confidence_level").val($("#calculatorB3_input_confidence_level_slider").slider("value") + "%");
+
+    // tab 3: assumed prevalence slider
+    $("#calculatorB3_input_p_slider").slider({
+        value:calculatorTypeBInputs.p3,
+        min: 1,
+        max: 30,
+        step: 1,
+        slide: function(event, ui) {
+            $("#calculatorB3_input_p").val(ui.value + "%");
+            calculatorTypeBInputs.p3 = parseFloat($("#calculatorB3_input_p").val());
+            calculatorTypeBRefresh();
+        }
+    });
+
+    $("#calculatorB3_input_p").val($("#calculatorB3_input_p_slider").slider("value") + "%");
+
+    // tab 3: detection threshold slider
+    $("#calculatorB3_input_detection_threshold_slider").slider({
+        value:calculatorTypeBInputs.detectionThreshold3,
+        min: 0.25,
+        max: 3,
+        step: 0.25,
+        slide: function(event, ui) {
+            $("#calculatorB3_input_detection_threshold").val(ui.value + "%");
+            calculatorTypeBInputs.detectionThreshold3 = parseFloat($("#calculatorB3_input_detection_threshold").val());
+            calculatorTypeBRefresh();
+        }
+    });
+
+    $("#calculatorB3_input_detection_threshold").val($("#calculatorB3_input_detection_threshold_slider").slider("value") + "%");
+
+    // tab 4: Flu+ sample size
+    $("#calculatorB4_input_flu_sample_size").bind('keyup mouseup change', function(e) {
+        calculatorTypeBInputs.fluSampleSize4 = parseFloat($("#calculatorB4_input_flu_sample_size").val());
+        calculatorTypeBRefresh();
+    });
+
+    $("#calculatorB4_input_flu_sample_size").val(calculatorTypeBInputs.fluSampleSize4);
+
+    // tab 4: MA-ILI+ sample size
+    $("#calculatorB4_input_maili_sample_size").bind('keyup mouseup change', function(e) {
+        calculatorTypeBInputs.MAILISampleSize4 = parseFloat($("#calculatorB4_input_maili_sample_size").val());
+        calculatorTypeBRefresh();
+    });
+
+    $("#calculatorB4_input_maili_sample_size").val(calculatorTypeBInputs.MAILISampleSize4);
+
+    // tab 4: assumed prevalence slider
+    $("#calculatorB4_input_p_slider").slider({
+        value:calculatorTypeBInputs.p4,
+        min: 1,
+        max: 30,
+        step: 1,
+        slide: function(event, ui) {
+            $("#calculatorB4_input_p").val(ui.value + "%");
+            calculatorTypeBInputs.p4 = parseFloat($("#calculatorB4_input_p").val());
+            calculatorTypeBRefresh();
+        }
+    });
+
+    $("#calculatorB4_input_p").val($("#calculatorB4_input_p_slider").slider("value") + "%");
+}
+
+function calculatorTypeBRefresh()
+{
+    drawTypeBTab1();
+    drawTypeBTab2();
+    drawTypeBTab3();
+    drawTypeBTab4();
+}
+
 function onLoad()
 {
     // create accordion
-    $("#calculator_accordion").accordion({ heightStyle: "content" });
+    $("#calculator_accordion").accordion({ heightStyle: "content", activate: function(event, ui) { calculatorTypeARefresh(); calculatorTypeBRefresh(); } } );
 
-    // create calculator A tabs; trigger a refresh on activation so charts are correctly sized
+    // create individual calculator tabs; trigger a refresh on activation so charts are correctly sized
     $("#calculatorA_tabs").tabs({ activate: function(event, ui) { calculatorTypeARefresh(); } });
+    $("#calculatorB_tabs").tabs({ activate: function(event, ui) { calculatorTypeBRefresh(); } });
 
-    // create tooltips
-    $(document).tooltip();
-
-    // initialize and refresh calculator A
+    // initialize and refresh individual calculators
     calculatorTypeAInitialize();
     calculatorTypeARefresh();
+
+    calculatorTypeBInitialize();
+    calculatorTypeBRefresh();
+
+    // create tooltips; do this last since we may set some tooltip text in the calculator initializations
+    $(document).tooltip();
 }
