@@ -553,6 +553,7 @@ function calculatorTypeARefresh()
 // calculator type B inputs: population, confidence level (%)
 var calculatorTypeBInputs = {
     population:1,
+    surveillanceScale:'National',
     confidenceLevel1:95,
     confidenceLevel2:95,
     p2:10,
@@ -573,13 +574,19 @@ var tooltipTypeBMinimumFluSampleSize = "The minimum number of Flu+ samples requi
 var tooltipTypeBMinimumMAILISampleSize = "The minimum number of non-prescreened MA-ILI+ samples required to detect a rare type when its prevalence (Rare+/Flu+) reaches the specified detection threshold, with the specified level of confidence.";
 var tooltipTypeBFluSampleSize = "The number of Flu+ samples to be screened. Both Flu+ and non-prescreened MA-ILI+ samples can be used to detect rare types of influenza. However, many more non-prescreened MA-ILI+ specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI+) is low.";
 var tooltipTypeBMAILISampleSize = "The number of non-prescreened MA-ILI+ samples. Both Flu+ and non-prescreened MA-ILI+ samples can be used to detect rare types of influenza. However, many more non-prescreened MA-ILI+ specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI+) is low.";
+var tooltipTypeBSurveillanceScale = "Surveillance scale description.";
 
 function evaluateTypeB_FluSampleSize_vs_detectionThreshold(detectionThreshold)
 {
     // this object contains parameter values
 
     // scaled by population / nationalPopulation
-    var sampleSize = Math.log(1. - this.confidenceLevel/100.) / Math.log(1. - detectionThreshold/100.) * this.population / nationalPopulation;
+    var sampleSize = Math.log(1. - this.confidenceLevel/100.) / Math.log(1. - detectionThreshold/100.);
+
+    if(this.surveillanceScale == "National")
+    {
+        sampleSize = sampleSize * this.population / nationalPopulation;
+    }
 
     return Math.ceil(sampleSize);
 }
@@ -589,14 +596,24 @@ function evaluateTypeB_MAILISampleSize_vs_detectionThreshold(detectionThreshold)
     // this object contains parameter values
 
     // scaled by population / nationalPopulation and expected Flu+/MA-ILI+ (p)
-    var sampleSize = Math.log(1. - this.confidenceLevel/100.) / Math.log(1. - detectionThreshold/100.) * this.population / nationalPopulation * (100. / this.p);
+    var sampleSize = Math.log(1. - this.confidenceLevel/100.) / Math.log(1. - detectionThreshold/100.) * (100. / this.p);
+
+    if(this.surveillanceScale == "National")
+    {
+        sampleSize = sampleSize * this.population / nationalPopulation;
+    }
 
     return Math.ceil(sampleSize);
 }
 
 function evaluateTypeB_MAILISampleSize_vs_FluSampleSize(fluSampleSize)
 {
-    var idealFluSampleSize = Math.log(1. - this.confidenceLevel/100.) / Math.log(1. - this.detectionThreshold/100.) * this.population / nationalPopulation;
+    var idealFluSampleSize = Math.log(1. - this.confidenceLevel/100.) / Math.log(1. - this.detectionThreshold/100.);
+
+    if(this.surveillanceScale == "National")
+    {
+        idealFluSampleSize = idealFluSampleSize * this.population / nationalPopulation;
+    }
 
     var neededAdditionalFluSampleSize = idealFluSampleSize - fluSampleSize;
 
@@ -612,7 +629,16 @@ function evaluateTypeB_detectionThreshold_vs_confidenceLevel(confidenceLevel)
 {
     var idealFluSampleSize = this.fluSampleSize + this.p/100. * this.MAILISampleSize;
 
-    var detectionThreshold = 100.*( 1. - Math.pow(1. - confidenceLevel/100., this.population / (idealFluSampleSize * nationalPopulation)) );
+    var detectionThreshold = 0;
+
+    if(this.surveillanceScale == "National")
+    {
+        detectionThreshold = 100.*( 1. - Math.pow(1. - confidenceLevel/100., this.population / (idealFluSampleSize * nationalPopulation)) );
+    }
+    else if(this.surveillanceScale == "State")
+    {
+        detectionThreshold = 100.*( 1. - Math.pow(1. - confidenceLevel/100., 1. / idealFluSampleSize) );
+    }
 
     // round to the nearest 100th
     return Math.round(detectionThreshold*100)/100;
@@ -647,6 +673,7 @@ function drawTypeBTab1()
     // use a parameters object to pass in any other input parameters to the evaluation function
     var parameters = new Object();
     parameters.population = calculatorTypeBInputs.population;
+    parameters.surveillanceScale = calculatorTypeBInputs.surveillanceScale;
     parameters.confidenceLevel = calculatorTypeBInputs.confidenceLevel1;
 
     // evaluation for each x
@@ -714,6 +741,7 @@ function drawTypeBTab2()
     // use a parameters object to pass in any other input parameters to the evaluation function
     var parameters = new Object();
     parameters.population = calculatorTypeBInputs.population;
+    parameters.surveillanceScale = calculatorTypeBInputs.surveillanceScale;
     parameters.confidenceLevel = calculatorTypeBInputs.confidenceLevel2;
     parameters.p = calculatorTypeBInputs.p2;
 
@@ -763,24 +791,36 @@ function drawTypeBTab3()
     // use a parameters object to pass in any other input parameters to the evaluation function
     var parameters = new Object();
     parameters.population = calculatorTypeBInputs.population;
+    parameters.surveillanceScale = calculatorTypeBInputs.surveillanceScale;
     parameters.confidenceLevel = calculatorTypeBInputs.confidenceLevel3;
     parameters.p = calculatorTypeBInputs.p3;
     parameters.detectionThreshold = calculatorTypeBInputs.detectionThreshold3;
 
     // dynamically set range based on parameters
-    var idealFluSampleSize = Math.log(1. - parameters.confidenceLevel/100.) / Math.log(1. - parameters.detectionThreshold/100.) * parameters.population / nationalPopulation;
+    var idealFluSampleSize = Math.log(1. - parameters.confidenceLevel/100.) / Math.log(1. - parameters.detectionThreshold/100.);
+
+    if(parameters.surveillanceScale == "National")
+    {
+        idealFluSampleSize = idealFluSampleSize * parameters.population / nationalPopulation;
+    }
 
     // range: Flu+ sample size
     var min = 0;
     var max = Math.ceil(idealFluSampleSize);
     var numValues = max - min + 1;
 
+    // limit number of values
+    if(numValues > 100)
+    {
+        numValues = 100;
+    }
+
     for(var i=0; i<numValues; i++)
     {
         var value = min + i/(numValues-1)*(max-min);
 
-        // round to the nearest 100th
-        x.push(Math.round(value*100)/100);
+        // round to the nearest integer
+        x.push(Math.round(value));
     }
 
     // evaluation for each x
@@ -842,6 +882,7 @@ function drawTypeBTab4()
     // use a parameters object to pass in any other input parameters to the evaluation function
     var parameters = new Object();
     parameters.population = calculatorTypeBInputs.population;
+    parameters.surveillanceScale = calculatorTypeBInputs.surveillanceScale;
     parameters.fluSampleSize = calculatorTypeBInputs.fluSampleSize4;
     parameters.MAILISampleSize = calculatorTypeBInputs.MAILISampleSize4;
     parameters.p = calculatorTypeBInputs.p4;
@@ -906,6 +947,7 @@ function calculatorTypeBInitialize()
     $(".tooltipTypeBMinimumMAILISampleSize").attr("title", tooltipTypeBMinimumMAILISampleSize);
     $(".tooltipTypeBFluSampleSize").attr("title", tooltipTypeBFluSampleSize);
     $(".tooltipTypeBMAILISampleSize").attr("title", tooltipTypeBMAILISampleSize);
+    $(".tooltipTypeBSurveillanceScale").attr("title", tooltipTypeBSurveillanceScale);
 
     // population options
     var populationOptions = $("#calculatorB_select_population");
@@ -945,12 +987,36 @@ function calculatorTypeBInitialize()
         // save the value
         calculatorTypeBInputs.population = population;
 
+        // update the surveillane scale "state" option text
+        $("#calculatorB_select_surveillance_scale option:last-child").text($("#calculatorB_select_population :selected").val());
+
         // refresh
         calculatorTypeBRefresh();
     });
 
     // force an initial update event (since we have no current value for population)
     $("#calculatorB_select_population").change();
+
+    // surveillance scale selection
+    $("#calculatorB_select_surveillance_scale").bind('keyup mouseup change', function(e) {
+        // make sure we have a valid value
+        var value = $("#calculatorB_select_surveillance_scale :selected").val();
+
+        if(value != "National" && value != "State")
+        {
+            alert("invalid surveillance scale value");
+            return;
+        }
+
+        // save the value
+        calculatorTypeBInputs.surveillanceScale = value;
+
+        // refresh
+        calculatorTypeBRefresh();
+    });
+
+    // force an initial update event (since we have no current value for population)
+    $("#calculatorB_select_surveillance_scale").change();
 
     // tab 1: confidence level slider
     $("#calculatorB1_input_confidence_level_slider").slider({
