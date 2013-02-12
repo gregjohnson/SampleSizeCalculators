@@ -580,8 +580,13 @@ function evaluateTypeB_FluSampleSize_vs_detectionThreshold(detectionThreshold)
 {
     // this object contains parameter values
 
-    // scaled by population / nationalPopulation
     var sampleSize = Math.log(1. - this.confidenceLevel/100.) / Math.log(1. - detectionThreshold/100.);
+
+    if(this.surveillanceScale == "State")
+    {
+        // finite population correction
+        sampleSize = sampleSize * Math.sqrt((this.population - sampleSize) / (this.population - 1.));
+    }
 
     if(this.surveillanceScale == "National")
     {
@@ -595,8 +600,16 @@ function evaluateTypeB_MAILISampleSize_vs_detectionThreshold(detectionThreshold)
 {
     // this object contains parameter values
 
-    // scaled by population / nationalPopulation and expected Flu+/MA-ILI+ (p)
-    var sampleSize = Math.log(1. - this.confidenceLevel/100.) / Math.log(1. - detectionThreshold/100.) * (100. / this.p);
+    var sampleSize = Math.log(1. - this.confidenceLevel/100.) / Math.log(1. - detectionThreshold/100.);
+
+    if(this.surveillanceScale == "State")
+    {
+        // finite population correction
+        sampleSize = sampleSize * Math.sqrt((this.population - sampleSize) / (this.population - 1.));
+    }
+
+    // to MA-ILI+ samples
+    sampleSize = sampleSize * (100. / this.p);
 
     if(this.surveillanceScale == "National")
     {
@@ -609,6 +622,12 @@ function evaluateTypeB_MAILISampleSize_vs_detectionThreshold(detectionThreshold)
 function evaluateTypeB_MAILISampleSize_vs_FluSampleSize(fluSampleSize)
 {
     var idealFluSampleSize = Math.log(1. - this.confidenceLevel/100.) / Math.log(1. - this.detectionThreshold/100.);
+
+    if(this.surveillanceScale == "State")
+    {
+        // finite population correction
+        idealFluSampleSize = idealFluSampleSize * Math.sqrt((this.population - idealFluSampleSize) / (this.population - 1.));
+    }
 
     if(this.surveillanceScale == "National")
     {
@@ -628,6 +647,13 @@ function evaluateTypeB_MAILISampleSize_vs_FluSampleSize(fluSampleSize)
 function evaluateTypeB_detectionThreshold_vs_confidenceLevel(confidenceLevel)
 {
     var idealFluSampleSize = this.fluSampleSize + this.p/100. * this.MAILISampleSize;
+
+    if(this.surveillanceScale == "State")
+    {
+        // finite population correction (inverse)
+        // note the division instead of multiplication here
+        idealFluSampleSize = idealFluSampleSize / Math.sqrt((this.population - idealFluSampleSize) / (this.population - 1.));
+    }
 
     var detectionThreshold = 0;
 
@@ -798,6 +824,12 @@ function drawTypeBTab3()
 
     // dynamically set range based on parameters
     var idealFluSampleSize = Math.log(1. - parameters.confidenceLevel/100.) / Math.log(1. - parameters.detectionThreshold/100.);
+
+    if(parameters.surveillanceScale == "State")
+    {
+        // finite population correction
+        idealFluSampleSize = idealFluSampleSize * Math.sqrt((parameters.population - idealFluSampleSize) / (parameters.population - 1.));
+    }
 
     if(parameters.surveillanceScale == "National")
     {
