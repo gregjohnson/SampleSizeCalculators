@@ -565,12 +565,14 @@ var calculatorTypeBInputs = {
 };
 
 // tooltip text
-var tooltipTypeBTotalPopulation = "Total population description.";
-var tooltipTypeBConfidenceLevel = "Confidence level description.";
-var tooltipTypeBExpectedFluMAILI = "Execpted Flu+/MA-ILI+ description.";
-var tooltipTypeBDetectionThreshold = "Detection threshold (Rare+/Flu+) description.";
-var tooltipTypeBMinimumFluSampleSize = "Minimum Flu+ sample size description.";
-var tooltipTypeBMinimumMAILISampleSize = "Minimum MA-ILI+ sample size description.";
+var tooltipTypeBTotalPopulation = tooltipTypeATotalPopulation;
+var tooltipTypeBConfidenceLevel = "The desired confidence that the sample will contain at least one rare specimen (Rare+) when the prevalence of rare type reaches the specified limit of detection. Sample sizes can be calculated for non-prescreened MA-ILI+ or prescreened Flu+, or a combination of both types of specimens. For example, if you choose a confidence level of 95% and a detection threshold of 1/400, then the resulting minimum sample size should be sufficient to detect a rare type when it reaches a prevalence of 1/400 Rare+/Flu+, 95% of the time. Intuitively, a high confidence level and a low detection threshold requires many samples, while low confidence and a high detection threshold results in fewer samples.";
+var tooltipTypeBExpectedFluMAILI = "The fraction of non-prescreened MA-ILI+ cases that are Flu+. This estimate will vary throughout the influenza season. This fraction is needed to estimate the number of non-prescreened MA-ILI+ samples required to screen a sufficient number of Flu+ specimens to detect a rare type of influenza (Rare+).";
+var tooltipTypeBDetectionThreshold = "The detection threshold for a rare type of influenza is the prevalence of the rare type (out of all Flu+ cases) at which the first rare specimens are expected to appear in the lab. For example, a detection threshold of 0.25% (1/400) means that rare type should be detected by the lab when it rises to a prevalence of one out of every 400 cases of flu.";
+var tooltipTypeBMinimumFluSampleSize = "The minimum number of Flu+ samples required to detect a rare type when its prevalence (Rare+/Flu+) reaches the specified detection threshold, with the specified level of confidence.";
+var tooltipTypeBMinimumMAILISampleSize = "The minimum number of non-prescreened MA-ILI+ samples required to detect a rare type when its prevalence (Rare+/Flu+) reaches the specified detection threshold, with the specified level of confidence.";
+var tooltipTypeBFluSampleSize = "The number of Flu+ samples to be screened. Both Flu+ and non-prescreened MA-ILI+ samples can be used to detect rare types of influenza. However, many more non-prescreened MA-ILI+ specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI+) is low.";
+var tooltipTypeBMAILISampleSize = "The number of non-prescreened MA-ILI+ samples. Both Flu+ and non-prescreened MA-ILI+ samples can be used to detect rare types of influenza. However, many more non-prescreened MA-ILI+ specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI+) is low.";
 
 function evaluateTypeB_FluSampleSize_vs_detectionThreshold(detectionThreshold)
 {
@@ -674,7 +676,7 @@ function drawTypeBTab1()
         width: '225px'
     };
 
-    $("#calculatorB1_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeBMinimumFluSampleSize + "'>Minimum Flu+ sample size</span> vs <span class='calculatorTooltip' title='" + tooltipTypeBDetectionThreshold + "'>detection threshold (Rare+/Flu+)</span>. Description with confidence level " + formatTextParameter(parameters.confidenceLevel + "%") + ".");
+    $("#calculatorB1_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeBMinimumFluSampleSize + "'>Minimum sample size (of Flu+ specimens)</span> required to detect a rare type of influenza at a specified <span class='calculatorTooltip' title='" + tooltipTypeBDetectionThreshold + "'>detection threshold (Rare+/Flu+)</span>, with a confidence of " + formatTextParameter(parameters.confidenceLevel + "%") + ". (These calculations assume a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + ".) Use your mouse to view values in the sample size graph and scroll through sample size table.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorB1_chart_div'));
     chart.draw(dataChart, optionsChart);
@@ -742,7 +744,7 @@ function drawTypeBTab2()
         width: '225px'
     };
 
-    $("#calculatorB2_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeBMinimumMAILISampleSize + "'>Minimum MA-ILI+ sample size</span> vs <span class='calculatorTooltip' title='" + tooltipTypeBDetectionThreshold + "'>detection threshold (Rare+/Flu+)</span>. Description with confidence level " + formatTextParameter(parameters.confidenceLevel + "%") + " and expected Flu+/MA-ILI+ " + formatTextParameter(parameters.p) + "%.");
+    $("#calculatorB2_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeBMinimumMAILISampleSize + "'>Minimum sample size (of non-prescreened MA-ILI+ specimens)</span> required to detect a rare type of influenza at the specified <span class='calculatorTooltip' title='" + tooltipTypeBDetectionThreshold + "'>detection threshold (Rare+/Flu+)</span>, with a confidence of " + formatTextParameter(parameters.confidenceLevel + "%") + ". (These calculations assume a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + " and a Flu+/MA-ILI+ prevalence of " + formatTextParameter(parameters.p + "%") + ".) Use your mouse to view values in the sample size graph and scroll through sample size table.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorB2_chart_div'));
     chart.draw(dataChart, optionsChart);
@@ -804,7 +806,7 @@ function drawTypeBTab3()
         width: '225px'
     };
 
-    $("#calculatorB3_chart_table_description_div").html("Acceptable <span class='calculatorTooltip' title='" + tooltipTypeBMinimumFluSampleSize + "'>Flu+</span> and <span class='calculatorTooltip' title='" + tooltipTypeBMinimumMAILISampleSize + "'>MA-ILI+</span> sample sizes. Description with confidence level " + formatTextParameter(parameters.confidenceLevel + "%") + ", expected Flu+/MA-ILI+ " + formatTextParameter(parameters.p) + "% and detection threshold (Rare+/Flu+) " + formatTextParameter(parameters.detectionThreshold + "% (1/" + Math.round(100. / parameters.detectionThreshold) + ")") + ".");
+    $("#calculatorB3_chart_table_description_div").html("Acceptable combinations of <span class='calculatorTooltip' title='" + tooltipTypeBFluSampleSize + "'>Flu+</span> and <span class='calculatorTooltip' title='" + tooltipTypeBMAILISampleSize + "'>non-prescreened MA-ILI+</span> sample sizes required to detect a rare type of influenza with prevalence (Rare+/Flu+) that has reached the detection threshold of " + formatTextParameter(parameters.detectionThreshold + "% (1/" + Math.round(100. / parameters.detectionThreshold) + ")") + ", with a confidence of " + formatTextParameter(parameters.confidenceLevel + "%") + ". (These calculations assume a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + " and a Flu+/MA-ILI+ prevalence of " + formatTextParameter(parameters.p + "%") + ".)  Many more non-prescreened MA-ILI+ specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI+) is low.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorB3_chart_div'));
     chart.draw(dataChart, optionsChart);
@@ -882,7 +884,7 @@ function drawTypeBTab4()
         width: '225px'
     };
 
-    $("#calculatorB4_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeBDetectionThreshold + "'>Detection threshold (Rare+/Flu+)</span> vs <span class='calculatorTooltip' title='" + tooltipTypeBConfidenceLevel + "'>confidence level</span>. Description with Flu+ sample size " + formatTextParameter(parameters.fluSampleSize) + ", MA-ILI+ sample size " + formatTextParameter(parameters.MAILISampleSize) + " and expected Flu+/MA-ILI+ " + formatTextParameter(parameters.p) + "%.");
+    $("#calculatorB4_chart_table_description_div").html("For specified numbers of Flu+ and non-prescreened MA-ILI+ specimens, the best possible combinations of <span class='calculatorTooltip' title='" + tooltipTypeBDetectionThreshold + "'>detection threshold</span> and <span class='calculatorTooltip' title='" + tooltipTypeBConfidenceLevel + "'>confidence level</span>. (These calculations assume a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + " and a Flu+/MA-ILI+ prevalence of " + formatTextParameter(parameters.p + "%") + ".)  There is a trade-off between detection threshold and confidence level. Intuitively, the lower the prevalence of a rare type, the less likely it will be detected, and vice versa.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorB4_chart_div'));
     chart.draw(dataChart, optionsChart);
@@ -902,6 +904,8 @@ function calculatorTypeBInitialize()
     $(".tooltipTypeBDetectionThreshold").attr("title", tooltipTypeBDetectionThreshold);
     $(".tooltipTypeBMinimumFluSampleSize").attr("title", tooltipTypeBMinimumFluSampleSize);
     $(".tooltipTypeBMinimumMAILISampleSize").attr("title", tooltipTypeBMinimumMAILISampleSize);
+    $(".tooltipTypeBFluSampleSize").attr("title", tooltipTypeBFluSampleSize);
+    $(".tooltipTypeBMAILISampleSize").attr("title", tooltipTypeBMAILISampleSize);
 
     // population options
     var populationOptions = $("#calculatorB_select_population");
