@@ -804,7 +804,7 @@ function drawTypeBTab3()
         width: '225px'
     };
 
-    $("#calculatorB3_chart_table_description_div").html("Acceptable <span class='calculatorTooltip' title='" + tooltipTypeBMinimumFluSampleSize + "'>Flu+</span> and <span class='calculatorTooltip' title='" + tooltipTypeBMinimumMAILISampleSize + "'>MA-ILI+</span> sample sizes. Description with confidence level " + formatTextParameter(parameters.confidenceLevel + "%") + ", expected Flu+/MA-ILI+ " + formatTextParameter(parameters.p) + "% and detection threshold (Rare+/Flu+) " + formatTextParameter(parameters.detectionThreshold) + "%.");
+    $("#calculatorB3_chart_table_description_div").html("Acceptable <span class='calculatorTooltip' title='" + tooltipTypeBMinimumFluSampleSize + "'>Flu+</span> and <span class='calculatorTooltip' title='" + tooltipTypeBMinimumMAILISampleSize + "'>MA-ILI+</span> sample sizes. Description with confidence level " + formatTextParameter(parameters.confidenceLevel + "%") + ", expected Flu+/MA-ILI+ " + formatTextParameter(parameters.p) + "% and detection threshold (Rare+/Flu+) " + formatTextParameter(parameters.detectionThreshold + "% (1/" + Math.round(100. / parameters.detectionThreshold) + ")") + ".");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorB3_chart_div'));
     chart.draw(dataChart, optionsChart);
@@ -1030,13 +1030,13 @@ function calculatorTypeBInitialize()
         max: 3,
         step: 0.25,
         slide: function(event, ui) {
-            $("#calculatorB3_input_detection_threshold").val(ui.value + "%");
+            $("#calculatorB3_input_detection_threshold").val(ui.value + "% (1/" + Math.round(100. / ui.value) + ")");
             calculatorTypeBInputs.detectionThreshold3 = parseFloat($("#calculatorB3_input_detection_threshold").val());
             calculatorTypeBRefresh();
         }
     });
 
-    $("#calculatorB3_input_detection_threshold").val($("#calculatorB3_input_detection_threshold_slider").slider("value") + "%");
+    $("#calculatorB3_input_detection_threshold").val($("#calculatorB3_input_detection_threshold_slider").slider("value") + "% (1/" + Math.round(100. / $("#calculatorB3_input_detection_threshold_slider").slider("value")) + ")");
 
     // tab 4: Flu+ sample size
     $("#calculatorB4_input_flu_sample_size").bind('keyup mouseup change', function(e) {
