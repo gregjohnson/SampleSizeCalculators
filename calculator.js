@@ -1185,6 +1185,8 @@ function calculatorTypeBRefresh()
 //////////////////////////////// CALCULATOR C /////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+var calculatorTypeCRangeMaxRareFluP = 5.;
+
 // calculator type C inputs
 var calculatorTypeCInputs = {
     rareFluP:1,
@@ -1204,29 +1206,286 @@ var tooltipTypeCRareFluP = "Expected Rare+/Flu+ description.";
 var tooltipTypeCConfidenceLevel = "Confidence level description.";
 var tooltipTypeCExpectedFluMAILI = "Expected Flu+/MA-ILI+ description.";
 var tooltipTypeCPrevalenceThreshold = "Prevalence threshold description.";
+var tooltipTypeCMinimumFluSampleSize = "Minimum Flu+ sample size description.";
+var tooltipTypeCMinimumMAILISampleSize = "Minimum MA-ILI+ sample size description.";
 var tooltipTypeCFluSampleSize = "Flu+ sample size description.";
 var tooltipTypeCMAILISampleSize = "MA-ILI+ sample size description.";
 
-// evaluation functions here
+function evaluateTypeC_FluSampleSize_vs_prevalenceThreshold(prevalenceThreshold)
+{
+    return 1.;
+}
+
+function evaluateTypeC_MAILISampleSize_vs_prevalenceThreshold(prevalenceThreshold)
+{
+    return 1.;
+}
+
+function evaluateTypeC_MAILISampleSize_vs_FluSampleSize(fluSampleSize)
+{
+    return 1.;
+}
+
+function evaluateTypeC_prevalenceThreshold_vs_confidenceLevel(confidenceLevel)
+{
+    return 1.;
+}
 
 function drawTypeCTab1()
 {
+    var labels = ['Prevalence Threshold (Rare+/Flu+)', 'Minimum Flu+ Sample Size'];
+    var x = [];
+    var y;
 
+    // use a parameters object to pass in any other input parameters to the evaluation function
+    var parameters = new Object();
+    parameters.rareFluP = calculatorTypeCInputs.rareFluP;
+    parameters.confidenceLevel = calculatorTypeCInputs.confidenceLevel1;
+
+    // range: prevalence threshhold
+    var min = parameters.rareFluP;
+    var max = calculatorTypeCRangeMaxRareFluP;
+    var numValues = 10;
+
+    for(var i=0; i<numValues; i++)
+    {
+        var value = min + i/(numValues-1)*(max-min);
+
+        // round to the nearest 100th
+        x.push(Math.round(value*100)/100);
+    }
+
+    // evaluation for each x
+    y = x.map(evaluateTypeC_FluSampleSize_vs_prevalenceThreshold, parameters);
+
+    // separate DataTable objects for chart / table to allow for formatting
+    var dataChart = arraysToDataTable(labels, [x, y]);
+    var dataTable = dataChart.clone();
+
+    // chart: format first column as percentage with prefix
+    var formatterChart = new google.visualization.NumberFormat( {pattern: "Prevalence Threshold (Rare+/Flu+): #.##'%'"} );
+    formatterChart.format(dataChart, 0);
+
+    // table: format first column as percentage
+    var formatterTable = new google.visualization.NumberFormat( {pattern: "#.##'%'"} );
+    formatterTable.format(dataTable, 0);
+
+    var optionsChart = {
+        title: '',
+        hAxis : { title: labels[0], format: "#.##'%'" },
+        vAxis : { title: labels[1] },
+        legend : { position: 'none' }
+    };
+
+    // need to specify width here (rather than in CSS) for IE
+    var optionsTable = {
+        width: '225px'
+    };
+
+    $("#calculatorC1_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeCMinimumFluSampleSize + "'>Minimum sample size (of Flu+ specimens)</span> required to determine that the prevalence of a rare type (Rare+/Flu+) does not exceed a specified <span class='calculatorTooltip' title='" + tooltipTypeCPrevalenceThreshold + "'>prevalence threshold (Rare+/Flu+)</span>, with a confidence of " + formatTextParameter(parameters.confidenceLevel + "%") + ". (These calculations assume that the estimated prevalence of the rare event (Rare+/Flu+) will be close to " + formatTextParameter(parameters.rareFluP + "%") + ".) Use your mouse to view values in the sample size graph and scroll through sample size table.");
+
+    var chart = new google.visualization.LineChart(document.getElementById('calculatorC1_chart_div'));
+    chart.draw(dataChart, optionsChart);
+
+    var table = new google.visualization.Table(document.getElementById('calculatorC1_table_div'));
+    table.draw(dataTable, optionsTable);
 }
 
 function drawTypeCTab2()
 {
+    var labels = ['Prevalence Threshold (Rare+/Flu+)', 'Minimum MA-ILI+ Sample Size'];
+    var x = [];
+    var y;
 
+    // use a parameters object to pass in any other input parameters to the evaluation function
+    var parameters = new Object();
+    parameters.rareFluP = calculatorTypeCInputs.rareFluP;
+    parameters.confidenceLevel = calculatorTypeCInputs.confidenceLevel2;
+    parameters.p = calculatorTypeCInputs.p2;
+
+    // range: prevalence threshhold
+    var min = parameters.rareFluP;
+    var max = calculatorTypeCRangeMaxRareFluP;
+    var numValues = 10;
+
+    for(var i=0; i<numValues; i++)
+    {
+        var value = min + i/(numValues-1)*(max-min);
+
+        // round to the nearest 100th
+        x.push(Math.round(value*100)/100);
+    }
+
+    // evaluation for each x
+    y = x.map(evaluateTypeC_MAILISampleSize_vs_prevalenceThreshold, parameters);
+
+    // separate DataTable objects for chart / table to allow for formatting
+    var dataChart = arraysToDataTable(labels, [x, y]);
+    var dataTable = dataChart.clone();
+
+    // chart: format first column as percentage with prefix
+    var formatterChart = new google.visualization.NumberFormat( {pattern: "Prevalence Threshold (Rare+/Flu+): #.##'%'"} );
+    formatterChart.format(dataChart, 0);
+
+    // table: format first column as percentage
+    var formatterTable = new google.visualization.NumberFormat( {pattern: "#.##'%'"} );
+    formatterTable.format(dataTable, 0);
+
+    var optionsChart = {
+        title: '',
+        hAxis : { title: labels[0], format: "#.##'%'" },
+        vAxis : { title: labels[1] },
+        legend : { position: 'none' }
+    };
+
+    // need to specify width here (rather than in CSS) for IE
+    var optionsTable = {
+        width: '225px'
+    };
+
+    $("#calculatorC2_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeCMinimumMAILISampleSize + "'>Minimum sample size (of non-prescreened MA-ILI+ specimens)</span> required to determine that the prevalence of a rare type (Rare+/Flu+) does not exceed a specified <span class='calculatorTooltip' title='" + tooltipTypeCPrevalenceThreshold + "'>prevalence threshold (Rare+/Flu+)</span>, with a confidence of " + formatTextParameter(parameters.confidenceLevel + "%") + ". (These calculations assume that the estimated prevalence of the rare event (Rare+/Flu+) will be close to " + formatTextParameter(parameters.rareFluP + "%") + ", and the prevalence of Flu+/MA-ILI+ is " + formatTextParameter(parameters.p + "%") + ".) Use your mouse to view values in the sample size graph and scroll through sample size table.");
+
+    var chart = new google.visualization.LineChart(document.getElementById('calculatorC2_chart_div'));
+    chart.draw(dataChart, optionsChart);
+
+    var table = new google.visualization.Table(document.getElementById('calculatorC2_table_div'));
+    table.draw(dataTable, optionsTable);
 }
 
 function drawTypeCTab3()
 {
+    var labels = ['Flu+ Sample Size', 'MA-ILI+ Sample Size'];
+    var x = [];
+    var y;
 
+    // use a parameters object to pass in any other input parameters to the evaluation function
+    var parameters = new Object();
+    parameters.rareFluP = calculatorTypeCInputs.rareFluP;
+    parameters.confidenceLevel = calculatorTypeCInputs.confidenceLevel3;
+    parameters.p = calculatorTypeCInputs.p3;
+    parameters.prevalenceThreshold = calculatorTypeCInputs.prevalenceThreshold3;
+
+    // dynamically set range based on parameters
+    var idealFluSampleSize = 10; //////// todo
+
+    // range: Flu+ sample size
+    var min = 0;
+    var max = Math.ceil(idealFluSampleSize);
+    var numValues = max - min + 1;
+
+    // limit number of values
+    if(numValues > 100)
+    {
+        numValues = 100;
+    }
+
+    for(var i=0; i<numValues; i++)
+    {
+        var value = min + i/(numValues-1)*(max-min);
+
+        // round to the nearest integer
+        x.push(Math.round(value));
+    }
+
+    // evaluation for each x
+    y = x.map(evaluateTypeC_MAILISampleSize_vs_FluSampleSize, parameters);
+
+    // separate DataTable objects for chart / table to allow for formatting
+    var dataChart = arraysToDataTable(labels, [x, y]);
+    var dataTable = dataChart.clone();
+
+    // chart: use x label in tooltip
+    var formatterChart = new google.visualization.NumberFormat( {pattern: "Flu+ Sample Size: #"} );
+    formatterChart.format(dataChart, 0);
+
+    var optionsChart = {
+        title: '',
+        hAxis : { title: labels[0] },
+        vAxis : { title: labels[1] },
+        legend : { position: 'none' }
+    };
+
+    // need to specify width here (rather than in CSS) for IE
+    var optionsTable = {
+        width: '225px'
+    };
+
+    $("#calculatorC3_chart_table_description_div").html("Acceptable combinations of <span class='calculatorTooltip' title='" + tooltipTypeCFluSampleSize + "'>Flu+</span> and <span class='calculatorTooltip' title='" + tooltipTypeCMAILISampleSize + "'>non-prescreened MA-ILI+</span> sample sizes required to determine that the prevalence of a rare type (Rare+/Flu+) does not exceed " + formatTextParameter(parameters.prevalenceThreshold + "%") + ", with a confidence " + formatTextParameter(parameters.confidenceLevel + "%") + ". (These calculations assume that the estimated prevalence of the rare event (Rare+/Flu+) will be close to " + formatTextParameter(parameters.rareFluP + "%") + ", and the prevalence of Flu+/MA-ILI+ is " + formatTextParameter(parameters.p + "%") + ".) Many more non-prescreened MA-ILI+ specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI+) is low.");
+
+    var chart = new google.visualization.LineChart(document.getElementById('calculatorC3_chart_div'));
+    chart.draw(dataChart, optionsChart);
+
+    var table = new google.visualization.Table(document.getElementById('calculatorC3_table_div'));
+    table.draw(dataTable, optionsTable);
 }
 
 function drawTypeCTab4()
 {
+    var labels = ['Confidence Level', 'Prevalence Threshold (Rare+/Flu+)'];
+    var x = [];
+    var y;
 
+    // range: confidence level (%)
+    var min = 70;
+    var max = 99;
+    var numValues = 30;
+
+    for(var i=0; i<numValues; i++)
+    {
+        var value = min + i/(numValues-1)*(max-min);
+
+        // round to the nearest 100th
+        x.push(Math.round(value*100)/100);
+    }
+
+    // add 99.9%
+    x.push(99.9);
+
+    // use a parameters object to pass in any other input parameters to the evaluation function
+    var parameters = new Object();
+    parameters.rareFluP = calculatorTypeCInputs.rareFluP;
+    parameters.fluSampleSize = calculatorTypeCInputs.fluSampleSize4;
+    parameters.MAILISampleSize = calculatorTypeCInputs.MAILISampleSize4;
+    parameters.p = calculatorTypeCInputs.p4;
+
+    // evaluation for each x
+    y = x.map(evaluateTypeC_prevalenceThreshold_vs_confidenceLevel, parameters);
+
+    // separate DataTable objects for chart / table to allow for formatting
+    var dataChart = arraysToDataTable(labels, [x, y]);
+    var dataTable = dataChart.clone();
+
+    // chart: format first column as percentage with prefix
+    var formatterChart = new google.visualization.NumberFormat( {pattern: "Confidence Level: #.##'%'"} );
+    formatterChart.format(dataChart, 0);
+
+    // table: format first column as percentage
+    var formatterPercentage = new google.visualization.NumberFormat( {pattern: "#.##'%'"} );
+    formatterPercentage.format(dataTable, 0);
+
+    // format y value as percentage
+    formatterPercentage.format(dataChart, 1);
+    formatterPercentage.format(dataTable, 1);
+
+    var optionsChart = {
+        title: '',
+        hAxis : { title: labels[0], format: "#.##'%'", gridlines : { count : 6 } },
+        vAxis : { title: labels[1], format: "#.##'%'" },
+        legend : { position: 'none' }
+    };
+
+    // need to specify width here (rather than in CSS) for IE
+    var optionsTable = {
+        width: '225px'
+    };
+
+    $("#calculatorC4_chart_table_description_div").html("Enter your sample sizes in the boxes above (number of Flu+ and non-prescreened MA-ILI+ specimens to be tested). The graph and table show the best combinations of <span class='calculatorTooltip' title='" + tooltipTypeCPrevalenceThreshold + "'>prevalence threshold</span> and <span class='calculatorTooltip' title='" + tooltipTypeCConfidenceLevel + "'>confidence level</span> achievable with " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " non-prescreened MA-ILI+ specimens. (This calculation assumes that the prevalence of Rare+/Flu+ is close to " + formatTextParameter(parameters.rareFluP + "%") + ", and the prevalence of Flu+/MA-ILI+ is " + formatTextParameter(parameters.p + "%") + ".) There is a trade-off between confidence level and prevalence threshold. The lower the prevalence threshold, the smaller the confidence, and vice versa. Use your mouse to view values in the graph and scroll through the table.");
+
+    var chart = new google.visualization.LineChart(document.getElementById('calculatorC4_chart_div'));
+    chart.draw(dataChart, optionsChart);
+
+    var table = new google.visualization.Table(document.getElementById('calculatorC4_table_div'));
+    table.draw(dataTable, optionsTable);
 }
 
 function calculatorTypeCInitialize()
@@ -1238,6 +1497,8 @@ function calculatorTypeCInitialize()
     $(".tooltipTypeCConfidenceLevel").attr("title", tooltipTypeCConfidenceLevel);
     $(".tooltipTypeCExpectedFluMAILI").attr("title", tooltipTypeCExpectedFluMAILI);
     $(".tooltipTypeCPrevalenceThreshold").attr("title", tooltipTypeCPrevalenceThreshold);
+    $(".tooltipTypeCMinimumFluSampleSize").attr("title", tooltipTypeCMinimumFluSampleSize);
+    $(".tooltipTypeCMinimumMAILISampleSize").attr("title", tooltipTypeCMinimumMAILISampleSize);
     $(".tooltipTypeCFluSampleSize").attr("title", tooltipTypeCFluSampleSize);
     $(".tooltipTypeCMAILISampleSize").attr("title", tooltipTypeCMAILISampleSize);
 
