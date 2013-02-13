@@ -16,7 +16,7 @@ google.load("visualization", "1", {packages:["corechart", "table"]});
 // set the on load callback
 google.setOnLoadCallback(onLoad);
 
-// calculator type A inputs: population, assumed prevalence p (%), confidence level (%)
+// calculator type A inputs
 var calculatorTypeAInputs = {
     population:1,
     p:10,
@@ -550,7 +550,7 @@ function calculatorTypeARefresh()
 //////////////////////////////// CALCULATOR B /////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-// calculator type B inputs: population, confidence level (%)
+// calculator type B inputs
 var calculatorTypeBInputs = {
     population:1,
     surveillanceScale:'National',
@@ -1180,14 +1180,221 @@ function calculatorTypeBRefresh()
     drawTypeBTab4();
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// CALCULATOR C /////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// calculator type C inputs
+var calculatorTypeCInputs = {
+    rareFluP:1,
+    confidenceLevel1:95,
+    confidenceLevel2:95,
+    p2:10,
+    confidenceLevel3:95,
+    p3:10,
+    prevalenceThreshold3:1,
+    fluSampleSize4:1,
+    MAILISampleSize4:0,
+    p4:10
+};
+
+// tooltip text
+var tooltipTypeCRareFluP = "Expected Rare+/Flu+ description.";
+var tooltipTypeCConfidenceLevel = "Confidence level description.";
+var tooltipTypeCExpectedFluMAILI = "Expected Flu+/MA-ILI+ description.";
+var tooltipTypeCPrevalenceThreshold = "Prevalence threshold description.";
+var tooltipTypeCFluSampleSize = "Flu+ sample size description.";
+var tooltipTypeCMAILISampleSize = "MA-ILI+ sample size description.";
+
+// evaluation functions here
+
+function drawTypeCTab1()
+{
+
+}
+
+function drawTypeCTab2()
+{
+
+}
+
+function drawTypeCTab3()
+{
+
+}
+
+function drawTypeCTab4()
+{
+
+}
+
+function calculatorTypeCInitialize()
+{
+    // initialize UI elements and events
+
+    // tooltips
+    $(".tooltipTypeCRareFluP").attr("title", tooltipTypeCRareFluP);
+    $(".tooltipTypeCConfidenceLevel").attr("title", tooltipTypeCConfidenceLevel);
+    $(".tooltipTypeCExpectedFluMAILI").attr("title", tooltipTypeCExpectedFluMAILI);
+    $(".tooltipTypeCPrevalenceThreshold").attr("title", tooltipTypeCPrevalenceThreshold);
+    $(".tooltipTypeCFluSampleSize").attr("title", tooltipTypeCFluSampleSize);
+    $(".tooltipTypeCMAILISampleSize").attr("title", tooltipTypeCMAILISampleSize);
+
+    // expected Rare+/Flu+ slider
+    $("#calculatorC_input_rare_flu_p_slider").slider({
+        value:calculatorTypeCInputs.rareFluP,
+        min: 0.25,
+        max: 3,
+        step: 0.25,
+        slide: function(event, ui) {
+            $("#calculatorC_input_rare_flu_p").val(ui.value + "%");
+            calculatorTypeCInputs.rareFluP = parseFloat($("#calculatorC_input_rare_flu_p").val());
+            calculatorTypeCRefresh();
+        }
+    });
+
+    $("#calculatorC_input_rare_flu_p").val($("#calculatorC_input_rare_flu_p_slider").slider("value") + "%");
+
+    // tab 1: confidence level slider
+    $("#calculatorC1_input_confidence_level_slider").slider({
+        value:calculatorTypeCInputs.confidenceLevel1,
+        min: 80,
+        max: 99,
+        step: 1,
+        slide: function(event, ui) {
+            $("#calculatorC1_input_confidence_level").val(ui.value + "%");
+            calculatorTypeCInputs.confidenceLevel1 = parseFloat($("#calculatorC1_input_confidence_level").val());
+            calculatorTypeCRefresh();
+        }
+    });
+
+    $("#calculatorC1_input_confidence_level").val($("#calculatorC1_input_confidence_level_slider").slider("value") + "%");
+
+    // tab 2: confidence level slider
+    $("#calculatorC2_input_confidence_level_slider").slider({
+        value:calculatorTypeCInputs.confidenceLevel2,
+        min: 80,
+        max: 99,
+        step: 1,
+        slide: function(event, ui) {
+            $("#calculatorC2_input_confidence_level").val(ui.value + "%");
+            calculatorTypeCInputs.confidenceLevel2 = parseFloat($("#calculatorC2_input_confidence_level").val());
+            calculatorTypeCRefresh();
+        }
+    });
+
+    $("#calculatorC2_input_confidence_level").val($("#calculatorC2_input_confidence_level_slider").slider("value") + "%");
+
+    // tab 2: assumed prevalence slider
+    $("#calculatorC2_input_p_slider").slider({
+        value:calculatorTypeCInputs.p2,
+        min: 1,
+        max: 30,
+        step: 1,
+        slide: function(event, ui) {
+            $("#calculatorC2_input_p").val(ui.value + "%");
+            calculatorTypeCInputs.p2 = parseFloat($("#calculatorC2_input_p").val());
+            calculatorTypeCRefresh();
+        }
+    });
+
+    $("#calculatorC2_input_p").val($("#calculatorC2_input_p_slider").slider("value") + "%");
+
+    // tab 3: confidence level slider
+    $("#calculatorC3_input_confidence_level_slider").slider({
+        value:calculatorTypeCInputs.confidenceLevel3,
+        min: 80,
+        max: 99,
+        step: 1,
+        slide: function(event, ui) {
+            $("#calculatorC3_input_confidence_level").val(ui.value + "%");
+            calculatorTypeCInputs.confidenceLevel3 = parseFloat($("#calculatorC3_input_confidence_level").val());
+            calculatorTypeCRefresh();
+        }
+    });
+
+    $("#calculatorC3_input_confidence_level").val($("#calculatorC3_input_confidence_level_slider").slider("value") + "%");
+
+    // tab 3: assumed prevalence slider
+    $("#calculatorC3_input_p_slider").slider({
+        value:calculatorTypeCInputs.p3,
+        min: 1,
+        max: 30,
+        step: 1,
+        slide: function(event, ui) {
+            $("#calculatorC3_input_p").val(ui.value + "%");
+            calculatorTypeCInputs.p3 = parseFloat($("#calculatorC3_input_p").val());
+            calculatorTypeCRefresh();
+        }
+    });
+
+    $("#calculatorC3_input_p").val($("#calculatorC3_input_p_slider").slider("value") + "%");
+
+    // tab 3: prevalence threshold slider
+    $("#calculatorC3_input_prevalence_threshold_slider").slider({
+        value:calculatorTypeCInputs.prevalenceThreshold3,
+        min: 0.25,
+        max: 3,
+        step: 0.25,
+        slide: function(event, ui) {
+            $("#calculatorC3_input_prevalence_threshold").val(ui.value + "%");
+            calculatorTypeCInputs.prevalenceThreshold3 = parseFloat($("#calculatorC3_input_prevalence_threshold").val());
+            calculatorTypeCRefresh();
+        }
+    });
+
+    $("#calculatorC3_input_prevalence_threshold").val($("#calculatorC3_input_prevalence_threshold_slider").slider("value") + "%");
+
+    // tab 4: Flu+ sample size
+    $("#calculatorC4_input_flu_sample_size").bind('keyup mouseup change', function(e) {
+        calculatorTypeCInputs.fluSampleSize4 = parseFloat($("#calculatorC4_input_flu_sample_size").val());
+        calculatorTypeCRefresh();
+    });
+
+    $("#calculatorC4_input_flu_sample_size").val(calculatorTypeCInputs.fluSampleSize4);
+
+    // tab 4: MA-ILI+ sample size
+    $("#calculatorC4_input_maili_sample_size").bind('keyup mouseup change', function(e) {
+        calculatorTypeCInputs.MAILISampleSize4 = parseFloat($("#calculatorC4_input_maili_sample_size").val());
+        calculatorTypeCRefresh();
+    });
+
+    $("#calculatorC4_input_maili_sample_size").val(calculatorTypeCInputs.MAILISampleSize4);
+
+    // tab 4: assumed prevalence slider
+    $("#calculatorC4_input_p_slider").slider({
+        value:calculatorTypeCInputs.p4,
+        min: 1,
+        max: 30,
+        step: 1,
+        slide: function(event, ui) {
+            $("#calculatorC4_input_p").val(ui.value + "%");
+            calculatorTypeCInputs.p4 = parseFloat($("#calculatorC4_input_p").val());
+            calculatorTypeCRefresh();
+        }
+    });
+
+    $("#calculatorC4_input_p").val($("#calculatorC4_input_p_slider").slider("value") + "%");
+}
+
+function calculatorTypeCRefresh()
+{
+    drawTypeCTab1();
+    drawTypeCTab2();
+    drawTypeCTab3();
+    drawTypeCTab4();
+}
+
 function onLoad()
 {
     // create accordion
-    $("#calculator_accordion").accordion({ heightStyle: "content", activate: function(event, ui) { calculatorTypeARefresh(); calculatorTypeBRefresh(); } } );
+    $("#calculator_accordion").accordion({ heightStyle: "content", activate: function(event, ui) { calculatorTypeARefresh(); calculatorTypeBRefresh(); calculatorTypeCRefresh(); } } );
 
     // create individual calculator tabs; trigger a refresh on activation so charts are correctly sized
     $("#calculatorA_tabs").tabs({ activate: function(event, ui) { calculatorTypeARefresh(); } });
     $("#calculatorB_tabs").tabs({ activate: function(event, ui) { calculatorTypeBRefresh(); } });
+    $("#calculatorC_tabs").tabs({ activate: function(event, ui) { calculatorTypeCRefresh(); } });
 
     // initialize and refresh individual calculators
     calculatorTypeAInitialize();
@@ -1195,6 +1402,9 @@ function onLoad()
 
     calculatorTypeBInitialize();
     calculatorTypeBRefresh();
+
+    calculatorTypeCInitialize();
+    calculatorTypeCRefresh();
 
     // create tooltips; do this last since we may set some tooltip text in the calculator initializations
     $(document).tooltip();

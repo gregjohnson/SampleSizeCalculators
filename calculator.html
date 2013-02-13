@@ -253,7 +253,143 @@
 
             <!-- Calculator C -->
             <h3>Sample Size Calculator for Rare (Novel) Event Investigation</h3>
-            <div> </div>
+            <div>
+                <!-- input: expected Rare+/Flu+ -->
+                <div class="calculatorInputArea">
+                    <label for="calculatorC_input_rare_flu_p" class="calculatorLabel calculatorTooltip tooltipTypeCRareFluP">Expected Rare+/Flu+</label>
+                    <div id="calculatorC_input_rare_flu_p_slider" class="calculatorSlider"></div>
+                    <input type="text" id="calculatorC_input_rare_flu_p" class="calculatorSliderInput" />
+                </div>
+
+                <br style="clear:both;" />
+                <br style="clear:both;" />
+
+                <div id="calculatorC_tabs" class="calculatorTabsContainer">
+                    <ul>
+                        <li><a href="#calculatorC_tabs-1">Flu+ Sample Size</a></li>
+                        <li><a href="#calculatorC_tabs-2">MA-ILI+ Sample Size</a></li>
+                        <li><a href="#calculatorC_tabs-3">Combined Samples</a></li>
+                        <li><a href="#calculatorC_tabs-4">Sample Power</a></li>
+                    </ul>
+
+                    <div id="calculatorC_tabs-1">
+                        <!-- input: confidence level -->
+                        <div class="calculatorInputArea">
+                            <label for="calculatorC1_input_confidence_level" class="calculatorLabel calculatorTooltip tooltipTypeCConfidenceLevel">Confidence level</label>
+                            <div id="calculatorC1_input_confidence_level_slider" class="calculatorSlider"></div>
+                            <input type="text" id="calculatorC1_input_confidence_level" class="calculatorSliderInput" />
+                        </div>
+
+                        <br style="clear:both;" />
+                        <br style="clear:both;" />
+                        <div id="calculatorC1_chart_table_description_div"> </div>
+
+                        <!-- chart and table -->
+                        <div id="calculatorC1_chart_div" class="calculatorSmallChart"></div>
+
+                        <!-- the table ignores height specification in class so must specify it here -->
+                        <div id="calculatorC1_table_div" class="calculatorSmallTable" style="height:200px; padding-top:50px;"></div>
+
+                        <br style="clear:both;" />
+                    </div> <!-- end tabs-1 -->
+
+                    <div id="calculatorC_tabs-2">
+                        <!-- input: confidence level -->
+                        <div class="calculatorInputArea">
+                            <label for="calculatorC2_input_confidence_level" class="calculatorLabel calculatorTooltip tooltipTypeCConfidenceLevel">Confidence level</label>
+                            <div id="calculatorC2_input_confidence_level_slider" class="calculatorSlider"></div>
+                            <input type="text" id="calculatorC2_input_confidence_level" class="calculatorSliderInput" />
+                        </div>
+
+                        <!-- input: assumed prevalence p -->
+                        <div class="calculatorInputArea">
+                            <label for="calculatorC2_input_p" class="calculatorLabel calculatorTooltip tooltipTypeCExpectedFluMAILI">Expected Flu+/MA-ILI+</label>
+                            <div id="calculatorC2_input_p_slider" class="calculatorSlider"></div>
+                            <input type="text" id="calculatorC2_input_p" class="calculatorSliderInput" />
+                        </div>
+
+                        <br style="clear:both;" />
+                        <br style="clear:both;" />
+                        <div id="calculatorC2_chart_table_description_div"> </div>
+
+                        <!-- chart and table -->
+                        <div id="calculatorC2_chart_div" class="calculatorSmallChart"></div>
+
+                        <!-- the table ignores height specification in class so must specify it here -->
+                        <div id="calculatorC2_table_div" class="calculatorSmallTable" style="height:200px; padding-top:50px;"></div>
+
+                        <br style="clear:both;" />
+                    </div> <!-- end tabs-2 -->
+
+                    <div id="calculatorC_tabs-3">
+                        <!-- input: confidence level -->
+                        <div class="calculatorInputArea">
+                            <label for="calculatorC3_input_confidence_level" class="calculatorLabel calculatorTooltip tooltipTypeCConfidenceLevel">Confidence level</label>
+                            <div id="calculatorC3_input_confidence_level_slider" class="calculatorSlider"></div>
+                            <input type="text" id="calculatorC3_input_confidence_level" class="calculatorSliderInput" />
+                        </div>
+
+                        <!-- input: assumed prevalence p -->
+                        <div class="calculatorInputArea">
+                            <label for="calculatorC3_input_p" class="calculatorLabel calculatorTooltip tooltipTypeCExpectedFluMAILI">Expected Flu+/MA-ILI+</label>
+                            <div id="calculatorC3_input_p_slider" class="calculatorSlider"></div>
+                            <input type="text" id="calculatorC3_input_p" class="calculatorSliderInput" />
+                        </div>
+
+                        <!-- input: prevalence threshold -->
+                        <div class="calculatorInputArea">
+                            <label for="calculatorC3_input_prevalence_threshold" class="calculatorLabel calculatorTooltip tooltipTypeCPrevalenceThreshold">Prevalence Threshold</label>
+                            <div id="calculatorC3_input_prevalence_threshold_slider" class="calculatorSlider"></div>
+                            <input type="text" id="calculatorC3_input_prevalence_threshold" class="calculatorSliderInput" />
+                        </div>
+
+                        <br style="clear:both;" />
+                        <br style="clear:both;" />
+                        <div id="calculatorC3_chart_table_description_div"> </div>
+
+                        <!-- chart and table -->
+                        <div id="calculatorC3_chart_div" class="calculatorSmallChart"></div>
+
+                        <!-- the table ignores height specification in class so must specify it here -->
+                        <div id="calculatorC3_table_div" class="calculatorSmallTable" style="height:200px; padding-top:50px;"></div>
+
+                        <br style="clear:both;" />
+                    </div> <!-- end tabs-3 -->
+
+                    <div id="calculatorC_tabs-4">
+                        <!-- input: Flu+ number of samples -->
+                        <div class="calculatorInputArea">
+                            <label for="calculatorC4_input_flu_sample_size" class="calculatorLabel calculatorTooltip tooltipTypeCFluSampleSize">Flu+ Sample Size</label>
+                            <input id="calculatorC4_input_flu_sample_size" type="number" class="calculatorNumberInput" />
+                        </div>
+
+                        <!-- input: MA-ILI+ number of samples -->
+                        <div class="calculatorInputArea">
+                            <label for="calculatorC4_input_maili_sample_size" class="calculatorLabel calculatorTooltip tooltipTypeCMAILISampleSize">MA-ILI+ Sample Size</label>
+                            <input id="calculatorC4_input_maili_sample_size" type="number" class="calculatorNumberInput" />
+                        </div>
+
+                        <!-- input: assumed prevalence p -->
+                        <div class="calculatorInputArea">
+                            <label for="calculatorC4_input_p" class="calculatorLabel calculatorTooltip tooltipTypeCExpectedFluMAILI">Expected Flu+/MA-ILI+</label>
+                            <div id="calculatorC4_input_p_slider" class="calculatorSlider"></div>
+                            <input type="text" id="calculatorC4_input_p" class="calculatorSliderInput" />
+                        </div>
+
+                        <br style="clear:both;" />
+                        <br style="clear:both;" />
+                        <div id="calculatorC4_chart_table_description_div"> </div>
+
+                        <!-- chart and table -->
+                        <div id="calculatorC4_chart_div" class="calculatorSmallChart"></div>
+
+                        <!-- the table ignores height specification in class so must specify it here -->
+                        <div id="calculatorC4_table_div" class="calculatorSmallTable" style="height:200px; padding-top:50px;"></div>
+
+                        <br style="clear:both;" />
+                    </div> <!-- end tabs-4 -->
+                </div> <!-- end tabs -->
+            </div> <!-- end Calculator C -->
         </div> <!-- end accordion -->
     </div> <!-- end div containing the entire calculator -->
 
