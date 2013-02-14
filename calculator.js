@@ -218,7 +218,7 @@ function evaluateTypeA_SampleSize_vs_epsilon(epsilon)
     var alpha = 1. - 0.5*errorPercentile/100.;
 
     // this is the inverse cumulative distribution function
-    var z = Math.sqrt(2.) * erfinv(2.*alpha - 1.)
+    var z = Math.sqrt(2.) * erfinv(2.*alpha - 1.);
 
     var episilonDecimal = epsilon / 100.;
     var pDecimal = this.p / 100.;
@@ -1224,14 +1224,17 @@ function typeC_getFluSampleSize(prevalenceThreshold)
     var alpha = 1. - 0.5*errorPercentile/100.;
 
     // this is the inverse cumulative distribution function
-    var z = Math.sqrt(2.) * erfinv(2.*alpha - 1.)
+    var z = Math.sqrt(2.) * erfinv(2.*alpha - 1.);
 
     var p = this.rareFluP / 100.;
     var puHat = prevalenceThreshold / 100.;
-    var psi = 2. * ( 3.*p*p - 6.*puHat*p + 3.*puHat*puHat );
-    var upsilon = 4.*p*p*z*z + 2.*p*p - 2.*p*z*z - 4.*puHat*p*z*z + 2.*puHat*z*z - 2.*puHat*p - p + puHat;
 
-    var n = (p*p*z*z)/psi +( Math.sqrt(upsilon*Math.pow(p*p*(-z*z)-5.*p*p-p*z*z+4.*puHat*p*z*z-2.*puHat*z*z+8.*puHat*p+p-3.*puHat*puHat-puHat,2)-4.*(3.*p*p-6.*puHat*p+3.*puHat*puHat)) ) / psi + ( 5.*p*p+p*z*z-4.*puHat*p*z*z+2.*puHat*z*z-8.*puHat*p-p+3.*puHat*puHat+puHat ) / psi;
+    // using equation from mathematica screenshot
+    var psi = 2. * ( 3.*p*p - 6.*puHat*p + 3.*puHat*puHat );
+    var firstTerm = -p + 5.*p*p + p*z*z + p*p*z*z + puHat - 8.*p*puHat + 2.*z*z*puHat - 4*p*z*z*puHat + 3.*puHat*puHat;
+    var secondTerm = Math.sqrt( Math.pow(p - 5.*p*p - p*z*z - p*p*z*z - puHat + 8.*p*puHat - 2.*z*z*puHat + 4.*p*z*z*puHat - 3.*puHat*puHat, 2) - 4.*(-p + 2.*p*p - 2.*p*z*z + 4*p*p*z*z + puHat - 2.*p*puHat + 2*z*z*puHat - 4.*p*z*z*puHat) * (3*p*p - 6.*p*puHat + 3.*puHat*puHat) );
+
+    var n = 1./psi * ( firstTerm  + secondTerm );
 
     return n;
 }
@@ -1273,7 +1276,21 @@ function evaluateTypeC_MAILISampleSize_vs_FluSampleSize(fluSampleSize)
 
 function evaluateTypeC_prevalenceThreshold_vs_confidenceLevel(confidenceLevel)
 {
-    return 1.;
+    // this object contains parameter values
+    var errorPercentile = 100. - confidenceLevel;
+    var alpha = 1. - 0.5*errorPercentile/100.;
+
+    // this is the inverse cumulative distribution function
+    var z = Math.sqrt(2.) * erfinv(2.*alpha - 1.);
+
+    var p = this.rareFluP / 100.;
+    var n = this.fluSampleSize + this.MAILISampleSize * (this.p / 100.);
+    var delta = (z*z/3. + 1./6.) * (1.-2.*p) / n;
+    var v = p*(1.-p)/(n-1.);
+
+    var puHat = p + delta + Math.sqrt(z*z*v + delta*delta);
+
+    return puHat * 100.;
 }
 
 function drawTypeCTab1()
