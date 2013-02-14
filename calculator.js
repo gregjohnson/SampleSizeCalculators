@@ -336,6 +336,40 @@ function drawTypeAChartAndTable()
 
     var table = new google.visualization.Table(document.getElementById('calculatorA_table_div'));
     table.draw(dataTable, optionsTable);
+
+    // selection handling
+    var thisObj = drawTypeAChartAndTable;
+
+    google.visualization.events.addListener(chart, 'select', chartSelectHandler);
+    google.visualization.events.addListener(table, 'select', tableSelectHandler);
+
+    function chartSelectHandler(e) { thisObj.selectHandler(chart.getSelection()); }
+    function tableSelectHandler(e) { thisObj.selectHandler(table.getSelection()); }
+
+    thisObj.selectHandler = function(selectionArray)
+    {
+        if(selectionArray.length > 0 && selectionArray[0].row != null)
+        {
+            thisObj.selectedRow = selectionArray[0].row;
+
+            // make sure row is valid
+            if(thisObj.selectedRow >= x.length)
+            {
+                thisObj.selectedRow = 0;
+            }
+
+            // form new array with only this entry (to avoid multiple selections)
+            var newSelectionArray = [{row:selectionArray[0].row}];
+
+            // select element in chart and table
+            chart.setSelection(newSelectionArray);
+            table.setSelection(newSelectionArray);
+
+            $("#calculatorA_chart_table_report_div").html("A minimum of " + formatTextParameter(y[thisObj.selectedRow]) + " MA-ILI+ specimens are required to estimate the actual Flu+/MA-ILI+ fraction with " + formatTextParameter(parameters.confidenceLevel + "%") + " confidence error bars of +/-" + formatTextParameter(x[thisObj.selectedRow] + "%") + ". (This assumes that Flu+/MA-ILI+ is approximately " + formatTextParameter(parameters.p + "%") + ".)");
+        }
+    }
+
+    thisObj.selectHandler([{row:thisObj.selectedRow ? thisObj.selectedRow : 0}]);
 }
 
 function drawTypeABigTable()
@@ -373,6 +407,37 @@ function drawTypeABigTable()
 
     var table = new google.visualization.Table(document.getElementById('calculatorA_big_table_div'));
     table.draw(data);
+
+    // selection handling
+    var thisObj = drawTypeABigTable;
+
+    google.visualization.events.addListener(table, 'select', tableSelectHandler);
+
+    function tableSelectHandler(e) { thisObj.selectHandler(table.getSelection()); }
+
+    thisObj.selectHandler = function(selectionArray)
+    {
+        if(selectionArray.length > 0 && selectionArray[0].row != null)
+        {
+            thisObj.selectedRow = selectionArray[0].row;
+
+            // make sure row is valid
+            if(thisObj.selectedRow >= epsilons.length)
+            {
+                thisObj.selectedRow = 0;
+            }
+
+            // form new array with only this entry (to avoid multiple selections)
+            var newSelectionArray = [{row:selectionArray[0].row}];
+
+            // select element in chart and table
+            table.setSelection(newSelectionArray);
+
+            $("#calculatorA_big_table_report_div").html("This row gives the minimum number of MA-ILI+ specimens that are required to estimate the actual Flu+/MA-ILI+ fraction with error bars of +/-" + formatTextParameter(epsilons[thisObj.selectedRow] + "%") + " at various levels of confidence. (This assumes that Flu+/MA-ILI+ is approximately " + formatTextParameter(parameters.p + "%") + ".) For example, at least " + formatTextParameter(dataArrays[1][thisObj.selectedRow]) + " MA-ILI+ specimens are required to estimate the actual Flu+/MA-ILI+ fraction with 99% confidence error bars of +/-" + formatTextParameter(epsilons[thisObj.selectedRow] + "%") + ", but only " + formatTextParameter(dataArrays[3][thisObj.selectedRow]) + " specimens are needed for 90% confidence error bars of the same size.");
+        }
+    }
+
+    thisObj.selectHandler([{row:thisObj.selectedRow ? thisObj.selectedRow : 0}]);
 }
 
 // draw chart and table given labels, x series, y series
@@ -439,6 +504,40 @@ function drawTypeAChartAndTable2()
 
     var table = new google.visualization.Table(document.getElementById('calculatorA_table_2_div'));
     table.draw(dataTable, optionsTable);
+
+    // selection handling
+    var thisObj = drawTypeAChartAndTable2;
+
+    google.visualization.events.addListener(chart, 'select', chartSelectHandler);
+    google.visualization.events.addListener(table, 'select', tableSelectHandler);
+
+    function chartSelectHandler(e) { thisObj.selectHandler(chart.getSelection()); }
+    function tableSelectHandler(e) { thisObj.selectHandler(table.getSelection()); }
+
+    thisObj.selectHandler = function(selectionArray)
+    {
+        if(selectionArray.length > 0 && selectionArray[0].row != null)
+        {
+            thisObj.selectedRow = selectionArray[0].row;
+
+            // make sure row is valid
+            if(thisObj.selectedRow >= x.length)
+            {
+                thisObj.selectedRow = 0;
+            }
+
+            // form new array with only this entry (to avoid multiple selections)
+            var newSelectionArray = [{row:selectionArray[0].row}];
+
+            // select element in chart and table
+            chart.setSelection(newSelectionArray);
+            table.setSelection(newSelectionArray);
+
+            $("#calculatorA_chart_table_2_report_div").html(formatTextParameter(parameters.sampleSize) + " MA-ILI+ specimens should yield Flu+/MA-ILI+ estimates with " + formatTextParameter(x[thisObj.selectedRow] + "%") + " confidence error bars of +/-" + formatTextParameter(Math.round(y[thisObj.selectedRow]*100.)/100. + "%") + ". (This assumes that Flu+/MA-ILI+ is approximately " + formatTextParameter(parameters.p + "%") + ".)");
+        }
+    }
+
+    thisObj.selectHandler([{row:thisObj.selectedRow ? thisObj.selectedRow : 0}]);
 }
 
 function calculatorTypeAInitialize()
@@ -736,6 +835,45 @@ function drawTypeBTab1()
 
     var table = new google.visualization.Table(document.getElementById('calculatorB1_table_div'));
     table.draw(dataTable, optionsTable);
+
+    // selection handling
+    var thisObj = drawTypeBTab1;
+
+    google.visualization.events.addListener(chart, 'select', chartSelectHandler);
+    google.visualization.events.addListener(table, 'select', tableSelectHandler);
+
+    function chartSelectHandler(e) { thisObj.selectHandler(chart.getSelection()); }
+    function tableSelectHandler(e) { thisObj.selectHandler(table.getSelection()); }
+
+    thisObj.selectHandler = function(selectionArray)
+    {
+        if(selectionArray.length > 0 && selectionArray[0].row != null)
+        {
+            thisObj.selectedRow = selectionArray[0].row;
+
+            // make sure row is valid
+            if(thisObj.selectedRow >= x.length)
+            {
+                thisObj.selectedRow = 0;
+            }
+
+            // form new array with only this entry (to avoid multiple selections)
+            var newSelectionArray = [{row:selectionArray[0].row}];
+
+            // select element in chart and table
+            chart.setSelection(newSelectionArray);
+            table.setSelection(newSelectionArray);
+
+            $("#calculatorB1_chart_table_report_div").html("If the prevalence of the rare type among all flu specimens (Rare+/Flu+) is  approximately " + formatTextParameter(x[thisObj.selectedRow] + "%") + ", then " + formatTextParameter(y[thisObj.selectedRow]) + " Flu+ specimens will yield at least one Rare+ specimen, with " + formatTextParameter(parameters.confidenceLevel + "%") + " confidence.");
+
+            if(parameters.surveillanceScale == "National")
+            {
+                $("#calculatorB1_chart_table_report_div").html($("#calculatorB1_chart_table_report_div").html() + " (This assumes that all states are contributing to the national surveillance effort proportional to population size.)");
+            }
+        }
+    }
+
+    thisObj.selectHandler([{row:thisObj.selectedRow ? thisObj.selectedRow : 0}]);
 }
 
 // draw chart and table given labels, x series, y series
@@ -805,6 +943,45 @@ function drawTypeBTab2()
 
     var table = new google.visualization.Table(document.getElementById('calculatorB2_table_div'));
     table.draw(dataTable, optionsTable);
+
+    // selection handling
+    var thisObj = drawTypeBTab2;
+
+    google.visualization.events.addListener(chart, 'select', chartSelectHandler);
+    google.visualization.events.addListener(table, 'select', tableSelectHandler);
+
+    function chartSelectHandler(e) { thisObj.selectHandler(chart.getSelection()); }
+    function tableSelectHandler(e) { thisObj.selectHandler(table.getSelection()); }
+
+    thisObj.selectHandler = function(selectionArray)
+    {
+        if(selectionArray.length > 0 && selectionArray[0].row != null)
+        {
+            thisObj.selectedRow = selectionArray[0].row;
+
+            // make sure row is valid
+            if(thisObj.selectedRow >= x.length)
+            {
+                thisObj.selectedRow = 0;
+            }
+
+            // form new array with only this entry (to avoid multiple selections)
+            var newSelectionArray = [{row:selectionArray[0].row}];
+
+            // select element in chart and table
+            chart.setSelection(newSelectionArray);
+            table.setSelection(newSelectionArray);
+
+            $("#calculatorB2_chart_table_report_div").html("If the prevalence of the rare type among all flu specimens (Rare+/Flu+) is  approximately " + formatTextParameter(x[thisObj.selectedRow] + "%") + ", then " + formatTextParameter(y[thisObj.selectedRow]) + " non-prescreened MA-ILI+ specimens will yield at least one Rare+ specimen, with " + formatTextParameter(parameters.confidenceLevel + "%") + " confidence. (This assumes that " + formatTextParameter(parameters.p + "%") + " of MA-ILI+ patients are Flu+). ");
+
+            if(parameters.surveillanceScale == "National")
+            {
+                $("#calculatorB2_chart_table_report_div").html($("#calculatorB1_chart_table_report_div").html() + " (This assumes that all states are contributing to the national surveillance effort proportional to population size.)");
+            }
+        }
+    }
+
+    thisObj.selectHandler([{row:thisObj.selectedRow ? thisObj.selectedRow : 0}]);
 }
 
 // draw chart and table given labels, x series, y series
@@ -885,6 +1062,40 @@ function drawTypeBTab3()
 
     var table = new google.visualization.Table(document.getElementById('calculatorB3_table_div'));
     table.draw(dataTable, optionsTable);
+
+    // selection handling
+    var thisObj = drawTypeBTab3;
+
+    google.visualization.events.addListener(chart, 'select', chartSelectHandler);
+    google.visualization.events.addListener(table, 'select', tableSelectHandler);
+
+    function chartSelectHandler(e) { thisObj.selectHandler(chart.getSelection()); }
+    function tableSelectHandler(e) { thisObj.selectHandler(table.getSelection()); }
+
+    thisObj.selectHandler = function(selectionArray)
+    {
+        if(selectionArray.length > 0 && selectionArray[0].row != null)
+        {
+            thisObj.selectedRow = selectionArray[0].row;
+
+            // make sure row is valid
+            if(thisObj.selectedRow >= x.length)
+            {
+                thisObj.selectedRow = 0;
+            }
+
+            // form new array with only this entry (to avoid multiple selections)
+            var newSelectionArray = [{row:selectionArray[0].row}];
+
+            // select element in chart and table
+            chart.setSelection(newSelectionArray);
+            table.setSelection(newSelectionArray);
+
+            $("#calculatorB3_chart_table_report_div").html("If the prevalence of the rare type among all flu specimens (Rare+/Flu+) is approximately " + formatTextParameter(parameters.detectionThreshold + "%") + ", then a combination of " + formatTextParameter(x[thisObj.selectedRow]) + " Flu+ specimens and " + formatTextParameter(y[thisObj.selectedRow]) + " non-prescreened MA-ILI+ specimens will yield at least one Rare+ specimen, with " + formatTextParameter(parameters.confidenceLevel + "%") + " confidence. (This assumes that " + formatTextParameter(parameters.p + "%") + " of MA-ILI+ patients are Flu+). ");
+        }
+    }
+
+    thisObj.selectHandler([{row:thisObj.selectedRow ? thisObj.selectedRow : 0}]);
 }
 
 // draw chart and table given labels, x series, y series
@@ -964,6 +1175,40 @@ function drawTypeBTab4()
 
     var table = new google.visualization.Table(document.getElementById('calculatorB4_table_div'));
     table.draw(dataTable, optionsTable);
+
+    // selection handling
+    var thisObj = drawTypeBTab4;
+
+    google.visualization.events.addListener(chart, 'select', chartSelectHandler);
+    google.visualization.events.addListener(table, 'select', tableSelectHandler);
+
+    function chartSelectHandler(e) { thisObj.selectHandler(chart.getSelection()); }
+    function tableSelectHandler(e) { thisObj.selectHandler(table.getSelection()); }
+
+    thisObj.selectHandler = function(selectionArray)
+    {
+        if(selectionArray.length > 0 && selectionArray[0].row != null)
+        {
+            thisObj.selectedRow = selectionArray[0].row;
+
+            // make sure row is valid
+            if(thisObj.selectedRow >= x.length)
+            {
+                thisObj.selectedRow = 0;
+            }
+
+            // form new array with only this entry (to avoid multiple selections)
+            var newSelectionArray = [{row:selectionArray[0].row}];
+
+            // select element in chart and table
+            chart.setSelection(newSelectionArray);
+            table.setSelection(newSelectionArray);
+
+            $("#calculatorB4_chart_table_report_div").html("A combination of " + formatTextParameter(parameters.fluSampleSize) + " Flu+ specimens and " + formatTextParameter(parameters.MAILISampleSize) + " non-prescreened MA-ILI+ specimens will allow detection of a rare type with " + formatTextParameter(x[thisObj.selectedRow] + "%") + " confidence if the prevalence of the rare type (Rare+/Flu+) is at least " + formatTextParameter(y[thisObj.selectedRow] + "%") + ". (This assumes that " + formatTextParameter(parameters.p + "%") + " of MA-ILI+ patients are Flu+). ");
+        }
+    }
+
+    thisObj.selectHandler([{row:thisObj.selectedRow ? thisObj.selectedRow : 0}]);
 }
 
 function calculatorTypeBInitialize()
@@ -1358,6 +1603,38 @@ function drawTypeCTab1()
 
     var table = new google.visualization.Table(document.getElementById('calculatorC1_table_div'));
     table.draw(dataTable, optionsTable);
+
+    // selection handling
+    var thisObj = drawTypeCTab1;
+
+    google.visualization.events.addListener(chart, 'select', chartSelectHandler);
+    google.visualization.events.addListener(table, 'select', tableSelectHandler);
+
+    function chartSelectHandler(e) { thisObj.selectHandler(chart.getSelection()); }
+    function tableSelectHandler(e) { thisObj.selectHandler(table.getSelection()); }
+
+    thisObj.selectHandler = function(selectionArray)
+    {
+        if(selectionArray.length > 0 && selectionArray[0].row != null)
+        {
+            thisObj.selectedRow = selectionArray[0].row;
+
+            // make sure row is valid
+            if(thisObj.selectedRow >= x.length)
+            {
+                thisObj.selectedRow = 0;
+            }
+
+            // form new array with only this entry (to avoid multiple selections)
+            var newSelectionArray = [{row:selectionArray[0].row}];
+
+            // select element in chart and table
+            chart.setSelection(newSelectionArray);
+            table.setSelection(newSelectionArray);
+        }
+    }
+
+    thisObj.selectHandler([{row:thisObj.selectedRow ? thisObj.selectedRow : 0}]);
 }
 
 function drawTypeCTab2()
@@ -1419,6 +1696,38 @@ function drawTypeCTab2()
 
     var table = new google.visualization.Table(document.getElementById('calculatorC2_table_div'));
     table.draw(dataTable, optionsTable);
+
+    // selection handling
+    var thisObj = drawTypeCTab2;
+
+    google.visualization.events.addListener(chart, 'select', chartSelectHandler);
+    google.visualization.events.addListener(table, 'select', tableSelectHandler);
+
+    function chartSelectHandler(e) { thisObj.selectHandler(chart.getSelection()); }
+    function tableSelectHandler(e) { thisObj.selectHandler(table.getSelection()); }
+
+    thisObj.selectHandler = function(selectionArray)
+    {
+        if(selectionArray.length > 0 && selectionArray[0].row != null)
+        {
+            thisObj.selectedRow = selectionArray[0].row;
+
+            // make sure row is valid
+            if(thisObj.selectedRow >= x.length)
+            {
+                thisObj.selectedRow = 0;
+            }
+
+            // form new array with only this entry (to avoid multiple selections)
+            var newSelectionArray = [{row:selectionArray[0].row}];
+
+            // select element in chart and table
+            chart.setSelection(newSelectionArray);
+            table.setSelection(newSelectionArray);
+        }
+    }
+
+    thisObj.selectHandler([{row:thisObj.selectedRow ? thisObj.selectedRow : 0}]);
 }
 
 function drawTypeCTab3()
@@ -1486,6 +1795,38 @@ function drawTypeCTab3()
 
     var table = new google.visualization.Table(document.getElementById('calculatorC3_table_div'));
     table.draw(dataTable, optionsTable);
+
+    // selection handling
+    var thisObj = drawTypeCTab3;
+
+    google.visualization.events.addListener(chart, 'select', chartSelectHandler);
+    google.visualization.events.addListener(table, 'select', tableSelectHandler);
+
+    function chartSelectHandler(e) { thisObj.selectHandler(chart.getSelection()); }
+    function tableSelectHandler(e) { thisObj.selectHandler(table.getSelection()); }
+
+    thisObj.selectHandler = function(selectionArray)
+    {
+        if(selectionArray.length > 0 && selectionArray[0].row != null)
+        {
+            thisObj.selectedRow = selectionArray[0].row;
+
+            // make sure row is valid
+            if(thisObj.selectedRow >= x.length)
+            {
+                thisObj.selectedRow = 0;
+            }
+
+            // form new array with only this entry (to avoid multiple selections)
+            var newSelectionArray = [{row:selectionArray[0].row}];
+
+            // select element in chart and table
+            chart.setSelection(newSelectionArray);
+            table.setSelection(newSelectionArray);
+        }
+    }
+
+    thisObj.selectHandler([{row:thisObj.selectedRow ? thisObj.selectedRow : 0}]);
 }
 
 function drawTypeCTab4()
@@ -1555,6 +1896,38 @@ function drawTypeCTab4()
 
     var table = new google.visualization.Table(document.getElementById('calculatorC4_table_div'));
     table.draw(dataTable, optionsTable);
+
+    // selection handling
+    var thisObj = drawTypeCTab4;
+
+    google.visualization.events.addListener(chart, 'select', chartSelectHandler);
+    google.visualization.events.addListener(table, 'select', tableSelectHandler);
+
+    function chartSelectHandler(e) { thisObj.selectHandler(chart.getSelection()); }
+    function tableSelectHandler(e) { thisObj.selectHandler(table.getSelection()); }
+
+    thisObj.selectHandler = function(selectionArray)
+    {
+        if(selectionArray.length > 0 && selectionArray[0].row != null)
+        {
+            thisObj.selectedRow = selectionArray[0].row;
+
+            // make sure row is valid
+            if(thisObj.selectedRow >= x.length)
+            {
+                thisObj.selectedRow = 0;
+            }
+
+            // form new array with only this entry (to avoid multiple selections)
+            var newSelectionArray = [{row:selectionArray[0].row}];
+
+            // select element in chart and table
+            chart.setSelection(newSelectionArray);
+            table.setSelection(newSelectionArray);
+        }
+    }
+
+    thisObj.selectHandler([{row:thisObj.selectedRow ? thisObj.selectedRow : 0}]);
 }
 
 function calculatorTypeCInitialize()
