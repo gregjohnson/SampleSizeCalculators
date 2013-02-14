@@ -1679,7 +1679,7 @@ function calculatorTypeCInitialize()
     $("#calculatorC3_input_prevalence_threshold_slider").slider({
         value:calculatorTypeCInputs.prevalenceThreshold3,
         min: 0.25,
-        max: 3,
+        max: 5,
         step: 0.25,
         slide: function(event, ui) {
             $("#calculatorC3_input_prevalence_threshold").val(ui.value + "%");
