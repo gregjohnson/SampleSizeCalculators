@@ -1196,8 +1196,8 @@ var calculatorTypeCInputs = {
     p2:10,
     confidenceLevel3:95,
     p3:10,
-    fluSampleSize4:1,
     prevalenceThreshold3:1. + calculatorTypeCRareFluPBuffer,
+    fluSampleSize4:2,
     MAILISampleSize4:0,
     p4:10
 };
@@ -1290,6 +1290,12 @@ function evaluateTypeC_prevalenceThreshold_vs_confidenceLevel(confidenceLevel)
     var v = p*(1.-p)/(n-1.);
 
     var puHat = p + delta + Math.sqrt(z*z*v + delta*delta);
+
+    // bound puHat (prevalence threshold) to 100%
+    if(puHat > 1.)
+    {
+        puHat = 1.;
+    }
 
     return puHat * 100.;
 }
