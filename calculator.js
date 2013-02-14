@@ -1211,19 +1211,61 @@ var tooltipTypeCMinimumMAILISampleSize = "Minimum MA-ILI+ sample size descriptio
 var tooltipTypeCFluSampleSize = "Flu+ sample size description.";
 var tooltipTypeCMAILISampleSize = "MA-ILI+ sample size description.";
 
+// helper function so we only have to define this once.
+// must call this with a parameters object as "this"... use function.call(parameters, arg)
+function typeC_getFluSampleSize(prevalenceThreshold)
+{
+    // this object contains parameter values
+
+    var errorPercentile = 100. - this.confidenceLevel;
+    var alpha = 1. - 0.5*errorPercentile/100.;
+
+    // this is the inverse cumulative distribution function
+    var z = Math.sqrt(2.) * erfinv(2.*alpha - 1.)
+
+    var p = this.rareFluP / 100.;
+    var puHat = prevalenceThreshold / 100.;
+    var psi = 2. * ( 3.*p*p - 6.*puHat*p + 3.*puHat*puHat );
+    var upsilon = 4.*p*p*z*z + 2.*p*p - 2.*p*z*z - 4.*puHat*p*z*z + 2.*puHat*z*z - 2.*puHat*p - p + puHat;
+
+    var n = (p*p*z*z)/psi +( Math.sqrt(upsilon*Math.pow(p*p*(-z*z)-5.*p*p-p*z*z+4.*puHat*p*z*z-2.*puHat*z*z+8.*puHat*p+p-3.*puHat*puHat-puHat,2)-4.*(3.*p*p-6.*puHat*p+3.*puHat*puHat)) ) / psi + ( 5.*p*p+p*z*z-4.*puHat*p*z*z+2.*puHat*z*z-8.*puHat*p-p+3.*puHat*puHat+puHat ) / psi;
+
+    return n;
+}
+
 function evaluateTypeC_FluSampleSize_vs_prevalenceThreshold(prevalenceThreshold)
 {
-    return 1.;
+    // this object contains parameter values
+
+    var n = typeC_getFluSampleSize.call(this, prevalenceThreshold);
+
+    return Math.ceil(n);
 }
 
 function evaluateTypeC_MAILISampleSize_vs_prevalenceThreshold(prevalenceThreshold)
 {
-    return 1.;
+    // this object contains parameter values
+
+    var n = typeC_getFluSampleSize.call(this, prevalenceThreshold);
+
+    // to MA-ILI+ samples
+    n = n * (100. / this.p);
+
+    return Math.ceil(n);
 }
 
 function evaluateTypeC_MAILISampleSize_vs_FluSampleSize(fluSampleSize)
 {
-    return 1.;
+    var idealFluSampleSize = typeC_getFluSampleSize.call(this, this.prevalenceThreshold);
+
+    var neededAdditionalFluSampleSize = idealFluSampleSize - fluSampleSize;
+
+    if(neededAdditionalFluSampleSize <= 0.)
+    {
+        return 0.;
+    }
+
+    return Math.ceil(neededAdditionalFluSampleSize * (100. / this.p));
 }
 
 function evaluateTypeC_prevalenceThreshold_vs_confidenceLevel(confidenceLevel)
@@ -1366,7 +1408,7 @@ function drawTypeCTab3()
     parameters.prevalenceThreshold = calculatorTypeCInputs.prevalenceThreshold3;
 
     // dynamically set range based on parameters
-    var idealFluSampleSize = 10; //////// todo
+    var idealFluSampleSize = typeC_getFluSampleSize.call(parameters, parameters.prevalenceThreshold);
 
     // range: Flu+ sample size
     var min = 0;
