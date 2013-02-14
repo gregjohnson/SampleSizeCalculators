@@ -1202,14 +1202,17 @@ var calculatorTypeCInputs = {
 };
 
 // tooltip text
-var tooltipTypeCRareFluP = "Expected Rare+/Flu+ description.";
-var tooltipTypeCConfidenceLevel = "Confidence level description.";
-var tooltipTypeCExpectedFluMAILI = "Expected Flu+/MA-ILI+ description.";
-var tooltipTypeCPrevalenceThreshold = "Prevalence threshold description.";
-var tooltipTypeCMinimumFluSampleSize = "Minimum Flu+ sample size description.";
-var tooltipTypeCMinimumMAILISampleSize = "Minimum MA-ILI+ sample size description.";
-var tooltipTypeCFluSampleSize = "Flu+ sample size description.";
-var tooltipTypeCMAILISampleSize = "MA-ILI+ sample size description.";
+var tooltipTypeCRareFluP = "This is the estimated prevalence of the rare type among all Flu+ specimens (Rare+/Flu+). Although the actual prevalence of the rare type may differ from the value you choose, this approximation still provides an important baseline for determining sample sizes.";
+var tooltipTypeCConfidenceLevel = "The desired confidence level for testing that the prevalence of the rare type (Rare+/Flu+) does not exceed a specified value (prevalence threshold). The number of samples required will increase as the desired confidence level increases and as the prevalence threshold decreases. For example, determining that a rare type has prevalence less than 2% is more difficult than determining its prevalence is less than 4%, and establishing a low prevalence with 99% confidence is more difficult than doing so with 90% confidence.";
+var tooltipTypeCExpectedFluMAILI = "The fraction of non-prescreened MA-ILI+ cases that are Flu+. This estimate will vary throughout the influenza season. This fraction is needed to estimate the number of non-prescreened MA-ILI+ specimens required to screen a sufficient number of Flu+ specimens to estimate the prevalence of a rare type of influenza (Rare+/Flu+).";
+var tooltipTypeCPrevalenceThreshold = "An upper bound (highest value) for the prevalence of the rare type (Rare+/Flu+) that you hope to establish with the specified level of confidence.";
+var tooltipTypeCPrevalenceThreshold4 = "An upper bound (highest value) for the prevalence of the rare type (Rare+/Flu+) that you hope to establish.";
+var tooltipTypeCMinimumFluSampleSize = "The minimum number of Flu+ specimens required to confirm that the prevalence of a rare type is below a specified prevalence threshold, with the specified level of confidence.";
+var tooltipTypeCMinimumMAILISampleSize = "The minimum number of non-prescreened MA-ILI+ specimens required to confirm that the prevalence of a rare type is below a specified prevalence threshold, with the specified level of confidence.";
+var tooltipTypeCFluSampleSize = "The number of Flu+ specimens to be tested. Both Flu+ and non-prescreened MA-ILI+ specimens can be used to estimate the prevalence of rare types of influenza. However, many more non-prescreened MA-ILI+ specimens are typically required than Flu+ specimens to achieve the same statistical power, particularly when the overall prevalence of influenza (Flu+/MA-ILI+) is low.";
+var tooltipTypeCFluSampleSize3 = "The minimum number of Flu+ specimens required, in combination with a specified number of non-prescreened MA-ILI+ specimens, to confirm that the prevalence of a rare type is below a specified prevalence threshold, with the specified level of confidence.";
+var tooltipTypeCMAILISampleSize = "The number of non-prescreened MA-ILI+ specimens to be tested. Both Flu+ and non-prescreened MA-ILI+ specimens can be used to estimate the prevalence of rare types of influenza. However, many more non-prescreened MA-ILI+ specimens are typically required than Flu+ specimens to achieve the same statistical power, particularly when the overall prevalence of influenza (Flu+/MA-ILI+) is low.";
+var tooltipTypeCMAILISampleSize3 = "The minimum number of non-prescreened MA-ILI+ specimens required, in combination with a specified number of Flu+ specimens, to confirm that the prevalence of a rare type is below a specified prevalence threshold, with the specified level of confidence.";
 
 // helper function so we only have to define this once.
 // must call this with a parameters object as "this"... use function.call(parameters, arg)
@@ -1452,7 +1455,7 @@ function drawTypeCTab3()
         width: '225px'
     };
 
-    $("#calculatorC3_chart_table_description_div").html("Acceptable combinations of <span class='calculatorTooltip' title='" + tooltipTypeCFluSampleSize + "'>Flu+</span> and <span class='calculatorTooltip' title='" + tooltipTypeCMAILISampleSize + "'>non-prescreened MA-ILI+</span> sample sizes required to determine that the prevalence of a rare type (Rare+/Flu+) does not exceed " + formatTextParameter(parameters.prevalenceThreshold + "%") + ", with a confidence " + formatTextParameter(parameters.confidenceLevel + "%") + ". (These calculations assume that the estimated prevalence of the rare event (Rare+/Flu+) will be close to " + formatTextParameter(parameters.rareFluP + "%") + ", and the prevalence of Flu+/MA-ILI+ is " + formatTextParameter(parameters.p + "%") + ".) Many more non-prescreened MA-ILI+ specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI+) is low.");
+    $("#calculatorC3_chart_table_description_div").html("Acceptable combinations of <span class='calculatorTooltip' title='" + tooltipTypeCFluSampleSize3 + "'>Flu+</span> and <span class='calculatorTooltip' title='" + tooltipTypeCMAILISampleSize3 + "'>non-prescreened MA-ILI+</span> sample sizes required to determine that the prevalence of a rare type (Rare+/Flu+) does not exceed " + formatTextParameter(parameters.prevalenceThreshold + "%") + ", with a confidence " + formatTextParameter(parameters.confidenceLevel + "%") + ". (These calculations assume that the estimated prevalence of the rare event (Rare+/Flu+) will be close to " + formatTextParameter(parameters.rareFluP + "%") + ", and the prevalence of Flu+/MA-ILI+ is " + formatTextParameter(parameters.p + "%") + ".) Many more non-prescreened MA-ILI+ specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI+) is low.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorC3_chart_div'));
     chart.draw(dataChart, optionsChart);
@@ -1521,7 +1524,7 @@ function drawTypeCTab4()
         width: '225px'
     };
 
-    $("#calculatorC4_chart_table_description_div").html("Enter your sample sizes in the boxes above (number of Flu+ and non-prescreened MA-ILI+ specimens to be tested). The graph and table show the best combinations of <span class='calculatorTooltip' title='" + tooltipTypeCPrevalenceThreshold + "'>prevalence threshold</span> and <span class='calculatorTooltip' title='" + tooltipTypeCConfidenceLevel + "'>confidence level</span> achievable with " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " non-prescreened MA-ILI+ specimens. (This calculation assumes that the prevalence of Rare+/Flu+ is close to " + formatTextParameter(parameters.rareFluP + "%") + ", and the prevalence of Flu+/MA-ILI+ is " + formatTextParameter(parameters.p + "%") + ".) There is a trade-off between confidence level and prevalence threshold. The lower the prevalence threshold, the smaller the confidence, and vice versa. Use your mouse to view values in the graph and scroll through the table.");
+    $("#calculatorC4_chart_table_description_div").html("Enter your sample sizes in the boxes above (number of Flu+ and non-prescreened MA-ILI+ specimens to be tested). The graph and table show the best combinations of <span class='calculatorTooltip' title='" + tooltipTypeCPrevalenceThreshold4 + "'>prevalence threshold</span> and <span class='calculatorTooltip' title='" + tooltipTypeCConfidenceLevel + "'>confidence level</span> achievable with " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " non-prescreened MA-ILI+ specimens. (This calculation assumes that the prevalence of Rare+/Flu+ is close to " + formatTextParameter(parameters.rareFluP + "%") + ", and the prevalence of Flu+/MA-ILI+ is " + formatTextParameter(parameters.p + "%") + ".) There is a trade-off between confidence level and prevalence threshold. The lower the prevalence threshold, the smaller the confidence, and vice versa. Use your mouse to view values in the graph and scroll through the table.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorC4_chart_div'));
     chart.draw(dataChart, optionsChart);
@@ -1539,10 +1542,13 @@ function calculatorTypeCInitialize()
     $(".tooltipTypeCConfidenceLevel").attr("title", tooltipTypeCConfidenceLevel);
     $(".tooltipTypeCExpectedFluMAILI").attr("title", tooltipTypeCExpectedFluMAILI);
     $(".tooltipTypeCPrevalenceThreshold").attr("title", tooltipTypeCPrevalenceThreshold);
+    $(".tooltipTypeCPrevalenceThreshold4").attr("title", tooltipTypeCPrevalenceThreshold4);
     $(".tooltipTypeCMinimumFluSampleSize").attr("title", tooltipTypeCMinimumFluSampleSize);
     $(".tooltipTypeCMinimumMAILISampleSize").attr("title", tooltipTypeCMinimumMAILISampleSize);
     $(".tooltipTypeCFluSampleSize").attr("title", tooltipTypeCFluSampleSize);
+    $(".tooltipTypeCFluSampleSize3").attr("title", tooltipTypeCFluSampleSize3);
     $(".tooltipTypeCMAILISampleSize").attr("title", tooltipTypeCMAILISampleSize);
+    $(".tooltipTypeCMAILISampleSize3").attr("title", tooltipTypeCMAILISampleSize3);
 
     // expected Rare+/Flu+ slider
     $("#calculatorC_input_rare_flu_p_slider").slider({
