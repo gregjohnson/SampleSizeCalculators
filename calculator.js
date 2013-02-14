@@ -1186,6 +1186,7 @@ function calculatorTypeBRefresh()
 ///////////////////////////////////////////////////////////////////////////////
 
 var calculatorTypeCRangeMaxRareFluP = 5.;
+var calculatorTypeCRareFluPBuffer = 0.25;
 
 // calculator type C inputs
 var calculatorTypeCInputs = {
@@ -1195,8 +1196,8 @@ var calculatorTypeCInputs = {
     p2:10,
     confidenceLevel3:95,
     p3:10,
-    prevalenceThreshold3:1,
     fluSampleSize4:1,
+    prevalenceThreshold3:1. + calculatorTypeCRareFluPBuffer,
     MAILISampleSize4:0,
     p4:10
 };
@@ -1305,7 +1306,7 @@ function drawTypeCTab1()
     parameters.confidenceLevel = calculatorTypeCInputs.confidenceLevel1;
 
     // range: prevalence threshhold
-    var min = parameters.rareFluP;
+    var min = parameters.rareFluP + calculatorTypeCRareFluPBuffer;
     var max = calculatorTypeCRangeMaxRareFluP;
     var numValues = 10;
 
@@ -1366,7 +1367,7 @@ function drawTypeCTab2()
     parameters.p = calculatorTypeCInputs.p2;
 
     // range: prevalence threshhold
-    var min = parameters.rareFluP;
+    var min = parameters.rareFluP + calculatorTypeCRareFluPBuffer;
     var max = calculatorTypeCRangeMaxRareFluP;
     var numValues = 10;
 
@@ -1576,6 +1577,17 @@ function calculatorTypeCInitialize()
         slide: function(event, ui) {
             $("#calculatorC_input_rare_flu_p").val(ui.value + "%");
             calculatorTypeCInputs.rareFluP = parseFloat($("#calculatorC_input_rare_flu_p").val());
+
+            // other sliders use this value as a minimum
+            var newMin = calculatorTypeCInputs.rareFluP + calculatorTypeCRareFluPBuffer;
+
+            $("#calculatorC3_input_prevalence_threshold_slider").slider("option", "min", newMin);
+
+            if($("#calculatorC3_input_prevalence_threshold_slider").slider("value") <= newMin)
+            {
+                $("#calculatorC3_input_prevalence_threshold_slider").slider("value", newMin);
+            }
+
             calculatorTypeCRefresh();
         }
     });
@@ -1664,6 +1676,12 @@ function calculatorTypeCInitialize()
         max: 3,
         step: 0.25,
         slide: function(event, ui) {
+            $("#calculatorC3_input_prevalence_threshold").val(ui.value + "%");
+            calculatorTypeCInputs.prevalenceThreshold3 = parseFloat($("#calculatorC3_input_prevalence_threshold").val());
+            calculatorTypeCRefresh();
+        },
+        change: function(event, ui) {
+            // also need change() to catch .value() changes
             $("#calculatorC3_input_prevalence_threshold").val(ui.value + "%");
             calculatorTypeCInputs.prevalenceThreshold3 = parseFloat($("#calculatorC3_input_prevalence_threshold").val());
             calculatorTypeCRefresh();
