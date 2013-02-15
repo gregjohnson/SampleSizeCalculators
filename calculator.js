@@ -2064,7 +2064,7 @@ function calculatorTypeCInitialize()
     // tab 3: prevalence threshold slider
     $("#calculatorC3_input_prevalence_threshold_slider").slider({
         value:calculatorTypeCInputs.prevalenceThreshold3,
-        min: 0.25,
+        min: 1.25,
         max: 5,
         step: 0.25,
         slide: function(event, ui) {
