@@ -40,7 +40,7 @@ var tooltipTypeAConfidenceLevel = "The desired confidence that the sample will y
 
 var tooltipTypeASampleSize = "The number of non-prescreened samples collected from the medically attended influenza-like-illness population (MA-ILI+).";
 
-var nationalPopulation = 290672938;
+var nationalPopulation = 313914040;
 
 var statePopulations = {
         "Alabama": 4822023,
@@ -88,7 +88,12 @@ var statePopulations = {
         "Tennessee": 6456243,
         "Texas": 26059203,
         "Utah": 2855287,
-        "Vermont": 626011
+        "Vermont": 626011,
+        "Virginia": 8185867,
+        "Washington": 6897012,
+        "West Virginia": 1855413,
+        "Wisconsin": 5726398,
+        "Wyoming": 576412
     };
 
 // special Google visualization formatter for different values and labels
