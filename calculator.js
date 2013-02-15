@@ -678,7 +678,7 @@ var tooltipTypeBMinimumFluSampleSize = "The minimum number of Flu+ specimens req
 var tooltipTypeBMinimumMAILISampleSize = "The minimum number of non-prescreened MA-ILI+ specimens required to detect a rare type when its prevalence (Rare+/Flu+) reaches the specified detection threshold, with the specified level of confidence.";
 var tooltipTypeBFluSampleSize = "The number of Flu+ specimens to be tested. Both Flu+ and non-prescreened MA-ILI+ specimens can be used to detect rare types of influenza. However, many more non-prescreened MA-ILI+ specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI+) is low.";
 var tooltipTypeBMAILISampleSize = "The number of non-prescreened MA-ILI+ specimens to be tested. Both Flu+ and non-prescreened MA-ILI+ specimens can be used to detect rare types of influenza. However, many more non-prescreened MA-ILI+ specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI+) is low.";
-var tooltipTypeBSurveillanceScale = "Surveillance scale description.";
+var tooltipTypeBSurveillanceScale = "The scale of the surveillance effort. A 'National' surveillance scale means that all states are contributing to a national surveillance effort proportional to their population size. A state-based surveillance scale indicates a local surveillance effort for that state only.";
 
 function evaluateTypeB_FluSampleSize_vs_detectionThreshold(detectionThreshold)
 {
