@@ -869,7 +869,7 @@ function drawTypeBTab1()
             chart.setSelection(newSelectionArray);
             table.setSelection(newSelectionArray);
 
-            $("#calculatorB1_chart_table_report_div").html("If the prevalence of the rare type among all flu specimens (Rare+/Flu+) is  approximately " + formatTextParameter(x[thisObj.selectedRow] + "%") + ", then " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " Flu+ specimens will yield at least one Rare+ specimen, with " + formatTextParameter(parameters.confidenceLevel + "%") + " confidence.");
+            $("#calculatorB1_chart_table_report_div").html("If the prevalence of the rare type among all flu specimens (Rare+/Flu+) is  approximately " + formatTextParameter(xTableLabelMap[x[thisObj.selectedRow]]) + ", then " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " Flu+ specimens will yield at least one Rare+ specimen, with " + formatTextParameter(parameters.confidenceLevel + "%") + " confidence.");
 
             if(parameters.surveillanceScale == "National")
             {
@@ -977,7 +977,7 @@ function drawTypeBTab2()
             chart.setSelection(newSelectionArray);
             table.setSelection(newSelectionArray);
 
-            $("#calculatorB2_chart_table_report_div").html("If the prevalence of the rare type among all flu specimens (Rare+/Flu+) is  approximately " + formatTextParameter(x[thisObj.selectedRow] + "%") + ", then " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " non-prescreened MA-ILI+ specimens will yield at least one Rare+ specimen, with " + formatTextParameter(parameters.confidenceLevel + "%") + " confidence. (This assumes that " + formatTextParameter(parameters.p + "%") + " of MA-ILI+ patients are Flu+).");
+            $("#calculatorB2_chart_table_report_div").html("If the prevalence of the rare type among all flu specimens (Rare+/Flu+) is  approximately " + formatTextParameter(xTableLabelMap[x[thisObj.selectedRow]]) + ", then " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " non-prescreened MA-ILI+ specimens will yield at least one Rare+ specimen, with " + formatTextParameter(parameters.confidenceLevel + "%") + " confidence. (This assumes that " + formatTextParameter(parameters.p + "%") + " of MA-ILI+ patients are Flu+).");
 
             if(parameters.surveillanceScale == "National")
             {
@@ -1096,7 +1096,7 @@ function drawTypeBTab3()
             chart.setSelection(newSelectionArray);
             table.setSelection(newSelectionArray);
 
-            $("#calculatorB3_chart_table_report_div").html("If the prevalence of the rare type among all flu specimens (Rare+/Flu+) is approximately " + formatTextParameter(parameters.detectionThreshold + "%") + ", then a combination of " + formatTextParameter(numberWithCommas(x[thisObj.selectedRow])) + " Flu+ specimens and " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " non-prescreened MA-ILI+ specimens will yield at least one Rare+ specimen, with " + formatTextParameter(parameters.confidenceLevel + "%") + " confidence. (This assumes that " + formatTextParameter(parameters.p + "%") + " of MA-ILI+ patients are Flu+). ");
+            $("#calculatorB3_chart_table_report_div").html("If the prevalence of the rare type among all flu specimens (Rare+/Flu+) is approximately " + formatTextParameter(parameters.detectionThreshold + "% (1/" + Math.round(100. / parameters.detectionThreshold) + ")") + ", then a combination of " + formatTextParameter(numberWithCommas(x[thisObj.selectedRow])) + " Flu+ specimens and " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " non-prescreened MA-ILI+ specimens will yield at least one Rare+ specimen, with " + formatTextParameter(parameters.confidenceLevel + "%") + " confidence. (This assumes that " + formatTextParameter(parameters.p + "%") + " of MA-ILI+ patients are Flu+). ");
         }
     }
 
@@ -1209,7 +1209,7 @@ function drawTypeBTab4()
             chart.setSelection(newSelectionArray);
             table.setSelection(newSelectionArray);
 
-            $("#calculatorB4_chart_table_report_div").html("A combination of " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " non-prescreened MA-ILI+ specimens will allow detection of a rare type with " + formatTextParameter(x[thisObj.selectedRow] + "%") + " confidence if the prevalence of the rare type (Rare+/Flu+) is at least " + formatTextParameter(y[thisObj.selectedRow] + "%") + ". (This assumes that " + formatTextParameter(parameters.p + "%") + " of MA-ILI+ patients are Flu+). ");
+            $("#calculatorB4_chart_table_report_div").html("A combination of " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " non-prescreened MA-ILI+ specimens will allow detection of a rare type with " + formatTextParameter(x[thisObj.selectedRow] + "%") + " confidence if the prevalence of the rare type (Rare+/Flu+) is at least " + formatTextParameter(yLabelMap[y[thisObj.selectedRow]]) + ". (This assumes that " + formatTextParameter(parameters.p + "%") + " of MA-ILI+ patients are Flu+). ");
         }
     }
 
