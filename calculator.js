@@ -671,9 +671,9 @@ var calculatorTypeBInputs = {
 
 // tooltip text
 var tooltipTypeBTotalPopulation = tooltipTypeATotalPopulation;
-var tooltipTypeBConfidenceLevel = "The desired confidence that the sample will contain at least one rare specimen (Rare+) when the prevalence of rare type reaches the specified limit of detection. Sample sizes can be calculated for non-prescreened MA-ILI+ or prescreened Flu+, or a combination of both types of specimens. For example, if you choose a confidence level of 95% and a detection threshold of 1/400, then the resulting minimum sample size should be sufficient to detect a rare type when it reaches a prevalence of 1/400 Rare+/Flu+, 95% of the time. Intuitively, a high confidence level and a low detection threshold requires many samples, while low confidence and a high detection threshold results in fewer samples.";
+var tooltipTypeBConfidenceLevel = "The desired confidence that the sample will contain at least one rare specimen (Rare+) when the prevalence of rare type reaches the specified limit of detection. Sample sizes can be calculated for non-prescreened MA-ILI+ or prescreened Flu+, or a combination of both types of specimens. For example, if you choose a confidence level of 95% and a detection threshold of 1/500, then the resulting minimum sample size should be sufficient to detect a rare type when it reaches a prevalence of 1/500 Rare+/Flu+, 95% of the time. Intuitively, a high confidence level and a low detection threshold requires many samples, while low confidence and a high detection threshold results in fewer samples.";
 var tooltipTypeBExpectedFluMAILI = "The fraction of non-prescreened MA-ILI+ cases that are Flu+. This estimate will vary throughout the influenza season. This fraction is needed to estimate the number of non-prescreened MA-ILI+ specimens required to screen a sufficient number of Flu+ specimens to detect a rare type of influenza (Rare+).";
-var tooltipTypeBDetectionThreshold = "The detection threshold for a rare type of influenza is the prevalence of the rare type (out of all Flu+ cases) at which the first rare specimens are expected to appear in the lab. For example, a detection threshold of 0.25% (1/400) means that rare type should be detected by the lab when it rises to a prevalence of one out of every 400 cases of flu.";
+var tooltipTypeBDetectionThreshold = "The detection threshold for a rare type of influenza is the prevalence of the rare type (out of all Flu+ cases) at which the first rare specimens are expected to appear in the lab. For example, a detection threshold of 0.2% (1/500) means that rare type should be detected by the lab when it rises to a prevalence of one out of every 500 cases of flu.";
 var tooltipTypeBMinimumFluSampleSize = "The minimum number of Flu+ specimens required to detect a rare type when its prevalence (Rare+/Flu+) reaches the specified detection threshold, with the specified level of confidence.";
 var tooltipTypeBMinimumMAILISampleSize = "The minimum number of non-prescreened MA-ILI+ specimens required to detect a rare type when its prevalence (Rare+/Flu+) reaches the specified detection threshold, with the specified level of confidence.";
 var tooltipTypeBFluSampleSize = "The number of Flu+ specimens to be tested. Both Flu+ and non-prescreened MA-ILI+ specimens can be used to detect rare types of influenza. However, many more non-prescreened MA-ILI+ specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI+) is low.";
@@ -783,17 +783,17 @@ function drawTypeBTab1()
     var xTableLabelMap = {};
     var y;
 
-    // range: detection threshhold
-    var min = 0.25;
+    // range: detection threshhold (increments of 0.1)
+    var min = 0.2;
     var max = 3;
-    var numValues = 12;
+    var numValues = 29;
 
     for(var i=0; i<numValues; i++)
     {
-        var value = min + i/(numValues-1)*(max-min);
-
         // round to the nearest 100th
-        x.push(Math.round(value*100)/100);
+        var value = Math.round((min + i/(numValues-1)*(max-min)) * 100) / 100;
+
+        x.push(value);
 
         // labels
         xChartLabelMap[value] = "Detection Threshhold: " + value + "% (1/" + Math.round(100. / value) + ")";
@@ -890,17 +890,18 @@ function drawTypeBTab2()
     var xTableLabelMap = {};
     var y;
 
-    // range: detection threshhold
-    var min = 0.25;
+    // range: detection threshhold (increments of 0.1)
+    var min = 0.2;
     var max = 3;
-    var numValues = 12;
+    var numValues = 29;
 
     for(var i=0; i<numValues; i++)
     {
-        var value = min + i/(numValues-1)*(max-min);
+        // round to the nearest 100th
+        var value = Math.round((min + i/(numValues-1)*(max-min)) * 100) / 100;
 
         // round to the nearest 100th
-        x.push(Math.round(value*100)/100);
+        x.push(value);
 
         // labels
         xChartLabelMap[value] = "Detection Threshhold: " + value + "% (1/" + Math.round(100. / value) + ")";
@@ -1378,9 +1379,9 @@ function calculatorTypeBInitialize()
     // tab 3: detection threshold slider
     $("#calculatorB3_input_detection_threshold_slider").slider({
         value:calculatorTypeBInputs.detectionThreshold3,
-        min: 0.25,
+        min: 0.2,
         max: 3,
-        step: 0.25,
+        step: 0.1,
         slide: function(event, ui) {
             $("#calculatorB3_input_detection_threshold").val(ui.value + "% (1/" + Math.round(100. / ui.value) + ")");
             calculatorTypeBInputs.detectionThreshold3 = parseFloat($("#calculatorB3_input_detection_threshold").val());
@@ -1436,7 +1437,7 @@ function calculatorTypeBRefresh()
 ///////////////////////////////////////////////////////////////////////////////
 
 var calculatorTypeCRangeMaxRareFluP = 5.;
-var calculatorTypeCRareFluPBuffer = 0.25;
+var calculatorTypeCRareFluPBuffer = 0.2;
 
 // calculator type C inputs
 var calculatorTypeCInputs = {
@@ -1564,7 +1565,7 @@ function drawTypeCTab1()
     // range: prevalence threshhold
     var min = parameters.rareFluP + calculatorTypeCRareFluPBuffer;
     var max = calculatorTypeCRangeMaxRareFluP;
-    var numValues = 10;
+    var numValues = Math.round((max - min) / 0.1 + 1.);
 
     for(var i=0; i<numValues; i++)
     {
@@ -1659,7 +1660,7 @@ function drawTypeCTab2()
     // range: prevalence threshhold
     var min = parameters.rareFluP + calculatorTypeCRareFluPBuffer;
     var max = calculatorTypeCRangeMaxRareFluP;
-    var numValues = 10;
+    var numValues = Math.round((max - min) / 0.1 + 1.);
 
     for(var i=0; i<numValues; i++)
     {
@@ -1963,9 +1964,9 @@ function calculatorTypeCInitialize()
     // expected Rare+/Flu+ slider
     $("#calculatorC_input_rare_flu_p_slider").slider({
         value:calculatorTypeCInputs.rareFluP,
-        min: 0.25,
+        min: 0.2,
         max: 3,
-        step: 0.25,
+        step: 0.1,
         slide: function(event, ui) {
             $("#calculatorC_input_rare_flu_p").val(ui.value + "%");
             calculatorTypeCInputs.rareFluP = parseFloat($("#calculatorC_input_rare_flu_p").val());
@@ -2064,9 +2065,9 @@ function calculatorTypeCInitialize()
     // tab 3: prevalence threshold slider
     $("#calculatorC3_input_prevalence_threshold_slider").slider({
         value:calculatorTypeCInputs.prevalenceThreshold3,
-        min: 1.25,
+        min: 1.1,
         max: 5,
-        step: 0.25,
+        step: 0.1,
         slide: function(event, ui) {
             $("#calculatorC3_input_prevalence_threshold").val(ui.value + "%");
             calculatorTypeCInputs.prevalenceThreshold3 = parseFloat($("#calculatorC3_input_prevalence_threshold").val());
