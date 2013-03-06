@@ -40,7 +40,7 @@ var tooltipTypeAConfidenceLevel = "The desired confidence that the sample will y
 
 var tooltipTypeASampleSize = "The number of non-prescreened samples collected from the medically attended influenza-like-illness population (MA-ILI+).";
 
-var nationalPopulation = 313914040;
+var nationalPopulation = 317581124;
 
 var statePopulations = {
         "Alabama": 4822023,
@@ -82,6 +82,7 @@ var statePopulations = {
         "Oklahoma": 3814820,
         "Oregon": 3899353,
         "Pennsylvania": 12763536,
+        "Puerto Rico": 3667084,
         "Rhode Island": 1050292,
         "South Carolina": 4723723,
         "South Dakota": 833354,
