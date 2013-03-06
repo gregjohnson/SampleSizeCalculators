@@ -1042,6 +1042,17 @@ function drawTypeBTab3()
     // evaluation for each x
     y = x.map(evaluateTypeB_MAILISampleSize_vs_FluSampleSize, parameters);
 
+    // labels with percentages
+    xLabelMap = {};
+    yLabelMap = {};
+
+    for(var i=0; i<y.length; i++)
+    {
+        // round to nearest tenth of a percent
+        xLabelMap[x[i]] = x[i] + " (" + Math.round(x[i]/(x[i]+y[i])*100.*10.)/10. + "%)";
+        yLabelMap[y[i]] = y[i] + " (" + Math.round(y[i]/(x[i]+y[i])*100.*10.)/10. + "%)";
+    }
+
     // separate DataTable objects for chart / table to allow for formatting
     var dataChart = arraysToDataTable(labels, [x, y]);
     var dataTable = dataChart.clone();
@@ -1056,6 +1067,13 @@ function drawTypeBTab3()
         vAxis : { title: labels[1] },
         legend : { position: 'none' }
     };
+
+    // table: user labels with percentages
+    var formatterTableX = new labelFormatter(xLabelMap);
+    var formatterTableY = new labelFormatter(yLabelMap);
+
+    formatterTableX.format(dataTable, 0);
+    formatterTableY.format(dataTable, 1);
 
     // need to specify width here (rather than in CSS) for IE
     var optionsTable = {
@@ -1779,6 +1797,17 @@ function drawTypeCTab3()
     // evaluation for each x
     y = x.map(evaluateTypeC_MAILISampleSize_vs_FluSampleSize, parameters);
 
+    // labels with percentages
+    xLabelMap = {};
+    yLabelMap = {};
+
+    for(var i=0; i<y.length; i++)
+    {
+        // round to nearest tenth of a percent
+        xLabelMap[x[i]] = x[i] + " (" + Math.round(x[i]/(x[i]+y[i])*100.*10.)/10. + "%)";
+        yLabelMap[y[i]] = y[i] + " (" + Math.round(y[i]/(x[i]+y[i])*100.*10.)/10. + "%)";
+    }
+
     // separate DataTable objects for chart / table to allow for formatting
     var dataChart = arraysToDataTable(labels, [x, y]);
     var dataTable = dataChart.clone();
@@ -1793,6 +1822,13 @@ function drawTypeCTab3()
         vAxis : { title: labels[1] },
         legend : { position: 'none' }
     };
+
+    // table: user labels with percentages
+    var formatterTableX = new labelFormatter(xLabelMap);
+    var formatterTableY = new labelFormatter(yLabelMap);
+
+    formatterTableX.format(dataTable, 0);
+    formatterTableY.format(dataTable, 1);
 
     // need to specify width here (rather than in CSS) for IE
     var optionsTable = {
