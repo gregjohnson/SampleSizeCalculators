@@ -1567,7 +1567,7 @@ function evaluateTypeC_prevalenceThreshold_vs_confidenceLevel(confidenceLevel)
         puHat = 1.;
     }
 
-    return puHat * 100.;
+    return Math.round(puHat * 100. * 100.)/100.;
 }
 
 function drawTypeCTab1()
