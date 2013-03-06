@@ -94,7 +94,8 @@ var statePopulations = {
         "Washington": 6897012,
         "West Virginia": 1855413,
         "Wisconsin": 5726398,
-        "Wyoming": 576412
+        "Wyoming": 576412,
+        "United States": nationalPopulation
     };
 
 // special Google visualization formatter for different values and labels
