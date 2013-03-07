@@ -113,6 +113,9 @@ labelFormatter.prototype.format = function(dt, column) {
     }
 }
 
+// increased font size for all charts (default seems to be 11)
+var chartFontSize = '12';
+
 // return number with commas added
 // from: http://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
 function numberWithCommas(x)
@@ -328,7 +331,8 @@ function drawTypeAChartAndTable()
         title: '',
         hAxis : { title: labels[0], format: "#.##'%'" },
         vAxis : { title: labels[1] },
-        legend : { position: 'none' }
+        legend : { position: 'none' },
+        fontSize : chartFontSize
     };
 
     // need to specify width here (rather than in CSS) for IE
@@ -496,7 +500,8 @@ function drawTypeAChartAndTable2()
         title: '',
         hAxis : { title: labels[0], format: "#.##'%'", gridlines : { count : 6 } },
         vAxis : { title: labels[1], format: "#.##'%'" },
-        legend : { position: 'none' }
+        legend : { position: 'none' },
+        fontSize : chartFontSize
     };
 
     // need to specify width here (rather than in CSS) for IE
@@ -827,7 +832,8 @@ function drawTypeBTab1()
         title: '',
         hAxis : { title: labels[0], format: "#.##'%'" },
         vAxis : { title: labels[1] },
-        legend : { position: 'none' }
+        legend : { position: 'none' },
+        fontSize : chartFontSize
     };
 
     // need to specify width here (rather than in CSS) for IE
@@ -936,7 +942,8 @@ function drawTypeBTab2()
         title: '',
         hAxis : { title: labels[0], format: "#.##'%'" },
         vAxis : { title: labels[1] },
-        legend : { position: 'none' }
+        legend : { position: 'none' },
+        fontSize : chartFontSize
     };
 
     // need to specify width here (rather than in CSS) for IE
@@ -1066,7 +1073,8 @@ function drawTypeBTab3()
         title: '',
         hAxis : { title: labels[0] },
         vAxis : { title: labels[1] },
-        legend : { position: 'none' }
+        legend : { position: 'none' },
+        fontSize : chartFontSize
     };
 
     // table: user labels with percentages
@@ -1186,7 +1194,8 @@ function drawTypeBTab4()
         title: '',
         hAxis : { title: labels[0], format: "#.##'%'", gridlines : { count : 6 } },
         vAxis : { title: labels[1], format: "#.##'%'" },
-        legend : { position: 'none' }
+        legend : { position: 'none' },
+        fontSize : chartFontSize
     };
 
     // need to specify width here (rather than in CSS) for IE
@@ -1614,7 +1623,8 @@ function drawTypeCTab1()
         title: '',
         hAxis : { title: labels[0], format: "#.##'%'" },
         vAxis : { title: labels[1] },
-        legend : { position: 'none' }
+        legend : { position: 'none' },
+        fontSize : chartFontSize
     };
 
     // need to specify width here (rather than in CSS) for IE
@@ -1709,7 +1719,8 @@ function drawTypeCTab2()
         title: '',
         hAxis : { title: labels[0], format: "#.##'%'" },
         vAxis : { title: labels[1] },
-        legend : { position: 'none' }
+        legend : { position: 'none' },
+        fontSize : chartFontSize
     };
 
     // need to specify width here (rather than in CSS) for IE
@@ -1821,7 +1832,8 @@ function drawTypeCTab3()
         title: '',
         hAxis : { title: labels[0] },
         vAxis : { title: labels[1] },
-        legend : { position: 'none' }
+        legend : { position: 'none' },
+        fontSize : chartFontSize
     };
 
     // table: user labels with percentages
@@ -1931,7 +1943,8 @@ function drawTypeCTab4()
         title: '',
         hAxis : { title: labels[0], format: "#.##'%'", gridlines : { count : 6 } },
         vAxis : { title: labels[1], format: "#.##'%'" },
-        legend : { position: 'none' }
+        legend : { position: 'none' },
+        fontSize : chartFontSize
     };
 
     // need to specify width here (rather than in CSS) for IE
