@@ -372,7 +372,7 @@ function drawTypeAChartAndTable()
             chart.setSelection(newSelectionArray);
             table.setSelection(newSelectionArray);
 
-            $("#calculatorA_chart_table_report_div").html("A minimum of " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " MA-ILI+ specimens are required to estimate the actual Flu+/MA-ILI+ fraction with " + formatTextParameter(parameters.confidenceLevel + "%") + " confidence error bars of +/-" + formatTextParameter(x[thisObj.selectedRow] + "%") + ". (This assumes that Flu+/MA-ILI+ is approximately " + formatTextParameter(parameters.p + "%") + ".)");
+            $("#calculatorA_chart_table_report_div").html("A minimum of " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " MA-ILI+ specimens are required to estimate the actual Flu+/MA-ILI+ fraction with " + formatTextParameter(parameters.confidenceLevel + "%") + " confidence and error bars of +/-" + formatTextParameter(x[thisObj.selectedRow] + "%") + ". (This assumes that Flu+/MA-ILI+ is approximately " + formatTextParameter(parameters.p + "%") + ".)");
         }
     }
 
@@ -440,7 +440,7 @@ function drawTypeABigTable()
             // select element in chart and table
             table.setSelection(newSelectionArray);
 
-            $("#calculatorA_big_table_report_div").html("This row gives the minimum number of MA-ILI+ specimens that are required to estimate the actual Flu+/MA-ILI+ fraction with error bars of +/-" + formatTextParameter(epsilons[thisObj.selectedRow] + "%") + " at various levels of confidence. (This assumes that Flu+/MA-ILI+ is approximately " + formatTextParameter(parameters.p + "%") + ".) For example, at least " + formatTextParameter(numberWithCommas(dataArrays[1][thisObj.selectedRow])) + " MA-ILI+ specimens are required to estimate the actual Flu+/MA-ILI+ fraction with 99% confidence error bars of +/-" + formatTextParameter(epsilons[thisObj.selectedRow] + "%") + ", but only " + formatTextParameter(numberWithCommas(dataArrays[3][thisObj.selectedRow])) + " specimens are needed for 90% confidence error bars of the same size.");
+            $("#calculatorA_big_table_report_div").html("This row gives the minimum number of MA-ILI+ specimens that are required to estimate the actual Flu+/MA-ILI+ fraction with error bars of +/-" + formatTextParameter(epsilons[thisObj.selectedRow] + "%") + " at various levels of confidence. (This assumes that Flu+/MA-ILI+ is approximately " + formatTextParameter(parameters.p + "%") + ".) For example, at least " + formatTextParameter(numberWithCommas(dataArrays[1][thisObj.selectedRow])) + " MA-ILI+ specimens are required to estimate the actual Flu+/MA-ILI+ fraction with 99% confidence and error bars of +/-" + formatTextParameter(epsilons[thisObj.selectedRow] + "%") + ", but only " + formatTextParameter(numberWithCommas(dataArrays[3][thisObj.selectedRow])) + " specimens are needed for 90% confidence and error bars of the same size.");
         }
     }
 
@@ -540,7 +540,7 @@ function drawTypeAChartAndTable2()
             chart.setSelection(newSelectionArray);
             table.setSelection(newSelectionArray);
 
-            $("#calculatorA_chart_table_2_report_div").html(formatTextParameter(numberWithCommas(parameters.sampleSize)) + " MA-ILI+ specimens should yield Flu+/MA-ILI+ estimates with " + formatTextParameter(x[thisObj.selectedRow] + "%") + " confidence error bars of +/-" + formatTextParameter(Math.round(y[thisObj.selectedRow]*100.)/100. + "%") + ". (This assumes that Flu+/MA-ILI+ is approximately " + formatTextParameter(parameters.p + "%") + ".)");
+            $("#calculatorA_chart_table_2_report_div").html(formatTextParameter(numberWithCommas(parameters.sampleSize)) + " MA-ILI+ specimens should yield Flu+/MA-ILI+ estimates with " + formatTextParameter(x[thisObj.selectedRow] + "%") + " confidence and error bars of +/-" + formatTextParameter(Math.round(y[thisObj.selectedRow]*100.)/100. + "%") + ". (This assumes that Flu+/MA-ILI+ is approximately " + formatTextParameter(parameters.p + "%") + ".)");
         }
     }
 
