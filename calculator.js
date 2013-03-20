@@ -293,10 +293,10 @@ function drawTypeAChartAndTable()
     var x = [];
     var y;
 
-    // range: epsilon
+    // range: epsilon (0.25% increments)
     var min = 1;
     var max = 10;
-    var numValues = 91;
+    var numValues = 37;
 
     for(var i=0; i<numValues; i++)
     {
