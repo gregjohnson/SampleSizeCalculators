@@ -1465,7 +1465,7 @@ function calculatorTypeBRefresh()
 //////////////////////////////// CALCULATOR C /////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-var calculatorTypeCRangeMaxRareFluP = 5.;
+var calculatorTypeCRangeMaxRareFluP = 7.;
 var calculatorTypeCRareFluPBuffer = 0.2;
 
 // calculator type C inputs
@@ -2016,7 +2016,7 @@ function calculatorTypeCInitialize()
     $("#calculatorC_input_rare_flu_p_slider").slider({
         value:calculatorTypeCInputs.rareFluP,
         min: 0.2,
-        max: 3,
+        max: 5,
         step: 0.1,
         slide: function(event, ui) {
             $("#calculatorC_input_rare_flu_p").val(ui.value + "%");
@@ -2117,7 +2117,7 @@ function calculatorTypeCInitialize()
     $("#calculatorC3_input_prevalence_threshold_slider").slider({
         value:calculatorTypeCInputs.prevalenceThreshold3,
         min: 1.1,
-        max: 5,
+        max: calculatorTypeCRangeMaxRareFluP,
         step: 0.1,
         slide: function(event, ui) {
             $("#calculatorC3_input_prevalence_threshold").val(ui.value + "%");
