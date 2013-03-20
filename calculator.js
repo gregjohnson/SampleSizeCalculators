@@ -792,8 +792,8 @@ function drawTypeBTab1()
 
     // range: detection threshhold (increments of 0.1)
     var min = 0.2;
-    var max = 3;
-    var numValues = 29;
+    var max = 5;
+    var numValues = 49;
 
     for(var i=0; i<numValues; i++)
     {
@@ -900,8 +900,8 @@ function drawTypeBTab2()
 
     // range: detection threshhold (increments of 0.1)
     var min = 0.2;
-    var max = 3;
-    var numValues = 29;
+    var max = 5;
+    var numValues = 49;
 
     for(var i=0; i<numValues; i++)
     {
@@ -1409,7 +1409,7 @@ function calculatorTypeBInitialize()
     $("#calculatorB3_input_detection_threshold_slider").slider({
         value:calculatorTypeBInputs.detectionThreshold3,
         min: 0.2,
-        max: 3,
+        max: 5,
         step: 0.1,
         slide: function(event, ui) {
             $("#calculatorB3_input_detection_threshold").val(ui.value + "% (1/" + Math.round(100. / ui.value) + ")");
