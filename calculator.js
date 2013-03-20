@@ -805,6 +805,12 @@ function drawTypeBTab1()
         // round to the nearest 100th
         var value = Math.round((min + i/(numValues-1)*(max-min)) * 100) / 100;
 
+        // we need the 1/165 case
+        if(value == 0.6)
+        {
+            value = 0.606;
+        }
+
         x.push(value);
 
         // labels
@@ -912,6 +918,12 @@ function drawTypeBTab2()
     {
         // round to the nearest 100th
         var value = Math.round((min + i/(numValues-1)*(max-min)) * 100) / 100;
+
+        // we need the 1/165 case
+        if(value == 0.6)
+        {
+            value = 0.606;
+        }
 
         // round to the nearest 100th
         x.push(value);
@@ -1417,6 +1429,12 @@ function calculatorTypeBInitialize()
         max: 5,
         step: 0.1,
         slide: function(event, ui) {
+            // we need the 1/165 case
+            if(ui.value == 0.6)
+            {
+                ui.value = 0.606;
+            }
+
             $("#calculatorB3_input_detection_threshold").val(ui.value + "% (1/" + Math.round(100. / ui.value) + ")");
             calculatorTypeBInputs.detectionThreshold3 = parseFloat($("#calculatorB3_input_detection_threshold").val());
             calculatorTypeBRefresh();
