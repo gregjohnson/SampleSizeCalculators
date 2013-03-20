@@ -1475,6 +1475,8 @@ var calculatorTypeCRareFluPBuffer = 0.2;
 
 // calculator type C inputs
 var calculatorTypeCInputs = {
+    population:1,
+    surveillanceScale:'National',
     rareFluP:1,
     confidenceLevel1:95,
     confidenceLevel2:95,
@@ -1488,6 +1490,8 @@ var calculatorTypeCInputs = {
 };
 
 // tooltip text
+var tooltipTypeCTotalPopulation = tooltipTypeATotalPopulation;
+var tooltipTypeCSurveillanceScale = tooltipTypeBSurveillanceScale;
 var tooltipTypeCRareFluP = "This is the estimated prevalence of the rare type among all Flu+ specimens (Rare+/Flu+). Although the actual prevalence of the rare type may differ from the value you choose, this approximation still provides an important baseline for determining sample sizes.";
 var tooltipTypeCConfidenceLevel = "The desired confidence level for testing that the prevalence of the rare type (Rare+/Flu+) does not exceed a specified value (prevalence threshold). The number of samples required will increase as the desired confidence level increases and as the prevalence threshold decreases. For example, determining that a rare type has prevalence less than 2% is more difficult than determining its prevalence is less than 4%, and establishing a low prevalence with 99% confidence is more difficult than doing so with 90% confidence.";
 var tooltipTypeCExpectedFluMAILI = "The fraction of non-prescreened MA-ILI+ cases that are Flu+. This estimate will vary throughout the influenza season. This fraction is needed to estimate the number of non-prescreened MA-ILI+ specimens required to screen a sufficient number of Flu+ specimens to estimate the prevalence of a rare type of influenza (Rare+/Flu+).";
@@ -1521,6 +1525,11 @@ function typeC_getFluSampleSize(prevalenceThreshold)
     var secondTerm = Math.sqrt( Math.pow(p - 5.*p*p - p*z*z - p*p*z*z - puHat + 8.*p*puHat - 2.*z*z*puHat + 4.*p*z*z*puHat - 3.*puHat*puHat, 2) - 4.*(-p + 2.*p*p - 2.*p*z*z + 4*p*p*z*z + puHat - 2.*p*puHat + 2*z*z*puHat - 4.*p*z*z*puHat) * (3*p*p - 6.*p*puHat + 3.*puHat*puHat) );
 
     var n = 1./psi * ( firstTerm  + secondTerm );
+
+    if(this.surveillanceScale == "National")
+    {
+        n = n * this.population / nationalPopulation;
+    }
 
     return n;
 }
@@ -1571,6 +1580,12 @@ function evaluateTypeC_prevalenceThreshold_vs_confidenceLevel(confidenceLevel)
 
     var p = this.rareFluP / 100.;
     var n = this.fluSampleSize + this.MAILISampleSize * (this.p / 100.);
+
+    if(this.surveillanceScale == "National")
+    {
+        n = n * nationalPopulation / this.population;
+    }
+
     var delta = (z*z/3. + 1./6.) * (1.-2.*p) / n;
     var v = p*(1.-p)/(n-1.);
 
@@ -1593,6 +1608,8 @@ function drawTypeCTab1()
 
     // use a parameters object to pass in any other input parameters to the evaluation function
     var parameters = new Object();
+    parameters.population = calculatorTypeCInputs.population;
+    parameters.surveillanceScale = calculatorTypeCInputs.surveillanceScale;
     parameters.rareFluP = calculatorTypeCInputs.rareFluP;
     parameters.confidenceLevel = calculatorTypeCInputs.confidenceLevel1;
 
@@ -1688,6 +1705,8 @@ function drawTypeCTab2()
 
     // use a parameters object to pass in any other input parameters to the evaluation function
     var parameters = new Object();
+    parameters.population = calculatorTypeCInputs.population;
+    parameters.surveillanceScale = calculatorTypeCInputs.surveillanceScale;
     parameters.rareFluP = calculatorTypeCInputs.rareFluP;
     parameters.confidenceLevel = calculatorTypeCInputs.confidenceLevel2;
     parameters.p = calculatorTypeCInputs.p2;
@@ -1784,6 +1803,8 @@ function drawTypeCTab3()
 
     // use a parameters object to pass in any other input parameters to the evaluation function
     var parameters = new Object();
+    parameters.population = calculatorTypeCInputs.population;
+    parameters.surveillanceScale = calculatorTypeCInputs.surveillanceScale;
     parameters.rareFluP = calculatorTypeCInputs.rareFluP;
     parameters.confidenceLevel = calculatorTypeCInputs.confidenceLevel3;
     parameters.p = calculatorTypeCInputs.p3;
@@ -1920,6 +1941,8 @@ function drawTypeCTab4()
 
     // use a parameters object to pass in any other input parameters to the evaluation function
     var parameters = new Object();
+    parameters.population = calculatorTypeCInputs.population;
+    parameters.surveillanceScale = calculatorTypeCInputs.surveillanceScale;
     parameters.rareFluP = calculatorTypeCInputs.rareFluP;
     parameters.fluSampleSize = calculatorTypeCInputs.fluSampleSize4;
     parameters.MAILISampleSize = calculatorTypeCInputs.MAILISampleSize4;
@@ -2005,6 +2028,8 @@ function calculatorTypeCInitialize()
     // initialize UI elements and events
 
     // tooltips
+    $(".tooltipTypeCTotalPopulation").attr("title", tooltipTypeCTotalPopulation);
+    $(".tooltipTypeCSurveillanceScale").attr("title", tooltipTypeCSurveillanceScale);
     $(".tooltipTypeCRareFluP").attr("title", tooltipTypeCRareFluP);
     $(".tooltipTypeCConfidenceLevel").attr("title", tooltipTypeCConfidenceLevel);
     $(".tooltipTypeCExpectedFluMAILI").attr("title", tooltipTypeCExpectedFluMAILI);
@@ -2016,6 +2041,75 @@ function calculatorTypeCInitialize()
     $(".tooltipTypeCFluSampleSize3").attr("title", tooltipTypeCFluSampleSize3);
     $(".tooltipTypeCMAILISampleSize").attr("title", tooltipTypeCMAILISampleSize);
     $(".tooltipTypeCMAILISampleSize3").attr("title", tooltipTypeCMAILISampleSize3);
+
+    // population options
+    var populationOptions = $("#calculatorC_select_population");
+
+    $.each(statePopulations, function(key, value) {
+        populationOptions.append($("<option />").val(key).text(key));
+    });
+
+    populationOptions.append($("<option />").val("Other").text("Other"));
+
+    // population selection
+    $("#calculatorC_select_population, #calculatorC_input_population").bind('keyup mouseup change', function(e) {
+        // selected state and population for that state
+        var state = $("#calculatorC_select_population :selected").val();
+        var population = 0;
+
+        if(state == "Other")
+        {
+            // hide number label and show number input
+            $("#calculatorC_select_population_number_label").hide();
+            $("#calculatorC_input_population").show();
+
+            population = $("#calculatorC_input_population").val();
+        }
+        else
+        {
+            // show number label and hide number input
+            $("#calculatorC_select_population_number_label").show();
+            $("#calculatorC_input_population").hide();
+
+            population = statePopulations[state];
+
+            // update the number label
+            $("#calculatorC_select_population_number_label").html(numberWithCommas(population));
+        }
+
+        // save the value
+        calculatorTypeCInputs.population = population;
+
+        // update the surveillane scale "state" option text
+        $("#calculatorC_select_surveillance_scale option:last-child").text($("#calculatorC_select_population :selected").val());
+
+        // refresh
+        calculatorTypeCRefresh();
+    });
+
+    // force an initial update event (since we have no current value for population)
+    $("#calculatorC_select_population").change();
+
+    // surveillance scale selection
+    $("#calculatorC_select_surveillance_scale").bind('keyup mouseup change', function(e) {
+        // make sure we have a valid value
+        var value = $("#calculatorC_select_surveillance_scale :selected").val();
+
+        if(value != "National" && value != "State")
+        {
+            alert("invalid surveillance scale value");
+            return;
+        }
+
+        // save the value
+        calculatorTypeCInputs.surveillanceScale = value;
+
+        // refresh
+        calculatorTypeCRefresh();
+    });
+
+    // force an initial update event (since we have no current value for population)
+    $("#calculatorC_select_surveillance_scale").change();
 
     // expected Rare+/Flu+ slider
     $("#calculatorC_input_rare_flu_p_slider").slider({

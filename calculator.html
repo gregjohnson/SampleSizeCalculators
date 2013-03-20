@@ -277,10 +277,24 @@
             <!-- Calculator C -->
             <h3>Sample Size Calculator for Rare (Novel) Event Investigation</h3>
             <div>
+                <!-- input: population; select options populated in javascript -->
                 <div class="calculatorInputArea">
-                    <i>Population size is not required for this calculator.</i>
+                    <label for="calculatorC_select_population" class="calculatorLabel calculatorTooltip tooltipTypeCTotalPopulation">Total Population</label>
+                    <select id="calculatorC_select_population" class="calculatorSelect"> </select>
+                    <span id="calculatorC_select_population_number_label" class="calculatorSelectNumberLabel"> </span>
+                    <input id="calculatorC_input_population" type="number" class="calculatorNumberInput" style="display:none;" value="1000000" />
                 </div>
 
+                <!-- input: surveillance scale -->
+                <div class="calculatorInputArea">
+                    <label for="calculatorC_select_surveillance_scale" class="calculatorLabel calculatorTooltip tooltipTypeCSurveillanceScale">Surveillance Scale</label>
+                    <select id="calculatorC_select_surveillance_scale" class="calculatorSelect">
+                        <option value="National">National</option>
+                        <option value="State">State</option>
+                    </select>
+                </div>
+
+                <br style="clear:both;" />
                 <br style="clear:both;" />
 
                 <!-- input: expected Rare+/Flu+ -->
