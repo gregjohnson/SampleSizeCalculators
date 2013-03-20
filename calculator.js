@@ -25,9 +25,14 @@ var calculatorTypeAInputs = {
 };
 
 // data
-var populationToILIFactor = 0.00084615;
+var populationToILIFactorBase = 0.00038461363636363633; // * 2.2 == 0.00084615 (2.2 is a percentage value)
+
+// global input: MA-ILI percentage
+var inputMAILIPercentage = 2.2;
 
 // tooltip text
+var tooltipMAILI = "Medically attended ILI description.";
+
 var tooltipTypeATotalPopulation = "The total population size under surveillance. For labs representing entire states, simply select the name of the state. This will automatically provide the 2012 census projection of the state population. For labs collecting specimens from subsets of state populations or populations that cross multiple states, choose 'Other' and enter the estimated size of the entire population under consideration. The calculator uses these numbers to estimate the weekly number of medically attended ILI cases in your jurisdiction (MA-ILI+).";
 
 var tooltipTypeAExpectedFluMAILI = "This is your surveillance target: the level of Flu+/MA-ILI+ you would like to be able estimate accurately. For example, if you would like to detect when Flu+/MA-ILI+ crosses the 10% threshold at the beginning of the flu season, then move the slider to 10%. If, instead, you plan to use the data to estimate Flu+/MA-ILI+ later in the season, when it is closer to 30%, then move the slider closer to 30%. Although the actual fraction of Flu+ over MA-ILI+ may differ from the value you choose, this approximation still provides an important baseline for determining sample sizes.";
@@ -236,7 +241,7 @@ function evaluateTypeA_SampleSize_vs_epsilon(epsilon)
     var sampleSize = (pDecimal*z*z - pDecimal*pDecimal*z*z) / (episilonDecimal*episilonDecimal);
 
     // finite population correction
-    var populationILI = this.population * populationToILIFactor;
+    var populationILI = this.population * (populationToILIFactorBase * inputMAILIPercentage);
     var sampleSizeStar = (sampleSize * populationILI) / (sampleSize + populationILI - 1.);
 
     return Math.round(sampleSizeStar);
@@ -251,7 +256,7 @@ function evaluateTypeA_ConfidenceLevel_vs_epsilon(epsilon)
     var epsilonDecimal = epsilon / 100.;
 
     // finite population correction (inverse)
-    var populationILI = this.population * populationToILIFactor;
+    var populationILI = this.population * (populationToILIFactorBase * inputMAILIPercentage);
 
     // equations not valid when we have more samples than our population
     // return 100% confidence in this case
@@ -272,7 +277,7 @@ function evaluateTypeA_epsilon_vs_ConfidenceLevel(confidenceLevel)
     var p = this.p / 100.;
 
     // finite population correction (inverse)
-    var populationILI = this.population * populationToILIFactor;
+    var populationILI = this.population * (populationToILIFactorBase * inputMAILIPercentage);
 
     // equations not valid when we have more samples than our population
     // return 0% margin of error in this case
@@ -2183,6 +2188,28 @@ function onLoad()
     $("#calculatorA_tabs").tabs({ activate: function(event, ui) { calculatorTypeARefresh(); } });
     $("#calculatorB_tabs").tabs({ activate: function(event, ui) { calculatorTypeBRefresh(); } });
     $("#calculatorC_tabs").tabs({ activate: function(event, ui) { calculatorTypeCRefresh(); } });
+
+    // global tooltips
+    $(".tooltipMAILI").attr("title", tooltipMAILI);
+
+    // global input: slider for medically attended ILI percentage
+    $("#calculators_input_MAILI_slider").slider({
+        value:inputMAILIPercentage,
+        min: 1,
+        max: 5,
+        step: 0.1,
+        slide: function(event, ui) {
+            $("#calculators_input_MAILI").val(ui.value + "%");
+            inputMAILIPercentage = parseFloat($("#calculators_input_MAILI").val());
+
+            // refresh all calculators since they depend on this value
+            calculatorTypeARefresh();
+            calculatorTypeBRefresh();
+            calculatorTypeCRefresh();
+        }
+    });
+
+    $("#calculators_input_MAILI").val($("#calculators_input_MAILI_slider").slider("value") + "%");
 
     // initialize and refresh individual calculators
     calculatorTypeAInitialize();
