@@ -1494,7 +1494,7 @@ var calculatorTypeCRareFluPBuffer = 0.2;
 // calculator type C inputs
 var calculatorTypeCInputs = {
     population:1,
-    surveillanceScale:'National',
+    surveillanceScale:'State',
     rareFluP:1,
     confidenceLevel1:95,
     confidenceLevel2:95,
