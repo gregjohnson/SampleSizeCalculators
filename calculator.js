@@ -1489,7 +1489,7 @@ function calculatorTypeBRefresh()
 ///////////////////////////////////////////////////////////////////////////////
 
 var calculatorTypeCRangeMaxRareFluP = 7.;
-var calculatorTypeCRareFluPBuffer = 0.2;
+var calculatorTypeCRareFluPBuffer = 1.0;
 
 // calculator type C inputs
 var calculatorTypeCInputs = {
@@ -2233,7 +2233,7 @@ function calculatorTypeCInitialize()
     // tab 3: prevalence threshold slider
     $("#calculatorC3_input_prevalence_threshold_slider").slider({
         value:calculatorTypeCInputs.prevalenceThreshold3,
-        min: 1.1,
+        min: 1. + calculatorTypeCRareFluPBuffer,
         max: calculatorTypeCRangeMaxRareFluP,
         step: 0.1,
         slide: function(event, ui) {
