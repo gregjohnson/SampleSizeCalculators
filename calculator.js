@@ -1529,7 +1529,7 @@ function typeC_getFluSampleSize(prevalenceThreshold)
     // this object contains parameter values
 
     var errorPercentile = 100. - this.confidenceLevel;
-    var alpha = 1. - 0.5*errorPercentile/100.;
+    var alpha = 1. - errorPercentile/100.;
 
     // this is the inverse cumulative distribution function
     var z = Math.sqrt(2.) * erfinv(2.*alpha - 1.);
@@ -1591,7 +1591,7 @@ function evaluateTypeC_prevalenceThreshold_vs_confidenceLevel(confidenceLevel)
 {
     // this object contains parameter values
     var errorPercentile = 100. - confidenceLevel;
-    var alpha = 1. - 0.5*errorPercentile/100.;
+    var alpha = 1. - errorPercentile/100.;
 
     // this is the inverse cumulative distribution function
     var z = Math.sqrt(2.) * erfinv(2.*alpha - 1.);
