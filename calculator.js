@@ -225,6 +225,9 @@ function arraysToDataTable(labels, arrays)
     return google.visualization.arrayToDataTable(dataTableArray);
 }
 
+// active tab index
+var calculatorTypeAActiveTabIndex = 0;
+
 function evaluateTypeA_SampleSize_vs_epsilon(epsilon)
 {
     // this object contains parameter values
@@ -292,7 +295,7 @@ function evaluateTypeA_epsilon_vs_ConfidenceLevel(confidenceLevel)
 }
 
 // draw chart and table given labels, x series, y series
-function drawTypeAChartAndTable()
+function drawTypeATab1()
 {
     var labels = ['Margin of Error', 'Minimum Sample Size'];
     var x = [];
@@ -354,7 +357,7 @@ function drawTypeAChartAndTable()
     table.draw(dataTable, optionsTable);
 
     // selection handling
-    var thisObj = drawTypeAChartAndTable;
+    var thisObj = drawTypeATab1;
 
     google.visualization.events.addListener(chart, 'select', chartSelectHandler);
     google.visualization.events.addListener(table, 'select', tableSelectHandler);
@@ -388,7 +391,7 @@ function drawTypeAChartAndTable()
     thisObj.selectHandler([{row:thisObj.selectedRow ? thisObj.selectedRow : 0}]);
 }
 
-function drawTypeABigTable()
+function drawTypeATab2()
 {
     var epsilons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     var confidenceLevels = [99, 95, 90, 85, 80, 75, 70];
@@ -425,7 +428,7 @@ function drawTypeABigTable()
     table.draw(data);
 
     // selection handling
-    var thisObj = drawTypeABigTable;
+    var thisObj = drawTypeATab2;
 
     google.visualization.events.addListener(table, 'select', tableSelectHandler);
 
@@ -457,7 +460,7 @@ function drawTypeABigTable()
 }
 
 // draw chart and table given labels, x series, y series
-function drawTypeAChartAndTable2()
+function drawTypeATab3()
 {
     var labels = ['Confidence Level', 'Margin of Error'];
     var x = [];
@@ -523,7 +526,7 @@ function drawTypeAChartAndTable2()
     table.draw(dataTable, optionsTable);
 
     // selection handling
-    var thisObj = drawTypeAChartAndTable2;
+    var thisObj = drawTypeATab3;
 
     google.visualization.events.addListener(chart, 'select', chartSelectHandler);
     google.visualization.events.addListener(table, 'select', tableSelectHandler);
@@ -656,9 +659,22 @@ function calculatorTypeAInitialize()
 
 function calculatorTypeARefresh()
 {
-    drawTypeAChartAndTable();
-    drawTypeABigTable();
-    drawTypeAChartAndTable2();
+    if(calculatorTypeAActiveTabIndex == 0)
+    {
+        drawTypeATab1();
+    }
+    else if(calculatorTypeAActiveTabIndex == 1)
+    {
+        drawTypeATab2();
+    }
+    else if(calculatorTypeAActiveTabIndex == 2)
+    {
+        drawTypeATab3();
+    }
+    else
+    {
+        alert("error, unknown tab index " + calculatorTypeAActiveTabIndex);
+    }
 }
 
 
@@ -691,6 +707,9 @@ var tooltipTypeBMinimumMAILISampleSize = "The minimum number of non-prescreened 
 var tooltipTypeBFluSampleSize = "The number of Flu+ specimens to be tested. Both Flu+ and non-prescreened MA-ILI+ specimens can be used to detect rare types of influenza. However, many more non-prescreened MA-ILI+ specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI+) is low.";
 var tooltipTypeBMAILISampleSize = "The number of non-prescreened MA-ILI+ specimens to be tested. Both Flu+ and non-prescreened MA-ILI+ specimens can be used to detect rare types of influenza. However, many more non-prescreened MA-ILI+ specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI+) is low.";
 var tooltipTypeBSurveillanceScale = "The scale of the surveillance effort. A 'National' surveillance scale means that all states are contributing to a national surveillance effort proportional to their population size. A state-based surveillance scale indicates a local surveillance effort for that state only.";
+
+// active tab index
+var calculatorTypeBActiveTabIndex = 0;
 
 function evaluateTypeB_FluSampleSize_vs_detectionThreshold(detectionThreshold)
 {
@@ -1477,10 +1496,26 @@ function calculatorTypeBInitialize()
 
 function calculatorTypeBRefresh()
 {
-    drawTypeBTab1();
-    drawTypeBTab2();
-    drawTypeBTab3();
-    drawTypeBTab4();
+    if(calculatorTypeBActiveTabIndex == 0)
+    {
+        drawTypeBTab1();
+    }
+    else if(calculatorTypeBActiveTabIndex == 1)
+    {
+        drawTypeBTab2();
+    }
+    else if(calculatorTypeBActiveTabIndex == 2)
+    {
+        drawTypeBTab3();
+    }
+    else if(calculatorTypeBActiveTabIndex == 3)
+    {
+        drawTypeBTab4();
+    }
+    else
+    {
+        alert("error, unknown tab index " + calculatorTypeBActiveTabIndex);
+    }
 }
 
 
@@ -1521,6 +1556,9 @@ var tooltipTypeCFluSampleSize = "The number of Flu+ specimens to be tested. Both
 var tooltipTypeCFluSampleSize3 = "The minimum number of Flu+ specimens required, in combination with a specified number of non-prescreened MA-ILI+ specimens, to confirm that the prevalence of a rare type is below a specified prevalence threshold, with the specified level of confidence.";
 var tooltipTypeCMAILISampleSize = "The number of non-prescreened MA-ILI+ specimens to be tested. Both Flu+ and non-prescreened MA-ILI+ specimens can be used to estimate the prevalence of rare types of influenza. However, many more non-prescreened MA-ILI+ specimens are typically required than Flu+ specimens to achieve the same statistical power, particularly when the overall prevalence of influenza (Flu+/MA-ILI+) is low.";
 var tooltipTypeCMAILISampleSize3 = "The minimum number of non-prescreened MA-ILI+ specimens required, in combination with a specified number of Flu+ specimens, to confirm that the prevalence of a rare type is below a specified prevalence threshold, with the specified level of confidence.";
+
+// active tab index
+var calculatorTypeCActiveTabIndex = 0;
 
 // helper function so we only have to define this once.
 // must call this with a parameters object as "this"... use function.call(parameters, arg)
@@ -2285,10 +2323,26 @@ function calculatorTypeCInitialize()
 
 function calculatorTypeCRefresh()
 {
-    drawTypeCTab1();
-    drawTypeCTab2();
-    drawTypeCTab3();
-    drawTypeCTab4();
+    if(calculatorTypeCActiveTabIndex == 0)
+    {
+        drawTypeCTab1();
+    }
+    else if(calculatorTypeCActiveTabIndex == 1)
+    {
+        drawTypeCTab2();
+    }
+    else if(calculatorTypeCActiveTabIndex == 2)
+    {
+        drawTypeCTab3();
+    }
+    else if(calculatorTypeCActiveTabIndex == 3)
+    {
+        drawTypeCTab4();
+    }
+    else
+    {
+        alert("error, unknown tab index " + calculatorTypeCActiveTabIndex);
+    }
 }
 
 function onLoad()
@@ -2297,9 +2351,9 @@ function onLoad()
     $("#calculator_accordion").accordion({ heightStyle: "content", activate: function(event, ui) { calculatorTypeARefresh(); calculatorTypeBRefresh(); calculatorTypeCRefresh(); } } );
 
     // create individual calculator tabs; trigger a refresh on activation so charts are correctly sized
-    $("#calculatorA_tabs").tabs({ activate: function(event, ui) { calculatorTypeARefresh(); } });
-    $("#calculatorB_tabs").tabs({ activate: function(event, ui) { calculatorTypeBRefresh(); } });
-    $("#calculatorC_tabs").tabs({ activate: function(event, ui) { calculatorTypeCRefresh(); } });
+    $("#calculatorA_tabs").tabs({ activate: function(event, ui) { calculatorTypeAActiveTabIndex = ui.newTab.index(); calculatorTypeARefresh(); } });
+    $("#calculatorB_tabs").tabs({ activate: function(event, ui) { calculatorTypeBActiveTabIndex = ui.newTab.index(); calculatorTypeBRefresh(); } });
+    $("#calculatorC_tabs").tabs({ activate: function(event, ui) { calculatorTypeCActiveTabIndex = ui.newTab.index(); calculatorTypeCRefresh(); } });
 
     // global tooltips
     $(".tooltipMAILI").attr("title", tooltipMAILI);
