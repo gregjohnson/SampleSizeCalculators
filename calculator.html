@@ -21,21 +21,19 @@
 
         <h3>Calculators</h3>
 
-        <!-- input: medically attended ILI -->
-        <div class="calculatorInputArea">
-            <label for="calculators_input_MAILI" class="calculatorLabel calculatorTooltip tooltipMAILI">Medically Attended ILI</label>
-            <div id="calculators_input_MAILI_slider" class="calculatorSlider"></div>
-            <input type="text" id="calculators_input_MAILI" class="calculatorSliderInput" />
-        </div>
-
-        <br style="clear:both;" />
-        <br style="clear:both;" />
-
         <div id="calculator_accordion" class="calculatorAccordionContainer">
 
             <!-- Calculator A -->
             <h3>Sample Size Calculator for Flu+/MA-ILI+</h3>
             <div>
+                <!-- input: medically attended ILI -->
+                <!-- this was (and still could be) a global input for all calculators... so it's coded a little differently -->
+                <div class="calculatorInputArea">
+                    <label for="calculators_input_MAILI" class="calculatorLabel calculatorTooltip tooltipMAILI">Medically Attended ILI</label>
+                    <div id="calculators_input_MAILI_slider" class="calculatorSlider"></div>
+                    <input type="text" id="calculators_input_MAILI" class="calculatorSliderInput" />
+                </div>
+
                 <!-- input: population; select options populated in javascript -->
                 <div class="calculatorInputArea">
                     <label for="calculatorA_select_population" class="calculatorLabel calculatorTooltip tooltipTypeATotalPopulation">Total Population</label>

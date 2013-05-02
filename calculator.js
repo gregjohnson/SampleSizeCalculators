@@ -2356,9 +2356,11 @@ function onLoad()
     $("#calculatorC_tabs").tabs({ activate: function(event, ui) { calculatorTypeCActiveTabIndex = ui.newTab.index(); calculatorTypeCRefresh(); } });
 
     // global tooltips
+    // this was (and still could be) a global input for all calculators... so it's coded a little differently
     $(".tooltipMAILI").attr("title", tooltipMAILI);
 
     // global input: slider for medically attended ILI percentage
+    // this was (and still could be) a global input for all calculators... so it's coded a little differently
     $("#calculators_input_MAILI_slider").slider({
         value:inputMAILIPercentage,
         min: 1,
@@ -2370,8 +2372,10 @@ function onLoad()
 
             // refresh all calculators since they depend on this value
             calculatorTypeARefresh();
-            calculatorTypeBRefresh();
-            calculatorTypeCRefresh();
+
+            // for now, it does not refresh calculators B and C
+            // calculatorTypeBRefresh();
+            // calculatorTypeCRefresh();
         }
     });
 
