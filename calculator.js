@@ -1524,7 +1524,7 @@ function calculatorTypeBRefresh()
 ///////////////////////////////////////////////////////////////////////////////
 
 var calculatorTypeCRangeMaxRareFluP = 7.;
-var calculatorTypeCRareFluPBuffer = 1.0;
+var calculatorTypeCRareFluPBuffer = 0.5;
 
 // calculator type C inputs
 var calculatorTypeCInputs = {
