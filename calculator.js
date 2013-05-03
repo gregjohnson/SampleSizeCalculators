@@ -1980,7 +1980,7 @@ function drawTypeCTab4()
     var y;
 
     // range: confidence level (%)
-    var min = 70;
+    var min = 50;
     var max = 99;
     var numValues = 30;
 
