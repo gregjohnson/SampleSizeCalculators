@@ -801,8 +801,34 @@ function evaluateTypeB_detectionThreshold_vs_confidenceLevel(confidenceLevel)
         detectionThreshold = 100.*( 1. - Math.pow(1. - confidenceLevel/100., 1. / idealFluSampleSize) );
     }
 
-    // round to the nearest 100th
-    return Math.round(detectionThreshold*100)/100;
+    // no rounding, since we need 0.606% case...
+    return detectionThreshold;
+}
+
+function evaluateTypeB_confidenceLevel_vs_detectionThreshold(detectionThreshold)
+{
+    var idealFluSampleSize = this.fluSampleSize + this.p/100. * this.MAILISampleSize;
+
+    if(this.surveillanceScale == "State")
+    {
+        // finite population correction (inverse)
+        // note the division instead of multiplication here
+        idealFluSampleSize = idealFluSampleSize / Math.sqrt((this.population - idealFluSampleSize) / (this.population - 1.));
+    }
+
+    var confidenceLevel = 0;
+
+    if(this.surveillanceScale == "National")
+    {
+        confidenceLevel = 100.*( 1. - Math.pow(1. - detectionThreshold/100., (idealFluSampleSize * nationalPopulation) / this.population) );
+    }
+    else if(this.surveillanceScale == "State")
+    {
+        confidenceLevel = 100.*( 1. - Math.pow(1. - detectionThreshold/100., idealFluSampleSize) );
+    }
+
+    // no rounding, since we need 0.606% case...
+    return confidenceLevel;
 }
 
 // draw chart and table given labels, x series, y series
@@ -1176,9 +1202,49 @@ function drawTypeBTab4()
     var y;
     var yLabelMap = {};
 
+    // use a parameters object to pass in any other input parameters to the evaluation function
+    var parameters = new Object();
+    parameters.population = calculatorTypeBInputs.population;
+    parameters.surveillanceScale = calculatorTypeBInputs.surveillanceScale;
+    parameters.fluSampleSize = calculatorTypeBInputs.fluSampleSize4;
+    parameters.MAILISampleSize = calculatorTypeBInputs.MAILISampleSize4;
+    parameters.p = calculatorTypeBInputs.p4;
+
     // range: confidence level (%)
+    // dynamically determine such that it contains resulting detection thresholds of 1/200, 1/165, and 5%
+    var cl_1_200 = evaluateTypeB_confidenceLevel_vs_detectionThreshold.call(parameters, 100.*1./200.);
+    var cl_1_165 = evaluateTypeB_confidenceLevel_vs_detectionThreshold.call(parameters, 100.*1./165.);
+    var cl_5 = evaluateTypeB_confidenceLevel_vs_detectionThreshold.call(parameters, 100.*0.05);
+
+    // make sure we have valid values; otherwise set to 0
+    if((cl_1_200 > 0. && cl_1_200 < 99.9) != true)
+    {
+        cl_1_200 = 0.;
+    }
+
+    if((cl_1_165 > 0. && cl_1_165 < 99.9) != true)
+    {
+        cl_1_165 = 0.;
+    }
+
+    if((cl_5 > 0. && cl_5 < 99.9) != true)
+    {
+        cl_5 = 0.;
+    }
+
     var min = 70;
     var max = 99;
+
+    if(cl_1_200 != 0. && cl_1_200 < min)
+    {
+        min = cl_1_200;
+    }
+
+    if(cl_5 != 0. && cl_5 > max)
+    {
+        max = cl_5;
+    }
+
     var numValues = 30;
 
     for(var i=0; i<numValues; i++)
@@ -1192,13 +1258,24 @@ function drawTypeBTab4()
     // add 99.9%
     x.push(99.9);
 
-    // use a parameters object to pass in any other input parameters to the evaluation function
-    var parameters = new Object();
-    parameters.population = calculatorTypeBInputs.population;
-    parameters.surveillanceScale = calculatorTypeBInputs.surveillanceScale;
-    parameters.fluSampleSize = calculatorTypeBInputs.fluSampleSize4;
-    parameters.MAILISampleSize = calculatorTypeBInputs.MAILISampleSize4;
-    parameters.p = calculatorTypeBInputs.p4;
+    // make sure confidence levels of interest are present
+    if(cl_1_200 != 0. && min != cl_1_200)
+    {
+        x.push(cl_1_200);
+    }
+
+    if(cl_1_165 != 0.)
+    {
+        x.push(cl_1_165);
+    }
+
+    if(cl_5 != 0. && max != cl_5)
+    {
+        x.push(cl_5);
+    }
+
+    // sort numerically
+    x = x.sort(function (a, b) { return a > b ? 1 : a < b ? -1 : 0; });
 
     // evaluation for each x
     y = x.map(evaluateTypeB_detectionThreshold_vs_confidenceLevel, parameters);
@@ -1206,7 +1283,7 @@ function drawTypeBTab4()
     // determine y labels
     for(var i=0; i<y.length; i++)
     {
-        yLabelMap[y[i]] = y[i] + "% (1/" + Math.round(100. / y[i]) + ")";
+        yLabelMap[y[i]] = Math.round(y[i]*100.)/100. + "% (1/" + Math.round(100. / y[i]) + ")";
     }
 
     // separate DataTable objects for chart / table to allow for formatting
