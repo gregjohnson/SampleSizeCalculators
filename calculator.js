@@ -1288,7 +1288,32 @@ function drawTypeBTab4()
 
     // separate DataTable objects for chart / table to allow for formatting
     var dataChart = arraysToDataTable(labels, [x, y]);
-    var dataTable = dataChart.clone();
+
+    // if we have bad values for the confidence levels of interest, add them in a special way
+    // for the table only!
+    if(cl_1_200 == 0.)
+    {
+        x.push(99.99);
+        y.push(1./200.*100.);
+        yLabelMap[1./200.*100.] = "0.5% (1/200)";
+    }
+
+    if(cl_1_165 == 0.)
+    {
+        x.push(99.99);
+        y.push(1./165.*100.);
+        yLabelMap[1./165.*100.] = "0.61% (1/165)";
+    }
+
+    if(cl_5 == 0.)
+    {
+        x.push(99.99);
+        y.push(0.05*100.);
+        yLabelMap[0.05*100.] = "5% (1/20)";
+    }
+
+    // before this was just dataChart.clone();
+    var dataTable = arraysToDataTable(labels, [x, y]);
 
     // chart: format first column as percentage with prefix
     var formatterChart = new google.visualization.NumberFormat( {pattern: "Confidence Level: #.##'%'"} );
