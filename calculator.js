@@ -617,10 +617,11 @@ function calculatorTypeAInitialize()
 
 
     // assumed prevalence slider
+    // the maximum here is 99% since at 100% the required sample size is 0
     $("#calculatorA_input_p_slider").slider({
         value:calculatorTypeAInputs.p,
         min: 1,
-        max: 30,
+        max: 99,
         step: 1,
         slide: function(event, ui) {
             $("#calculatorA_input_p").val(ui.value + "%");
@@ -1502,7 +1503,7 @@ function calculatorTypeBInitialize()
     $("#calculatorB2_input_p_slider").slider({
         value:calculatorTypeBInputs.p2,
         min: 1,
-        max: 30,
+        max: 100,
         step: 1,
         slide: function(event, ui) {
             $("#calculatorB2_input_p").val(ui.value + "%");
@@ -1532,7 +1533,7 @@ function calculatorTypeBInitialize()
     $("#calculatorB3_input_p_slider").slider({
         value:calculatorTypeBInputs.p3,
         min: 1,
-        max: 30,
+        max: 100,
         step: 1,
         slide: function(event, ui) {
             $("#calculatorB3_input_p").val(ui.value + "%");
@@ -1584,7 +1585,7 @@ function calculatorTypeBInitialize()
     $("#calculatorB4_input_p_slider").slider({
         value:calculatorTypeBInputs.p4,
         min: 1,
-        max: 30,
+        max: 100,
         step: 1,
         slide: function(event, ui) {
             $("#calculatorB4_input_p").val(ui.value + "%");
@@ -2329,7 +2330,7 @@ function calculatorTypeCInitialize()
     $("#calculatorC2_input_p_slider").slider({
         value:calculatorTypeCInputs.p2,
         min: 1,
-        max: 30,
+        max: 100,
         step: 1,
         slide: function(event, ui) {
             $("#calculatorC2_input_p").val(ui.value + "%");
@@ -2359,7 +2360,7 @@ function calculatorTypeCInitialize()
     $("#calculatorC3_input_p_slider").slider({
         value:calculatorTypeCInputs.p3,
         min: 1,
-        max: 30,
+        max: 100,
         step: 1,
         slide: function(event, ui) {
             $("#calculatorC3_input_p").val(ui.value + "%");
@@ -2411,7 +2412,7 @@ function calculatorTypeCInitialize()
     $("#calculatorC4_input_p_slider").slider({
         value:calculatorTypeCInputs.p4,
         min: 1,
-        max: 30,
+        max: 100,
         step: 1,
         slide: function(event, ui) {
             $("#calculatorC4_input_p").val(ui.value + "%");
