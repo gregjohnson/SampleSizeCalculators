@@ -7,7 +7,7 @@
 .calculatorSelectNumberLabel { float:left; margin-left:10px; font-weight:bold; }
 .calculatorNumberInput { float:left; margin-left:10px; width:125px; font-weight:bold; }
 .calculatorSlider { float:left; width:250px; }
-.calculatorSliderInput { float:left; margin-left:10px; width:120px; border:0; font-weight:bold;  }
+.calculatorSliderInput { float:left; margin-left:10px; width:130px; border:0; font-weight:bold;  }
 .calculatorSmallChart { float:left; width: 375px; height:300px; }
 .calculatorSmallTable { float:left; }
 .calculatorBigTable { clear: both; float:left; width: 600px; height: 300px; }

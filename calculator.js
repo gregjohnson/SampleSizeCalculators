@@ -842,9 +842,9 @@ function drawTypeBTab1()
     var y;
 
     // range: detection threshhold (increments of 0.1)
-    var min = 0.2;
+    var min = 0.1;
     var max = 5;
-    var numValues = 49;
+    var numValues = 50;
 
     for(var i=0; i<numValues; i++)
     {
@@ -862,6 +862,21 @@ function drawTypeBTab1()
         // labels
         xChartLabelMap[value] = "Detection Threshhold: " + value + "% (1/" + Math.round(100. / value) + ")";
         xTableLabelMap[value] = value + "% (1/" + Math.round(100. / value) + ")";
+
+        if(value == 0.1)
+        {
+            // also get other special cases...
+            // the label code is identical to above
+            value = 0.1429;
+            x.push(value);
+            xChartLabelMap[value] = "Detection Threshhold: " + value + "% (1/" + Math.round(100. / value) + ")";
+            xTableLabelMap[value] = value + "% (1/" + Math.round(100. / value) + ")";
+
+            value = 0.1667;
+            x.push(value);
+            xChartLabelMap[value] = "Detection Threshhold: " + value + "% (1/" + Math.round(100. / value) + ")";
+            xTableLabelMap[value] = value + "% (1/" + Math.round(100. / value) + ")";
+        }
     }
 
     // use a parameters object to pass in any other input parameters to the evaluation function
@@ -956,9 +971,9 @@ function drawTypeBTab2()
     var y;
 
     // range: detection threshhold (increments of 0.1)
-    var min = 0.2;
+    var min = 0.1;
     var max = 5;
-    var numValues = 49;
+    var numValues = 50;
 
     for(var i=0; i<numValues; i++)
     {
@@ -977,6 +992,21 @@ function drawTypeBTab2()
         // labels
         xChartLabelMap[value] = "Detection Threshhold: " + value + "% (1/" + Math.round(100. / value) + ")";
         xTableLabelMap[value] = value + "% (1/" + Math.round(100. / value) + ")";
+
+        if(value == 0.1)
+        {
+            // also get other special cases...
+            // the label code is identical to above
+            value = 0.1429;
+            x.push(value);
+            xChartLabelMap[value] = "Detection Threshhold: " + value + "% (1/" + Math.round(100. / value) + ")";
+            xTableLabelMap[value] = value + "% (1/" + Math.round(100. / value) + ")";
+
+            value = 0.1667;
+            x.push(value);
+            xChartLabelMap[value] = "Detection Threshhold: " + value + "% (1/" + Math.round(100. / value) + ")";
+            xTableLabelMap[value] = value + "% (1/" + Math.round(100. / value) + ")";
+        }
     }
 
     // use a parameters object to pass in any other input parameters to the evaluation function
@@ -1212,38 +1242,44 @@ function drawTypeBTab4()
     parameters.p = calculatorTypeBInputs.p4;
 
     // range: confidence level (%)
-    // dynamically determine such that it contains resulting detection thresholds of 1/200, 1/165, and 5%
-    var cl_1_200 = evaluateTypeB_confidenceLevel_vs_detectionThreshold.call(parameters, 100.*1./200.);
-    var cl_1_165 = evaluateTypeB_confidenceLevel_vs_detectionThreshold.call(parameters, 100.*1./165.);
-    var cl_5 = evaluateTypeB_confidenceLevel_vs_detectionThreshold.call(parameters, 100.*0.05);
+    // dynamically determine such that it contains resulting detection thresholds of 1/1000, 1/700, 1/600, 1/500, 1/200, 1/165, and 5%
+    var detectionThresholdValues = [];
+
+    detectionThresholdValues.push(100.*1./1000.);
+    detectionThresholdValues.push(100.*1./700.);
+    detectionThresholdValues.push(100.*1./600.);
+    detectionThresholdValues.push(100.*1./500.);
+    detectionThresholdValues.push(100.*1./200.);
+    detectionThresholdValues.push(100.*1./165.);
+    detectionThresholdValues.push(100.*0.05);
+
+    var confidenceLevelValues = [];
+
+    for(var i=0; i<detectionThresholdValues.length; i++)
+    {
+        confidenceLevelValues.push(evaluateTypeB_confidenceLevel_vs_detectionThreshold.call(parameters, detectionThresholdValues[i]));
+    }
 
     // make sure we have valid values; otherwise set to 0
-    if((cl_1_200 > 0. && cl_1_200 < 99.9) != true)
+    for(var i=0; i<confidenceLevelValues.length; i++)
     {
-        cl_1_200 = 0.;
-    }
-
-    if((cl_1_165 > 0. && cl_1_165 < 99.9) != true)
-    {
-        cl_1_165 = 0.;
-    }
-
-    if((cl_5 > 0. && cl_5 < 99.9) != true)
-    {
-        cl_5 = 0.;
+        if((confidenceLevelValues[i] > 0. && confidenceLevelValues[i] < 99.9) != true)
+        {
+            confidenceLevelValues[i] = 0.;
+        }
     }
 
     var min = 70;
     var max = 99;
 
-    if(cl_1_200 != 0. && cl_1_200 < min)
+    if(confidenceLevelValues[0] != 0. && confidenceLevelValues[0] < min)
     {
-        min = cl_1_200;
+        min = confidenceLevelValues[0];
     }
 
-    if(cl_5 != 0. && cl_5 > max)
+    if(confidenceLevelValues[confidenceLevelValues.length-1] != 0. && confidenceLevelValues[confidenceLevelValues.length-1] > max)
     {
-        max = cl_5;
+        max = confidenceLevelValues[confidenceLevelValues.length-1];
     }
 
     var numValues = 30;
@@ -1260,19 +1296,12 @@ function drawTypeBTab4()
     x.push(99.9);
 
     // make sure confidence levels of interest are present
-    if(cl_1_200 != 0. && min != cl_1_200)
+    for(var i=0; i<confidenceLevelValues.length; i++)
     {
-        x.push(cl_1_200);
-    }
-
-    if(cl_1_165 != 0.)
-    {
-        x.push(cl_1_165);
-    }
-
-    if(cl_5 != 0. && max != cl_5)
-    {
-        x.push(cl_5);
+        if(confidenceLevelValues[i] != 0. && min != confidenceLevelValues[i] && max != confidenceLevelValues[i])
+        {
+            x.push(confidenceLevelValues[i]);
+        }
     }
 
     // sort numerically
@@ -1292,25 +1321,14 @@ function drawTypeBTab4()
 
     // if we have bad values for the confidence levels of interest, add them in a special way
     // for the table only!
-    if(cl_1_200 == 0.)
+    for(var i=0; i<confidenceLevelValues.length; i++)
     {
-        x.push(99.99);
-        y.push(1./200.*100.);
-        yLabelMap[1./200.*100.] = "0.5% (1/200)";
-    }
-
-    if(cl_1_165 == 0.)
-    {
-        x.push(99.99);
-        y.push(1./165.*100.);
-        yLabelMap[1./165.*100.] = "0.61% (1/165)";
-    }
-
-    if(cl_5 == 0.)
-    {
-        x.push(99.99);
-        y.push(0.05*100.);
-        yLabelMap[0.05*100.] = "5% (1/20)";
+        if(confidenceLevelValues[i] == 0.)
+        {
+            x.push(99.99);
+            y.push(detectionThresholdValues[i]);
+            yLabelMap[detectionThresholdValues[i]] = Math.round(detectionThresholdValues[i]*100.)/100. + "% (1/" + Math.round(100. / detectionThresholdValues[i]) + ")";
+        }
     }
 
     // before this was just dataChart.clone();
@@ -1547,10 +1565,24 @@ function calculatorTypeBInitialize()
     // tab 3: detection threshold slider
     $("#calculatorB3_input_detection_threshold_slider").slider({
         value:calculatorTypeBInputs.detectionThreshold3,
-        min: 0.2,
+        min: -0.1,
         max: 5,
         step: 0.1,
         slide: function(event, ui) {
+            // we need to remap values to capture the 1/1000, 1/700, 1/600 cases
+            if(ui.value == -0.1)
+            {
+                ui.value = 0.1;
+            }
+            else if(ui.value == 0.0)
+            {
+                ui.value = 0.1429;
+            }
+            else if(ui.value == 0.1)
+            {
+                ui.value = 0.1667;
+            }
+
             // we need the 1/165 case
             if(ui.value == 0.6)
             {
