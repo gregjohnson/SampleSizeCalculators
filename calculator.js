@@ -25,7 +25,7 @@ var calculatorTypeAInputs = {
 };
 
 // data
-var populationToILIFactorBase = 0.00038461363636363633; // * 2.2 == 0.00084615 (2.2 is a percentage value)
+var populationToILIFactorBase = 2.5 / (52. * 100.); // corresponds to 2.5 doctor visits per year
 
 // global input: MA-ILI percentage
 var inputMAILIPercentage = 2.2;
