@@ -2528,4 +2528,16 @@ function onLoad()
 
     // create tooltips; do this last since we may set some tooltip text in the calculator initializations
     $(document).tooltip();
+
+    // activate specific calculator in accordion based on URL
+    if(window.location.hash)
+    {
+        var hashInt = parseInt(window.location.hash.replace('#', ''));
+
+        // right now we only have three calculators...
+        if(hashInt >= 0 && hashInt < 3)
+        {
+            $("#calculator_accordion").accordion('option', 'active', hashInt);
+        }
+    }
 }
