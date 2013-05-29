@@ -3,62 +3,132 @@
 <html>
 
 <head>
-    <title>Sample Size Landing Page</title>
+    <title>Sample Size Calculator Landing Page</title>
 </head>
 
-<body>
+<body style="font-size:0.9em; width:700px;">
 
-    <h2>Calculate Sample Sizes for Different Scenarios</h2>
+    <h2>Sample Size Calculator Landing Page</h2>
 
-    <table border="0">
+    <img src="images/APHL_logo.png" title="APHL logo" alt="APHL logo">
+
+    <h2>Introduction</h2>
+
+    <p>
+        The CDC-APHL Influenza Virologic Surveillance Right Size Roadmap defines the rationale, vital capabilities and optimal "right size" for influenza virologic surveillance. The Roadmap consolidates requirements for all components of virologic surveillance in one document and provides tools to assess and improve the precision of the system to support disease surveillance, response and control efforts and policy decisions. 
+    </p>
+
+    <p>
+        State and local influenza surveillance system partners are encouraged to implement a statistical, systematic approach to estimate the number of specimens to be tested in order to provide a specific level of data confidence for situational awareness, novel event detection and novel event investigation at the recommended thresholds.  Specimen sampling approaches should be established to enhance detection of novel events based on national thresholds, while at the same time collecting a representative sample of routine influenza cases for overall situational awareness at the state level.
+    </p>
+
+    <h2>Intended Audience</h2>
+
+    <p>
+        The primary audiences for the Roadmap and the sample size calculators are the state and local epidemiologists, influenza surveillance coordinators, PHL directors and other senior infectious disease laboratory staff responsible for coordinating policy, decisions, and implementation of virologic surveillance strategies.
+    </p>
+
+    <h2>Intended Use</h2>
+
+    <p>
+        The sample size calculators provided here can be used to estimate the desired number of specimens that should be tested to ensure adequate confidence in influenza surveillance data and detection of novel viruses at a point where intervention can be effective.  Alternately, these calculators can be used to demonstrate the level of confidence in the data obtained with the systems that a jurisdiction is capable of implementing.
+    </p>
+
+    <p>
+        There are three calculators:
+    </p>
+
+    <table border="1">
         <tr>
-            <td>
+            <td> </td>
+            <td><b>Surveillance Objective</b></td>
+            <td><b>Surveillance Question</b></td>
+        </tr>
+
+        <tr>
+            <td  style="padding:5px;">
+                <center>
                 <a href="calculator.html#0">
-                    <img style="width:156px; height:116px; padding-right:20px;" src="images/awareness.png" title="Calculate sample sizes to track the influenza season's progression." alt="Influenza Season Progression Graph">
+                    <img style="width:156px; height:116px; border:0;" src="images/awareness.png" title="Calculator A" alt="Calculator A">
+                <b>Calculator A</b>
                 </a>
+                </center>
             </td>
-            <td>
-                <h2 style="display:inline;"><a href="calculator.html#0">Situational Awareness</a></h2>
-                <br />
-                Sample sizes to track the progression of influenza throughout the season. <a href="video1">(video tutorial)</a>
+            <td  style="padding:5px;">
+                <b><u>Influenza Seasonal Situational Awareness:</u></b> Determine the beginning and end of the influenza season and monitor the prevalence and spread of influenza viruses throughout the year.
+            </td>
+            <td style="padding:5px;">
+                How many specimens from MA-ILI patients does the laboratory need to test (in a given period, usually one week) to determine that the prevalence of Flu+ specimens among MA-ILI persons tested is x% at a specified confidence level and error rate?
             </td>
         </tr>
 
         <tr>
-            <td>
+            <td rowspan="2">
+                <center>
                 <a href="calculator.html#1">
-                    <img style="width:156px; height:116px; padding-right:20px;" src="images/rare_event.png" title="Calculate sample sizes to catch rare events." alt="Rare Event Cartoon">
+                    <img style="width:156px; height:116px; border:0;" src="images/rare_event.png" title="Calculator B" alt="Calculator B">
+                    <b>Calculator B</b>
                 </a>
+                </center>
             </td>
-            <td>
-                <h2 style="display:inline;"><a href="calculator.html#1">Rare Event Detection</a></h2>
-                <br />
-                Sample sizes to catch rare events, for example novel virus or resistant mutation. <a href="video2">(video tutorial)</a>
+            <td  style="padding:5px;">
+                <b><u>Detecting a Rare/Novel Event:</u></b> Detect a rare event/novel influenza virus among influenza positive surveillance specimens tested in all states at a low enough threshold for effective intervention and control measures.
+            </td>
+            <td style="padding:5px;">
+                How many specimens does the PHL need to test to allow the national surveillance system to detect a rare/novel virus at 0.5% prevalence with 95% confidence (aggregating testing data from all states)?
             </td>
         </tr>
 
         <tr>
-            <td>
-                <a href="calculator.html#2">
-                    <img style="width:156px; height:116px; padding-right:20px;" src="images/rare_event_inv.png" title="Calculate sample sizes to determine prevalance of a rare event." alt="Clock Illustration">
-                </a>
+            <td  style="padding:5px;">
+                <b><u>Detecting/Monitoring Antiviral Resistance:</u></b> Detect antiviral resistance virus among influenza positive surveillance specimens tested in all states at a low enough threshold for effective intervention and control measures.
             </td>
+            <td style="padding:5px;">
+                How many of each influenza A subtype or influenza B Flu+ specimens need to be tested for antiviral resistance to allow the national surveillance system to detect antiviral resistant viruses at or below a 5% prevalence with 95% confidence (aggregating testing data from all states)?
+            </td>
+        </tr>
 
-            <td>
-                <h2 style="display:inline;"><a href="calculator.html#2">Rare Event Investigation</a></h2>
-                <br />
-                Sample sizes to determine prevalance of a rare event, is it too late to act? <a href="video3">(video tutorial)</a>
+        <tr>
+            <td  style="padding:5px;">
+                <center>
+                <a href="calculator.html#2">
+                    <img style="width:156px; height:116px; border:0;" src="images/rare_event_inv.png" title="Calculator C" alt="Calculator C">
+                    <b>Calculator C</b>
+                </a>
+                </center>
+            </td>
+            <td  style="padding:5px;">
+                <b><u>Rare/Novel Event Investigation:</u></b> Determine the prevalence of the novel virus (Novel Flu+/Total Flu+) within a state following detection of a novel influenza virus; confirm that the prevalence of a rare event does not exceed a specific percent positivity.  Investigation of a novel event is typically performed using enhanced, targeted surveillance.
+            </td>
+            <td style="padding:5px;">
+                Once a novel virus is detected, how many ILI specimens does the PHL need to test to determine that the true prevalence does not exceed a specified percent of Flu+?
             </td>
         </tr>
     </table>
 
-    <h2>Documentation</h2>
+    <p>
+        The number of samples to be tested will vary depending on the confidence level, margin of error, threshold, and assumptions used in the calculators.  Selecting a lower confidence level increases the amount of uncertainty in the calculated prevalence but permits a smaller sample size which may be necessary if resources are limited. A higher margin of error means that more error can be tolerated.  Recommended thresholds and confidence levels are provided in the Roadmap.  Each state will need to determine how to achieve the Roadmap surveillance goals to meet both national and state needs.
+    </p>
+
+    <p>
+        As an alternative to the on-line calculators, pre-calculated sample sizes for each of the objectives using the recommended confidence levels are provided in the Roadmap. Depending on the surveillance priorities and capacity of the system overall, jurisdictions may use the on-line calculators to vary the inputs to see how sample size is impacted.
+    </p>
+
+    <p>
+        Outside of influenza season, achieving statistical confidence may not be possible; therefore  surveillance should shift to obtaining all specimens from participating clinical sites that have tested positive for influenza or from patients with unusual respiratory illness or travel history or risk of exposure to animal-origin viruses, along with a subset MA-ILI specimens from routine surveillance providers.
+    </p>
+
+    <h2>Supplemental Information</h2>
 
     <ul>
-        <li><a href="doc/sample_size_calculators_user_guide.pdf">Calculator User Guide:</a> A detailed written description of how to use each calculator, its assumptions, and its formulas.
-
-        <li><a href="doc/sample_size_document.pdf">Sample Size Document:</a> A guidance document, on how to select inputs for your calculations.
+        <li><a href="doc/right_size_surveillance_roadmap.pdf">Influenza Virologic Right Size Surveillance Roadmap</a>: describes surveillance objectives, and thresholds, key variables, and provides guidance for using the sample size calculators.
+        <li><a href="doc/sample_size_calculators_user_guide.pdf">Sample Size Calculator User Guide</a>:  provides details information on the statistical basis of the calculators, including inputs, assumptions, and outputs.
+        <li>FAQs
     </ul>
+
+    <p>
+        For questions please contact <a href="mailto:fluquestions@aphl.org">fluquestions@aphl.org</a>.
+    </p>
 
 </body>
 
