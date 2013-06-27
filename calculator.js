@@ -1901,11 +1901,11 @@ function drawTypeCTab1()
 
             if(parameters.surveillanceScale == "National")
             {
-                $("#calculatorC1_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident that the actual prevalence of the novel virus does not exceed " + formatTextParameter(parameters.rareFluP + "%") + " (+/- " + formatTextParameter(x[thisObj.selectedRow] + "%") + ") of Flu+ specimens,  the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " Flu+ specimens at a national level.");
+                $("#calculatorC1_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident that the actual prevalence of the novel virus does not exceed " + formatTextParameter(x[thisObj.selectedRow] + "%") + " of Flu+ specimens,  the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " Flu+ specimens at a national level.");
             }
             else
             {
-                $("#calculatorC1_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident that the actual prevalence of the novel virus does not exceed " + formatTextParameter(parameters.rareFluP + "%") + " (+/- " + formatTextParameter(x[thisObj.selectedRow] + "%") + ") of Flu+ specimens (within the population under surveillance),  the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " Flu+ specimens.");
+                $("#calculatorC1_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident that the actual prevalence of the novel virus does not exceed " + formatTextParameter(x[thisObj.selectedRow] + "%") + " of Flu+ specimens (within the population under surveillance),  the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " Flu+ specimens.");
             }
         }
     }
@@ -2006,11 +2006,11 @@ function drawTypeCTab2()
 
             if(parameters.surveillanceScale == "National")
             {
-                $("#calculatorC2_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident that the actual prevalence of the novel virus does not exceed " + formatTextParameter(parameters.rareFluP + "%") + " (+/- " + formatTextParameter(x[thisObj.selectedRow] + "%") + ") of Flu+ specimens, the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " MA-ILI specimens at a national level.");
+                $("#calculatorC2_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident that the actual prevalence of the novel virus does not exceed " + formatTextParameter(x[thisObj.selectedRow] + "%") + " of Flu+ specimens, the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " MA-ILI specimens at a national level.");
             }
             else
             {
-                $("#calculatorC2_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident that the actual prevalence of the novel virus does not exceed " + formatTextParameter(parameters.rareFluP + "%") + " (+/- " + formatTextParameter(x[thisObj.selectedRow] + "%") + ") of Flu+ specimens (within the population under surveillance), the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " MA-ILI specimens.");
+                $("#calculatorC2_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident that the actual prevalence of the novel virus does not exceed " + formatTextParameter(x[thisObj.selectedRow] + "%") + " of Flu+ specimens (within the population under surveillance), the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " MA-ILI specimens.");
             }
         }
     }
@@ -2135,11 +2135,11 @@ function drawTypeCTab3()
 
             if(parameters.surveillanceScale == "National")
             {
-                $("#calculatorC3_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident that the true prevalence of the rare/novel influenza  does not exceed " + formatTextParameter(parameters.rareFluP + "%") + " (+/- " + formatTextParameter(parameters.prevalenceThreshold + "%") + ") of Flu+ specimens, the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " MA-ILI and " + formatTextParameter(numberWithCommas(x[thisObj.selectedRow])) + " Flu+ specimens (with " + formatTextParameter(parameters.p + "%") + " Flu+/MA-ILI prevalence) at a national level.");
+                $("#calculatorC3_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident that the true prevalence of the rare/novel influenza  does not exceed " + formatTextParameter(parameters.prevalenceThreshold + "%") + " of Flu+ specimens, the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " MA-ILI and " + formatTextParameter(numberWithCommas(x[thisObj.selectedRow])) + " Flu+ specimens (with " + formatTextParameter(parameters.p + "%") + " Flu+/MA-ILI prevalence) at a national level. This assumes an estimated prevalence of the rare type among all flu specimens (Rare+/Flu+) is " + formatTextParameter(parameters.rareFluP + "%") + ".");
             }
             else
             {
-                $("#calculatorC3_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident that the true prevalence of the rare/novel influenza  does not exceed " + formatTextParameter(parameters.rareFluP + "%") + " (+/- " + formatTextParameter(parameters.prevalenceThreshold + "%") + ") of Flu+ specimens (within the population under surveillance), the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " MA-ILI and " + formatTextParameter(numberWithCommas(x[thisObj.selectedRow])) + " Flu+ specimens (with " + formatTextParameter(parameters.p + "%") + " Flu+/MA-ILI prevalence).");
+                $("#calculatorC3_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident that the true prevalence of the rare/novel influenza  does not exceed " + formatTextParameter(parameters.prevalenceThreshold + "%") + " of Flu+ specimens (within the population under surveillance), the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " MA-ILI and " + formatTextParameter(numberWithCommas(x[thisObj.selectedRow])) + " Flu+ specimens (with " + formatTextParameter(parameters.p + "%") + " Flu+/MA-ILI prevalence). This assumes an estimated prevalence of the rare type among all flu specimens (Rare+/Flu+) is " + formatTextParameter(parameters.rareFluP + "%") + ".");
             }
         }
     }
@@ -2248,11 +2248,11 @@ function drawTypeCTab4()
 
             if(parameters.surveillanceScale == "National")
             {
-                $("#calculatorC4_chart_table_report_div").html("If a combination of " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " unscreened MA-ILI specimens were tested, and the estimated prevalence of the rare/novel influenza virus among all flu positive specimens (Rare+/Flu+) is 1% (within the population under surveillance),  the PHL can be " + formatTextParameter(x[thisObj.selectedRow] + "%") + " confident that the actual prevalence does not exceed " + formatTextParameter(parameters.rareFluP + "%") + " (+/-" + formatTextParameter(y[thisObj.selectedRow] + "%") + ") at a national level. This assumes that " + formatTextParameter(parameters.p + "%") + " of MA-ILI patients are Flu+.");
+                $("#calculatorC4_chart_table_report_div").html("If a combination of " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " unscreened MA-ILI specimens were tested, and the estimated prevalence of the rare/novel influenza virus among all flu positive specimens (Rare+/Flu+) is " + formatTextParameter(parameters.rareFluP + "%") + " (within the population under surveillance),  the PHL can be " + formatTextParameter(x[thisObj.selectedRow] + "%") + " confident that the actual prevalence does not exceed " + formatTextParameter(y[thisObj.selectedRow] + "%") + " at a national level. This assumes that " + formatTextParameter(parameters.p + "%") + " of MA-ILI patients are Flu+.");
             }
             else
             {
-                $("#calculatorC4_chart_table_report_div").html("If a combination of " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " unscreened MA-ILI specimens were tested, and the estimated prevalence of the rare/novel influenza virus among all flu positive specimens (Rare+/Flu+) is 1%,  the PHL can be " + formatTextParameter(x[thisObj.selectedRow] + "%") + " confident that the actual prevalence does not exceed " + formatTextParameter(parameters.rareFluP + "%") + " (+/-" + formatTextParameter(y[thisObj.selectedRow] + "%") + ") within the population under surveillance. This assumes that " + formatTextParameter(parameters.p + "%") + " of MA-ILI patients are Flu+.");
+                $("#calculatorC4_chart_table_report_div").html("If a combination of " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " unscreened MA-ILI specimens were tested, and the estimated prevalence of the rare/novel influenza virus among all flu positive specimens (Rare+/Flu+) is " + formatTextParameter(parameters.rareFluP + "%") + ",  the PHL can be " + formatTextParameter(x[thisObj.selectedRow] + "%") + " confident that the actual prevalence does not exceed " + formatTextParameter(y[thisObj.selectedRow] + "%") + " within the population under surveillance. This assumes that " + formatTextParameter(parameters.p + "%") + " of MA-ILI patients are Flu+.");
             }
         }
     }
