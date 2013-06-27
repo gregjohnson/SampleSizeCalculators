@@ -16,22 +16,29 @@
 <body>
     <div class="ui-widget"> <!-- div containing the entire calculator -->
 
-        <h3>Abbreviations</h3>
-        MA-ILI+ : number of medically attended patients diagnosed with influenza-like-illness <br />
-        Flu+ : number of medically attended patients diagnosed with influenza-like-illness that have influenza <br />
-        Rare+ : number of Flu+ patients that have a rare type of influenza <br />
+        <h3>Right Size Influenza Virologic Surveillance Sample Size Calculators</h3>
+
+        Instructions: Scroll down to select the desired calculator: 1) Calculator A: Situational Awareness for Seasonal Influenza, 2) Calculator B: Rare/Novel Influenza Event Detection, 3) Calculator C: Rare/novel influenza event Investigation. Click on the appropriate title bar to have the calculator expand for use.
+
+        <h3>Definitions</h3>
+
+        <p><i>Medically Attended --Influenza like Illness (MA-ILI)</i>: The population of individuals with ILI who seek medical care. This is the subset of the population available for surveillance testing. This number is determined based on estimates that each person in the US visits an emergency room or physician in ambulatory care setting 2.5 times per year, and that the percentage of outpatient visits that are for ILI is 2.2% at CDC ILINet Seasonal Baseline - this number can be changed throughout the season as needed.</p>
+
+        <p><i>Influenza + (Flu+)</i>: The number of specimens testing positive for an influenza virus among specimens collected from patients with MA-ILI.</p>
+
+        <p><i>Rare/Novel Influenza+ (Rare+)</i>: The number of specimens testing positive for a rare or novel influenza virus among specimens collected from patients with MA-ILI (e.g. novel influenza subtypes, very low prevalence subtypes, antiviral resistance).</p>
 
         <h3>Calculators</h3>
 
         <div id="calculator_accordion" class="calculatorAccordionContainer">
 
             <!-- Calculator A -->
-            <h3>Sample Size Calculator for Flu+/MA-ILI+</h3>
+            <h3>Calculator A: Situational Awareness for Seasonal Influenza</h3>
             <div>
                 <!-- input: medically attended ILI -->
                 <!-- this was (and still could be) a global input for all calculators... so it's coded a little differently -->
                 <div class="calculatorInputArea">
-                    <label for="calculators_input_MAILI" class="calculatorLabel calculatorTooltip tooltipMAILI">Medically Attended ILI</label>
+                    <label for="calculators_input_MAILI" class="calculatorLabel calculatorTooltip tooltipMAILI">Medically Attended ILI (MA-ILI)</label>
                     <div id="calculators_input_MAILI_slider" class="calculatorSlider"></div>
                     <input type="text" id="calculators_input_MAILI" class="calculatorSliderInput" />
                 </div>
@@ -46,7 +53,7 @@
 
                 <!-- input: assumed prevalence p -->
                 <div class="calculatorInputArea">
-                    <label for="calculatorA_input_p" class="calculatorLabel calculatorTooltip tooltipTypeAExpectedFluMAILI">Expected Flu+/MA-ILI+</label>
+                    <label for="calculatorA_input_p" class="calculatorLabel calculatorTooltip tooltipTypeAExpectedFluMAILI">Expected prevalence of Flu+/MA-ILI</label>
                     <div id="calculatorA_input_p_slider" class="calculatorSlider"></div>
                     <input type="text" id="calculatorA_input_p" class="calculatorSliderInput" />
                 </div>
@@ -58,7 +65,7 @@
                     <ul>
                         <li><a href="#calculatorA_tabs-1">Sample Size</a></li>
                         <li><a href="#calculatorA_tabs-2">Sample Size Table</a></li>
-                        <li><a href="#calculatorA_tabs-3">Sample Power</a></li>
+                        <li><a href="#calculatorA_tabs-3">Data Confidence</a></li>
                     </ul>
 
                     <div id="calculatorA_tabs-1">
@@ -93,9 +100,11 @@
                     </div> <!-- end tabs-2 -->
 
                     <div id="calculatorA_tabs-3">
+                        <p>Instructions: The Data Confidence tab allows the PHL to input a sample size that already exists (e.g. the number of specimens already received in the past week in the laboratory) to determine the confidence the PHL can have in the sample size.</p>
+
                         <!-- input: number of samples -->
                         <div class="calculatorInputArea">
-                            <label for="calculatorA_input_sample_size" class="calculatorLabel calculatorTooltip tooltipTypeASampleSize">MA-ILI+ Sample Size</label>
+                            <label for="calculatorA_input_sample_size" class="calculatorLabel calculatorTooltip tooltipTypeASampleSize">MA-ILI Sample Size</label>
                             <input id="calculatorA_input_sample_size" type="number" class="calculatorNumberInput" />
                         </div>
 
@@ -117,7 +126,7 @@
             </div> <!-- end Calculator A -->
 
             <!-- Calculator B -->
-            <h3>Sample Size Calculator for Rare (Novel) Event Detection</h3>
+            <h3>Calculator B: Rare/Novel Influenza Event Detection</h3>
             <div>
                 <!-- input: population; select options populated in javascript -->
                 <div class="calculatorInputArea">
@@ -142,9 +151,9 @@
                 <div id="calculatorB_tabs" class="calculatorTabsContainer">
                     <ul>
                         <li><a href="#calculatorB_tabs-1">Flu+ Sample Size</a></li>
-                        <li><a href="#calculatorB_tabs-2">MA-ILI+ Sample Size</a></li>
+                        <li><a href="#calculatorB_tabs-2">MA-ILI Sample Size</a></li>
                         <li><a href="#calculatorB_tabs-3">Combined Samples</a></li>
-                        <li><a href="#calculatorB_tabs-4">Sample Power</a></li>
+                        <li><a href="#calculatorB_tabs-4">Data Confidence</a></li>
                     </ul>
 
                     <div id="calculatorB_tabs-1">
@@ -180,7 +189,7 @@
 
                         <!-- input: assumed prevalence p -->
                         <div class="calculatorInputArea">
-                            <label for="calculatorB2_input_p" class="calculatorLabel calculatorTooltip tooltipTypeBExpectedFluMAILI">Expected Flu+/MA-ILI+</label>
+                            <label for="calculatorB2_input_p" class="calculatorLabel calculatorTooltip tooltipTypeBExpectedFluMAILI">Expected prevalence of Flu+/MA-ILI</label>
                             <div id="calculatorB2_input_p_slider" class="calculatorSlider"></div>
                             <input type="text" id="calculatorB2_input_p" class="calculatorSliderInput" />
                         </div>
@@ -210,7 +219,7 @@
 
                         <!-- input: assumed prevalence p -->
                         <div class="calculatorInputArea">
-                            <label for="calculatorB3_input_p" class="calculatorLabel calculatorTooltip tooltipTypeBExpectedFluMAILI">Expected Flu+/MA-ILI+</label>
+                            <label for="calculatorB3_input_p" class="calculatorLabel calculatorTooltip tooltipTypeBExpectedFluMAILI">Expected prevalence of Flu+/MA-ILI</label>
                             <div id="calculatorB3_input_p_slider" class="calculatorSlider"></div>
                             <input type="text" id="calculatorB3_input_p" class="calculatorSliderInput" />
                         </div>
@@ -246,13 +255,13 @@
 
                         <!-- input: MA-ILI+ number of samples -->
                         <div class="calculatorInputArea">
-                            <label for="calculatorB4_input_maili_sample_size" class="calculatorLabel calculatorTooltip tooltipTypeBMAILISampleSize">MA-ILI+ Sample Size</label>
+                            <label for="calculatorB4_input_maili_sample_size" class="calculatorLabel calculatorTooltip tooltipTypeBMAILISampleSize">MA-ILI Sample Size</label>
                             <input id="calculatorB4_input_maili_sample_size" type="number" class="calculatorNumberInput" />
                         </div>
 
                         <!-- input: assumed prevalence p -->
                         <div class="calculatorInputArea">
-                            <label for="calculatorB4_input_p" class="calculatorLabel calculatorTooltip tooltipTypeBExpectedFluMAILI">Expected Flu+/MA-ILI+</label>
+                            <label for="calculatorB4_input_p" class="calculatorLabel calculatorTooltip tooltipTypeBExpectedFluMAILI">Expected prevalence of Flu+/MA-ILI</label>
                             <div id="calculatorB4_input_p_slider" class="calculatorSlider"></div>
                             <input type="text" id="calculatorB4_input_p" class="calculatorSliderInput" />
                         </div>
@@ -275,7 +284,7 @@
             </div> <!-- end Calculator B -->
 
             <!-- Calculator C -->
-            <h3>Sample Size Calculator for Rare (Novel) Event Investigation</h3>
+            <h3>Calculator C: Rare/Novel Event Investigation</h3>
             <div>
                 <!-- input: population; select options populated in javascript -->
                 <div class="calculatorInputArea">
@@ -299,7 +308,7 @@
 
                 <!-- input: expected Rare+/Flu+ -->
                 <div class="calculatorInputArea">
-                    <label for="calculatorC_input_rare_flu_p" class="calculatorLabel calculatorTooltip tooltipTypeCRareFluP">Expected Rare+/Flu+</label>
+                    <label for="calculatorC_input_rare_flu_p" class="calculatorLabel calculatorTooltip tooltipTypeCRareFluP">Expected prevalence of Rare+/Flu+</label>
                     <div id="calculatorC_input_rare_flu_p_slider" class="calculatorSlider"></div>
                     <input type="text" id="calculatorC_input_rare_flu_p" class="calculatorSliderInput" />
                 </div>
@@ -310,9 +319,9 @@
                 <div id="calculatorC_tabs" class="calculatorTabsContainer">
                     <ul>
                         <li><a href="#calculatorC_tabs-1">Flu+ Sample Size</a></li>
-                        <li><a href="#calculatorC_tabs-2">MA-ILI+ Sample Size</a></li>
+                        <li><a href="#calculatorC_tabs-2">MA-ILI Sample Size</a></li>
                         <li><a href="#calculatorC_tabs-3">Combined Samples</a></li>
-                        <li><a href="#calculatorC_tabs-4">Sample Power</a></li>
+                        <li><a href="#calculatorC_tabs-4">Data Confidence</a></li>
                     </ul>
 
                     <div id="calculatorC_tabs-1">
@@ -348,7 +357,7 @@
 
                         <!-- input: assumed prevalence p -->
                         <div class="calculatorInputArea">
-                            <label for="calculatorC2_input_p" class="calculatorLabel calculatorTooltip tooltipTypeCExpectedFluMAILI">Expected Flu+/MA-ILI+</label>
+                            <label for="calculatorC2_input_p" class="calculatorLabel calculatorTooltip tooltipTypeCExpectedFluMAILI">Expected prevalence of Flu+/MA-ILI</label>
                             <div id="calculatorC2_input_p_slider" class="calculatorSlider"></div>
                             <input type="text" id="calculatorC2_input_p" class="calculatorSliderInput" />
                         </div>
@@ -378,7 +387,7 @@
 
                         <!-- input: assumed prevalence p -->
                         <div class="calculatorInputArea">
-                            <label for="calculatorC3_input_p" class="calculatorLabel calculatorTooltip tooltipTypeCExpectedFluMAILI">Expected Flu+/MA-ILI+</label>
+                            <label for="calculatorC3_input_p" class="calculatorLabel calculatorTooltip tooltipTypeCExpectedFluMAILI">Expected prevalence of Flu+/MA-ILI</label>
                             <div id="calculatorC3_input_p_slider" class="calculatorSlider"></div>
                             <input type="text" id="calculatorC3_input_p" class="calculatorSliderInput" />
                         </div>
@@ -414,13 +423,13 @@
 
                         <!-- input: MA-ILI+ number of samples -->
                         <div class="calculatorInputArea">
-                            <label for="calculatorC4_input_maili_sample_size" class="calculatorLabel calculatorTooltip tooltipTypeCMAILISampleSize">MA-ILI+ Sample Size</label>
+                            <label for="calculatorC4_input_maili_sample_size" class="calculatorLabel calculatorTooltip tooltipTypeCMAILISampleSize">MA-ILI Sample Size</label>
                             <input id="calculatorC4_input_maili_sample_size" type="number" class="calculatorNumberInput" />
                         </div>
 
                         <!-- input: assumed prevalence p -->
                         <div class="calculatorInputArea">
-                            <label for="calculatorC4_input_p" class="calculatorLabel calculatorTooltip tooltipTypeCExpectedFluMAILI">Expected Flu+/MA-ILI+</label>
+                            <label for="calculatorC4_input_p" class="calculatorLabel calculatorTooltip tooltipTypeCExpectedFluMAILI">Expected prevalence of Flu+/MA-ILI</label>
                             <div id="calculatorC4_input_p_slider" class="calculatorSlider"></div>
                             <input type="text" id="calculatorC4_input_p" class="calculatorSliderInput" />
                         </div>

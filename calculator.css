@@ -6,11 +6,11 @@
 .calculatorSelect { float:left; }
 .calculatorSelectNumberLabel { float:left; margin-left:10px; font-weight:bold; }
 .calculatorNumberInput { float:left; margin-left:10px; width:125px; font-weight:bold; }
-.calculatorSlider { float:left; width:250px; }
+.calculatorSlider { float:left; width:170px; }
 .calculatorSliderInput { float:left; margin-left:10px; width:130px; border:0; font-weight:bold;  }
 .calculatorSmallChart { float:left; width: 375px; height:300px; }
 .calculatorSmallTable { float:left; }
 .calculatorBigTable { clear: both; float:left; width: 600px; height: 300px; }
 .calculatorTextParameter { font-weight: bold; }
-body { font-size:0.8em; } /* adjust jquery UI font sizes */
+body { font-size:0.8em; width:700px; } /* adjust jquery UI font sizes */
 .ui-widget{ font-size:1.0em !important; } /* adjust jquery UI font sizes */
