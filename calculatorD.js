@@ -19,14 +19,14 @@ var calculatorTypeDInputs = {
 
 // tooltip text
 var tooltipTypeDTotalPopulation = "This is the total population size under surveillance. For labs representing entire states, simply select the name of the state. This will automatically provide the 2012 census projection of the state population. For labs collecting specimens from subsets of state populations or populations that cross multiple states, choose 'Other' and enter the estimated size of the entire population under consideration.";
-var tooltipTypeDConfidenceLevel = "The desired confidence that the sample will contain at least one Rare+ when the prevalence of rare/novel influenza reaches the specified limit of detection. Sample sizes can be calculated for unscreened MA-ILI or screened Flu+, or a combination of both types of specimens. For example, if the PHL choose a confidence level of 95% and a detection threshold of 1/700, then the resulting minimum sample size should be sufficient to detect a rare/novel influenza when it reaches a prevalence of 1/700 Rare+/Flu+, 95% of the time. Intuitively, a high confidence level and a low detection threshold requires many samples, while low confidence and a high detection threshold results in fewer samples.";
+var tooltipTypeDConfidenceLevel = "The desired confidence that the sample will contain at least one AVR+ when the prevalence of an antiviral resistant influenza reaches the specified limit of detection. Sample sizes can be calculated for unscreened MA-ILI or screened Flu+, or a combination of both types of specimens. For example, if the PHL choose a confidence level of 95% and a detection threshold of 1/700, then the resulting minimum sample size should be sufficient to detect an antiviral resistant influenza when it reaches a prevalence of 1/700 AVR+/Flu+, 95% of the time. Intuitively, a high confidence level and a low detection threshold requires many samples, while low confidence and a high detection threshold results in fewer samples.";
 var tooltipTypeDExpectedFluMAILI = "This is the PHL's surveillance target; the level of Flu+/MA-ILI the PHL would like to estimate. For example, if the PHL would like to detect when Flu+/MA-ILI crosses the 10% threshold at the beginning of the influenza season, then move the slider to 10%. If, instead, the PHL plans to use the data to estimate Flu+/MA-ILI later in the season, when it is closer to 30%, then move the slider closer to 30%. Although the actual fraction of Flu+ over MA-ILI may differ from the value chosen, this approximation still provides an important baseline for determining sample sizes.";
-var tooltipTypeDDetectionThreshold = "The detection threshold for a rare/novel influenza is the prevalence of the rare/novel influenza (out of all Flu+ cases) at which the first rare/novel influenza specimens are expected to appear in the lab. For example, a detection threshold of 1/700 means that rare/novel influenza should be detected by the lab when it rises to a prevalence of one out of every 700 cases of influenza.";
-var tooltipTypeDMinimumFluSampleSize = "The minimum number of Flu+ specimens required to detect a rare/novel influenza when its prevalence (Rare+/Flu+) reaches the specified detection threshold, with the specified level of confidence.";
-var tooltipTypeDMinimumMAILISampleSize = "The minimum number of unscreened MA-ILI specimens required to detect a rare/novel influenza when its prevalence (Rare+/Flu+) reaches the specified detection threshold, with the specified level of confidence.";
-var tooltipTypeDFluSampleSize = "The number of Flu+ specimens to be tested. Both Flu+ and unscreened MA-ILI specimens can be used to detect rare/novel influenza specimens. However, many more unscreened MA-ILI specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI) is low.";
-var tooltipTypeDMAILISampleSize = "The number of unscreened MA-ILI specimens to be tested. Both Flu+ and unscreened MA-ILI specimens can be used to detect rare/novel influenza specimens. However, many more unscreened MA-ILI specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI) is low.";
-var tooltipTypeDSurveillanceScale = "This is the scale of the surveillance effort. The default is national, meaning that all states are contributing to a national surveillance effort proportional to their population size.  The number of samples that a state PHL needs to test is apportioned based on population size. The calculator also provides the option for states to calculate the number of specimens to test for detection of a rare/novel influenza event at a specific threshold within their state; however, the sample size for an individual state at the same threshold (e.g. 1/500 or 1/700) will be significantly larger than that needed for the national threshold.";
+var tooltipTypeDDetectionThreshold = "The detection threshold for an antiviral resistant influenza is the prevalence of the antiviral resistant influenza (out of all Flu+ cases) at which the first antiviral resistant influenza specimens are expected to appear in the lab. For example, a detection threshold of 1/700 means that antiviral resistant influenza should be detected by the lab when it rises to a prevalence of one out of every 700 cases of influenza.";
+var tooltipTypeDMinimumFluSampleSize = "The minimum number of Flu+ specimens required to detect an antiviral resistant influenza when its prevalence (AVR+/Flu+) reaches the specified detection threshold, with the specified level of confidence.";
+var tooltipTypeDMinimumMAILISampleSize = "The minimum number of unscreened MA-ILI specimens required to detect an antiviral resistant influenza when its prevalence (AVR+/Flu+) reaches the specified detection threshold, with the specified level of confidence.";
+var tooltipTypeDFluSampleSize = "The number of Flu+ specimens to be tested. Both Flu+ and unscreened MA-ILI specimens can be used to detect antiviral resistant influenza specimens. However, many more unscreened MA-ILI specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI) is low.";
+var tooltipTypeDMAILISampleSize = "The number of unscreened MA-ILI specimens to be tested. Both Flu+ and unscreened MA-ILI specimens can be used to detect antiviral resistant influenza specimens. However, many more unscreened MA-ILI specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI) is low.";
+var tooltipTypeDSurveillanceScale = "This is the scale of the surveillance effort. The default is national, meaning that all states are contributing to a national surveillance effort proportional to their population size.  The number of samples that a state PHL needs to test is apportioned based on population size. The calculator also provides the option for states to calculate the number of specimens to test for detection of an antiviral resistant influenza event at a specific threshold within their state; however, the sample size for an individual state at the same threshold (e.g. 1/500 or 1/700) will be significantly larger than that needed for the national threshold.";
 
 // active tab index
 var calculatorTypeDActiveTabIndex = 0;
@@ -154,7 +154,7 @@ function evaluateTypeD_confidenceLevel_vs_detectionThreshold(detectionThreshold)
 // draw chart and table given labels, x series, y series
 function drawTypeDTab1()
 {
-    var labels = ['Detection Threshold (Rare+/Flu+)', 'Minimum Flu+ Sample Size'];
+    var labels = ['Detection Threshold (AVR+/Flu+)', 'Minimum Flu+ Sample Size'];
     var x = [];
     var xChartLabelMap = {};
     var xTableLabelMap = {};
@@ -232,7 +232,7 @@ function drawTypeDTab1()
         width: '225px'
     };
 
-    $("#calculatorD1_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeDMinimumFluSampleSize + "'>Minimum sample size (of Flu+ specimens)</span> required to detect a rare/novel influenza at a specified <span class='calculatorTooltip' title='" + tooltipTypeDDetectionThreshold + "'>detection threshold (Rare+/Flu+)</span>, with a confidence of " + formatTextParameter(parameters.confidenceLevel + "%") + ". These calculations assume a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + ". Use the mouse to view values in the sample size graph and scroll through sample size table.");
+    $("#calculatorD1_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeDMinimumFluSampleSize + "'>Minimum sample size (of Flu+ specimens)</span> required to detect an antiviral resistant (AVR) influenza at a specified <span class='calculatorTooltip' title='" + tooltipTypeDDetectionThreshold + "'>detection threshold (AVR+/Flu+)</span>, with a confidence of " + formatTextParameter(parameters.confidenceLevel + "%") + ". These calculations assume a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + ". Use the mouse to view values in the sample size graph and scroll through sample size table.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorD1_chart_div'));
     chart.draw(dataChart, optionsChart);
@@ -268,13 +268,15 @@ function drawTypeDTab1()
             chart.setSelection(newSelectionArray);
             table.setSelection(newSelectionArray);
 
+            var noteText = "Note: Historical PHL data suggest that a 1/700 AVR+/Flu+ threshold is appropriate during the peak of the season, a 1/55 threshold during moderate periods of influenza activity, and 1/3.5 during out-of-season (summer) months to achieve detection with 85-95% confidence.";
+
             if(parameters.surveillanceScale == "National")
             {
-                $("#calculatorD1_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident of detecting 1 or more rare/novel influenza events at a prevalence of " + formatTextParameter(xTableLabelMap[x[thisObj.selectedRow]]) + " at a national level, the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " Flu+ specimens.");
+                $("#calculatorD1_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident of detecting 1 or more antiviral resistant influenza events at a prevalence of " + formatTextParameter(xTableLabelMap[x[thisObj.selectedRow]]) + " at a national level, the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " Flu+ specimens." + "<p>" + noteText + "</p>");
             }
             else
             {
-                $("#calculatorD1_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident of detecting 1 or more rare/novel influenza events at a prevalence of " + formatTextParameter(xTableLabelMap[x[thisObj.selectedRow]]) + " (within the population under surveillance), the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " Flu+ specimens.");
+                $("#calculatorD1_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident of detecting 1 or more antiviral resistant influenza events at a prevalence of " + formatTextParameter(xTableLabelMap[x[thisObj.selectedRow]]) + " (within the population under surveillance), the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " Flu+ specimens." + "<p>" + noteText + "</p>");
             }
         }
     }
@@ -285,7 +287,7 @@ function drawTypeDTab1()
 // draw chart and table given labels, x series, y series
 function drawTypeDTab2()
 {
-    var labels = ['Detection Threshold (Rare+/Flu+)', 'Minimum MA-ILI Sample Size'];
+    var labels = ['Detection Threshold (AVR+/Flu+)', 'Minimum MA-ILI Sample Size'];
     var x = [];
     var xChartLabelMap = {};
     var xTableLabelMap = {};
@@ -365,7 +367,7 @@ function drawTypeDTab2()
         width: '225px'
     };
 
-    $("#calculatorD2_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeDMinimumMAILISampleSize + "'>Minimum sample size (of unscreened MA-ILI specimens)</span> required to detect a rare/novel influenza of influenza at the specified <span class='calculatorTooltip' title='" + tooltipTypeDDetectionThreshold + "'>detection threshold (Rare+/Flu+)</span>, with a confidence of " + formatTextParameter(parameters.confidenceLevel + "%") + ". These calculations assume a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + " and a Flu+/MA-ILI prevalence of " + formatTextParameter(parameters.p + "%") + ". Use the mouse to view values in the sample size graph and scroll through sample size table.");
+    $("#calculatorD2_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeDMinimumMAILISampleSize + "'>Minimum sample size (of unscreened MA-ILI specimens)</span> required to detect an antiviral resistant influenza at the specified <span class='calculatorTooltip' title='" + tooltipTypeDDetectionThreshold + "'>detection threshold (AVR+/Flu+)</span>, with a confidence of " + formatTextParameter(parameters.confidenceLevel + "%") + ". These calculations assume a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + " and a Flu+/MA-ILI prevalence of " + formatTextParameter(parameters.p + "%") + ". Use the mouse to view values in the sample size graph and scroll through sample size table.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorD2_chart_div'));
     chart.draw(dataChart, optionsChart);
@@ -401,13 +403,15 @@ function drawTypeDTab2()
             chart.setSelection(newSelectionArray);
             table.setSelection(newSelectionArray);
 
+            var noteText = "Note: Historical PHL data suggest that a 1/700 AVR+/Flu+ threshold is appropriate during the peak of the season, a 1/55 threshold during moderate periods of influenza activity, and 1/3.5 during out-of-season (summer) months to achieve detection with 85-95% confidence.";
+
             if(parameters.surveillanceScale == "National")
             {
-                $("#calculatorD2_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident of detecting 1 or more rare/novel influenza events at a prevalence of " + formatTextParameter(xTableLabelMap[x[thisObj.selectedRow]]) + " at a national level, the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " MA-ILI specimens.");
+                $("#calculatorD2_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident of detecting 1 or more antiviral resistant influenza events at a prevalence of " + formatTextParameter(xTableLabelMap[x[thisObj.selectedRow]]) + " at a national level, the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " MA-ILI specimens." + "<p>" + noteText + "</p>");
             }
             else
             {
-                $("#calculatorD2_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident of detecting 1 or more rare/novel influenza events at a prevalence of " + formatTextParameter(xTableLabelMap[x[thisObj.selectedRow]]) + " (within the population under surveillance), the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " MA-ILI specimens.");
+                $("#calculatorD2_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident of detecting 1 or more antiviral resistant influenza events at a prevalence of " + formatTextParameter(xTableLabelMap[x[thisObj.selectedRow]]) + " (within the population under surveillance), the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " MA-ILI specimens." + "<p>" + noteText + "</p>");
             }
         }
     }
@@ -505,7 +509,7 @@ function drawTypeDTab3()
         width: '225px'
     };
 
-    $("#calculatorD3_chart_table_description_div").html("Combinations of <span class='calculatorTooltip' title='" + tooltipTypeDFluSampleSize + "'>Flu+</span> and <span class='calculatorTooltip' title='" + tooltipTypeDMAILISampleSize + "'>unscreened MA-ILI</span> sample sizes may be required to detect a rare/novel influenza specimen with prevalence (Rare+/Flu+) that has reached the detection threshold of " + formatTextParameter(parameters.detectionThreshold + "% (1/" + Math.round(100. / parameters.detectionThreshold) + ")") + ", with a confidence of " + formatTextParameter(parameters.confidenceLevel + "%") + ". These calculations assume a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + " and a Flu+/MA-ILI prevalence of " + formatTextParameter(parameters.p + "%") + ". Many more unscreened MA-ILI specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI) is low.");
+    $("#calculatorD3_chart_table_description_div").html("Combinations of <span class='calculatorTooltip' title='" + tooltipTypeDFluSampleSize + "'>Flu+</span> and <span class='calculatorTooltip' title='" + tooltipTypeDMAILISampleSize + "'>unscreened MA-ILI</span> sample sizes may be required to detect an antiviral resistant influenza specimen with prevalence (AVR+/Flu+) that has reached the detection threshold of " + formatTextParameter(parameters.detectionThreshold + "% (1/" + Math.round(100. / parameters.detectionThreshold) + ")") + ", with a confidence of " + formatTextParameter(parameters.confidenceLevel + "%") + ". These calculations assume a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + " and a Flu+/MA-ILI prevalence of " + formatTextParameter(parameters.p + "%") + ". Many more unscreened MA-ILI specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI) is low.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorD3_chart_div'));
     chart.draw(dataChart, optionsChart);
@@ -541,13 +545,15 @@ function drawTypeDTab3()
             chart.setSelection(newSelectionArray);
             table.setSelection(newSelectionArray);
 
+            var noteText = "Note: Historical PHL data suggest that a 1/700 AVR+/Flu+ threshold is appropriate during the peak of the season, a 1/55 threshold during moderate periods of influenza activity, and 1/3.5 during out-of-season (summer) months to achieve detection with 85-95% confidence.";
+
             if(parameters.surveillanceScale == "National")
             {
-                $("#calculatorD3_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident of detecting 1 or more rare/novel influenza events at a prevalence of " + formatTextParameter(parameters.detectionThreshold + "% (1/" + Math.round(100. / parameters.detectionThreshold) + ")") + " at a national level, the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " MA-ILI and " + formatTextParameter(numberWithCommas(x[thisObj.selectedRow])) + " Flu+ specimens (with " + formatTextParameter(parameters.p + "%") + " Flu+/MA-ILI prevalence).");
+                $("#calculatorD3_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident of detecting 1 or more antiviral resistant influenza events at a prevalence of " + formatTextParameter(parameters.detectionThreshold + "% (1/" + Math.round(100. / parameters.detectionThreshold) + ")") + " at a national level, the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " MA-ILI and " + formatTextParameter(numberWithCommas(x[thisObj.selectedRow])) + " Flu+ specimens (with " + formatTextParameter(parameters.p + "%") + " Flu+/MA-ILI prevalence)." + "<p>" + noteText + "</p>");
             }
             else
             {
-                $("#calculatorD3_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident of detecting 1 or more rare/novel influenza events at a prevalence of " + formatTextParameter(parameters.detectionThreshold + "% (1/" + Math.round(100. / parameters.detectionThreshold) + ")") + " (within the population under surveillance), the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " MA-ILI and " + formatTextParameter(numberWithCommas(x[thisObj.selectedRow])) + " Flu+ specimens (with " + formatTextParameter(parameters.p + "%") + " Flu+/MA-ILI prevalence).");
+                $("#calculatorD3_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident of detecting 1 or more antiviral resistant influenza events at a prevalence of " + formatTextParameter(parameters.detectionThreshold + "% (1/" + Math.round(100. / parameters.detectionThreshold) + ")") + " (within the population under surveillance), the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " MA-ILI and " + formatTextParameter(numberWithCommas(x[thisObj.selectedRow])) + " Flu+ specimens (with " + formatTextParameter(parameters.p + "%") + " Flu+/MA-ILI prevalence)." + "<p>" + noteText + "</p>");
             }
         }
     }
@@ -558,7 +564,7 @@ function drawTypeDTab3()
 // draw chart and table given labels, x series, y series
 function drawTypeDTab4()
 {
-    var labels = ['Confidence Level', 'Detection Threshold (Rare+/Flu+)'];
+    var labels = ['Confidence Level', 'Detection Threshold (AVR+/Flu+)'];
     var x = [];
     var y;
     var yLabelMap = {};
@@ -690,7 +696,7 @@ function drawTypeDTab4()
         width: '225px'
     };
 
-    $("#calculatorD4_chart_table_description_div").html("Enter the PHL's sample sizes in the boxes above (number of Flu+ and unscreened MA-ILI specimens to be tested). The graph and table show the best combinations of <span class='calculatorTooltip' title='" + tooltipTypeDDetectionThreshold + "'>detection threshold</span> and <span class='calculatorTooltip' title='" + tooltipTypeDConfidenceLevel + "'>confidence level</span> achievable with " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " unscreened MA-ILI specimens. This calculation assumes a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + " and a Flu+/MA-ILI prevalence of " + formatTextParameter(parameters.p + "%") + ". There is a trade-off between detection threshold and confidence level. Intuitively, the lower the prevalence of a rare/novel influenza, the less likely it will be detected, and vice versa. Use the mouse to view values in the graph and scroll through the table.");
+    $("#calculatorD4_chart_table_description_div").html("Enter the PHL's sample sizes in the boxes above (number of Flu+ and unscreened MA-ILI specimens to be tested). The graph and table show the best combinations of <span class='calculatorTooltip' title='" + tooltipTypeDDetectionThreshold + "'>detection threshold</span> and <span class='calculatorTooltip' title='" + tooltipTypeDConfidenceLevel + "'>confidence level</span> achievable with " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " unscreened MA-ILI specimens. This calculation assumes a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + " and a Flu+/MA-ILI prevalence of " + formatTextParameter(parameters.p + "%") + ". There is a trade-off between detection threshold and confidence level. Intuitively, the lower the prevalence of an antiviral resistant virus, the less likely it will be detected, and vice versa. Use the mouse to view values in the graph and scroll through the table.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorD4_chart_div'));
     chart.draw(dataChart, optionsChart);
@@ -726,13 +732,15 @@ function drawTypeDTab4()
             chart.setSelection(newSelectionArray);
             table.setSelection(newSelectionArray);
 
+            var noteText = "Note: Historical PHL data suggest that a 1/700 AVR+/Flu+ threshold is appropriate during the peak of the season, a 1/55 threshold during moderate periods of influenza activity, and 1/3.5 during out-of-season (summer) months to achieve detection with 85-95% confidence.";
+
             if(parameters.surveillanceScale == "National")
             {
-                $("#calculatorD4_chart_table_report_div").html("If the laboratory tested " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " MA-ILI specimens and " + formatTextParameter(parameters.p + "%") + " estimated prevalence of Flu+/MA-ILI, the PHL can be " + formatTextParameter(Math.round(x[thisObj.selectedRow]*100.)/100. + "%") + " confident that the rare/novel influenza would be detected at a prevalence of " + formatTextParameter(yLabelMap[y[thisObj.selectedRow]]) + " at a national level.");
+                $("#calculatorD4_chart_table_report_div").html("If the laboratory tested " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " MA-ILI specimens and " + formatTextParameter(parameters.p + "%") + " estimated prevalence of Flu+/MA-ILI, the PHL can be " + formatTextParameter(Math.round(x[thisObj.selectedRow]*100.)/100. + "%") + " confident that the antiviral resistant influenza would be detected at a prevalence of " + formatTextParameter(yLabelMap[y[thisObj.selectedRow]]) + " at a national level." + "<p>" + noteText + "</p>");
             }
             else
             {
-                $("#calculatorD4_chart_table_report_div").html("If the laboratory tested " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " MA-ILI specimens and " + formatTextParameter(parameters.p + "%") + " estimated prevalence of Flu+/MA-ILI, the PHL can be " + formatTextParameter(Math.round(x[thisObj.selectedRow]*100.)/100. + "%") + " confident that the rare/novel influenza would be detected at a prevalence of " + formatTextParameter(yLabelMap[y[thisObj.selectedRow]]) + " (within the population under surveillance).");
+                $("#calculatorD4_chart_table_report_div").html("If the laboratory tested " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " MA-ILI specimens and " + formatTextParameter(parameters.p + "%") + " estimated prevalence of Flu+/MA-ILI, the PHL can be " + formatTextParameter(Math.round(x[thisObj.selectedRow]*100.)/100. + "%") + " confident that the antiviral resistant influenza would be detected at a prevalence of " + formatTextParameter(yLabelMap[y[thisObj.selectedRow]]) + " (within the population under surveillance)." + "<p>" + noteText + "</p>");
             }
         }
     }
