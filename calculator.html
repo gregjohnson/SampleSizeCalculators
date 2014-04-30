@@ -483,8 +483,6 @@
                 <div id="calculatorD_tabs" class="calculatorTabsContainer">
                     <ul>
                         <li><a href="#calculatorD_tabs-1">Flu+ Sample Size</a></li>
-                        <li><a href="#calculatorD_tabs-2">MA-ILI Sample Size</a></li>
-                        <li><a href="#calculatorD_tabs-3">Combined Samples</a></li>
                         <li><a href="#calculatorD_tabs-4">Data Confidence</a></li>
                     </ul>
 
@@ -510,73 +508,6 @@
 
                         <div id="calculatorD1_chart_table_report_div"> </div>
                     </div> <!-- end tabs-1 -->
-
-                    <div id="calculatorD_tabs-2">
-                        <!-- input: confidence level -->
-                        <div class="calculatorInputArea">
-                            <label for="calculatorD2_input_confidence_level" class="calculatorLabel calculatorTooltip tooltipTypeDConfidenceLevel">Confidence level</label>
-                            <div id="calculatorD2_input_confidence_level_slider" class="calculatorSlider"></div>
-                            <input type="text" id="calculatorD2_input_confidence_level" class="calculatorSliderInput" />
-                        </div>
-
-                        <!-- input: assumed prevalence p -->
-                        <div class="calculatorInputArea">
-                            <label for="calculatorD2_input_p" class="calculatorLabel calculatorTooltip tooltipTypeDExpectedFluMAILI">Expected prevalence of Flu+/MA-ILI</label>
-                            <div id="calculatorD2_input_p_slider" class="calculatorSlider"></div>
-                            <input type="text" id="calculatorD2_input_p" class="calculatorSliderInput" />
-                        </div>
-
-                        <br style="clear:both;" />
-                        <br style="clear:both;" />
-                        <div id="calculatorD2_chart_table_description_div"> </div>
-
-                        <!-- chart and table -->
-                        <div id="calculatorD2_chart_div" class="calculatorSmallChart"></div>
-
-                        <!-- the table ignores height specification in class so must specify it here -->
-                        <div id="calculatorD2_table_div" class="calculatorSmallTable" style="height:200px; padding-top:50px;"></div>
-
-                        <br style="clear:both;" />
-
-                        <div id="calculatorD2_chart_table_report_div"> </div>
-                    </div> <!-- end tabs-2 -->
-
-                    <div id="calculatorD_tabs-3">
-                        <!-- input: confidence level -->
-                        <div class="calculatorInputArea">
-                            <label for="calculatorD3_input_confidence_level" class="calculatorLabel calculatorTooltip tooltipTypeDConfidenceLevel">Confidence level</label>
-                            <div id="calculatorD3_input_confidence_level_slider" class="calculatorSlider"></div>
-                            <input type="text" id="calculatorD3_input_confidence_level" class="calculatorSliderInput" />
-                        </div>
-
-                        <!-- input: assumed prevalence p -->
-                        <div class="calculatorInputArea">
-                            <label for="calculatorD3_input_p" class="calculatorLabel calculatorTooltip tooltipTypeDExpectedFluMAILI">Expected prevalence of Flu+/MA-ILI</label>
-                            <div id="calculatorD3_input_p_slider" class="calculatorSlider"></div>
-                            <input type="text" id="calculatorD3_input_p" class="calculatorSliderInput" />
-                        </div>
-
-                        <!-- input: detection threshold -->
-                        <div class="calculatorInputArea">
-                            <label for="calculatorD3_input_detection_threshold" class="calculatorLabel calculatorTooltip tooltipTypeDDetectionThreshold">Detection Threshold</label>
-                            <div id="calculatorD3_input_detection_threshold_slider" class="calculatorSlider"></div>
-                            <input type="text" id="calculatorD3_input_detection_threshold" class="calculatorSliderInput" />
-                        </div>
-
-                        <br style="clear:both;" />
-                        <br style="clear:both;" />
-                        <div id="calculatorD3_chart_table_description_div"> </div>
-
-                        <!-- chart and table -->
-                        <div id="calculatorD3_chart_div" class="calculatorSmallChart"></div>
-
-                        <!-- the table ignores height specification in class so must specify it here -->
-                        <div id="calculatorD3_table_div" class="calculatorSmallTable" style="height:200px; padding-top:50px;"></div>
-
-                        <br style="clear:both;" />
-
-                        <div id="calculatorD3_chart_table_report_div"> </div>
-                    </div> <!-- end tabs-3 -->
 
                     <div id="calculatorD_tabs-4">
                         <!-- input: Flu+ number of samples -->
