@@ -8,8 +8,6 @@ var calculatorTypeDInputs = {
     surveillanceScale:'National',
     confidenceLevel1:95,
     fluSampleSize4:1,
-    MAILISampleSize4:0,
-    p4:10
 };
 
 // tooltip text
@@ -43,57 +41,9 @@ function evaluateTypeD_FluSampleSize_vs_detectionThreshold(detectionThreshold)
     return Math.ceil(sampleSize);
 }
 
-function evaluateTypeD_MAILISampleSize_vs_detectionThreshold(detectionThreshold)
-{
-    // this object contains parameter values
-
-    var sampleSize = Math.log(1. - this.confidenceLevel/100.) / Math.log(1. - detectionThreshold/100.);
-
-    if(this.surveillanceScale == "State")
-    {
-        // finite population correction
-        sampleSize = sampleSize * Math.sqrt((this.population - sampleSize) / (this.population - 1.));
-    }
-
-    // to MA-ILI+ samples
-    sampleSize = sampleSize * (100. / this.p);
-
-    if(this.surveillanceScale == "National")
-    {
-        sampleSize = sampleSize * this.population / nationalPopulation;
-    }
-
-    return Math.ceil(sampleSize);
-}
-
-function evaluateTypeD_MAILISampleSize_vs_FluSampleSize(fluSampleSize)
-{
-    var idealFluSampleSize = Math.log(1. - this.confidenceLevel/100.) / Math.log(1. - this.detectionThreshold/100.);
-
-    if(this.surveillanceScale == "State")
-    {
-        // finite population correction
-        idealFluSampleSize = idealFluSampleSize * Math.sqrt((this.population - idealFluSampleSize) / (this.population - 1.));
-    }
-
-    if(this.surveillanceScale == "National")
-    {
-        idealFluSampleSize = idealFluSampleSize * this.population / nationalPopulation;
-    }
-
-    var neededAdditionalFluSampleSize = idealFluSampleSize - fluSampleSize;
-
-    if(neededAdditionalFluSampleSize <= 0.)
-    {
-        return 0.;
-    }
-
-    return Math.ceil(neededAdditionalFluSampleSize * (100. / this.p));
-}
-
 function evaluateTypeD_detectionThreshold_vs_confidenceLevel(confidenceLevel)
 {
-    var idealFluSampleSize = this.fluSampleSize + this.p/100. * this.MAILISampleSize;
+    var idealFluSampleSize = this.fluSampleSize;
 
     if(this.surveillanceScale == "State")
     {
@@ -119,7 +69,7 @@ function evaluateTypeD_detectionThreshold_vs_confidenceLevel(confidenceLevel)
 
 function evaluateTypeD_confidenceLevel_vs_detectionThreshold(detectionThreshold)
 {
-    var idealFluSampleSize = this.fluSampleSize + this.p/100. * this.MAILISampleSize;
+    var idealFluSampleSize = this.fluSampleSize;
 
     if(this.surveillanceScale == "State")
     {
@@ -289,8 +239,6 @@ function drawTypeDTab4()
     parameters.population = calculatorTypeDInputs.population;
     parameters.surveillanceScale = calculatorTypeDInputs.surveillanceScale;
     parameters.fluSampleSize = calculatorTypeDInputs.fluSampleSize4;
-    parameters.MAILISampleSize = calculatorTypeDInputs.MAILISampleSize4;
-    parameters.p = calculatorTypeDInputs.p4;
 
     // range: confidence level (%)
     // dynamically determine such that it contains resulting detection thresholds of 1/1000, 1/700, 1/600, 1/500, 1/200, 1/165, and 5%
@@ -411,7 +359,7 @@ function drawTypeDTab4()
         width: '225px'
     };
 
-    $("#calculatorD4_chart_table_description_div").html("Enter the PHL's sample sizes in the boxes above (number of Flu+ and unscreened MA-ILI specimens to be tested). The graph and table show the best combinations of <span class='calculatorTooltip' title='" + tooltipTypeDDetectionThreshold + "'>detection threshold</span> and <span class='calculatorTooltip' title='" + tooltipTypeDConfidenceLevel + "'>confidence level</span> achievable with " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " unscreened MA-ILI specimens. This calculation assumes a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + " and a Flu+/MA-ILI prevalence of " + formatTextParameter(parameters.p + "%") + ". There is a trade-off between detection threshold and confidence level. Intuitively, the lower the prevalence of an antiviral resistant virus, the less likely it will be detected, and vice versa. Use the mouse to view values in the graph and scroll through the table.");
+    $("#calculatorD4_chart_table_description_div").html("Enter the PHL's sample sizes in the boxes above (number of Flu+ and unscreened MA-ILI specimens to be tested). The graph and table show the best combinations of <span class='calculatorTooltip' title='" + tooltipTypeDDetectionThreshold + "'>detection threshold</span> and <span class='calculatorTooltip' title='" + tooltipTypeDConfidenceLevel + "'>confidence level</span> achievable with " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens. This calculation assumes a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + ". There is a trade-off between detection threshold and confidence level. Intuitively, the lower the prevalence of an antiviral resistant virus, the less likely it will be detected, and vice versa. Use the mouse to view values in the graph and scroll through the table.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorD4_chart_div'));
     chart.draw(dataChart, optionsChart);
@@ -451,11 +399,11 @@ function drawTypeDTab4()
 
             if(parameters.surveillanceScale == "National")
             {
-                $("#calculatorD4_chart_table_report_div").html("If the laboratory tested " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " MA-ILI specimens and " + formatTextParameter(parameters.p + "%") + " estimated prevalence of Flu+/MA-ILI, the PHL can be " + formatTextParameter(Math.round(x[thisObj.selectedRow]*100.)/100. + "%") + " confident that the antiviral resistant influenza would be detected at a prevalence of " + formatTextParameter(yLabelMap[y[thisObj.selectedRow]]) + " at a national level." + "<p>" + noteText + "</p>");
+                $("#calculatorD4_chart_table_report_div").html("If the laboratory tested " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens, the PHL can be " + formatTextParameter(Math.round(x[thisObj.selectedRow]*100.)/100. + "%") + " confident that the antiviral resistant influenza would be detected at a prevalence of " + formatTextParameter(yLabelMap[y[thisObj.selectedRow]]) + " at a national level." + "<p>" + noteText + "</p>");
             }
             else
             {
-                $("#calculatorD4_chart_table_report_div").html("If the laboratory tested " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " MA-ILI specimens and " + formatTextParameter(parameters.p + "%") + " estimated prevalence of Flu+/MA-ILI, the PHL can be " + formatTextParameter(Math.round(x[thisObj.selectedRow]*100.)/100. + "%") + " confident that the antiviral resistant influenza would be detected at a prevalence of " + formatTextParameter(yLabelMap[y[thisObj.selectedRow]]) + " (within the population under surveillance)." + "<p>" + noteText + "</p>");
+                $("#calculatorD4_chart_table_report_div").html("If the laboratory tested " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens, the PHL can be " + formatTextParameter(Math.round(x[thisObj.selectedRow]*100.)/100. + "%") + " confident that the antiviral resistant influenza would be detected at a prevalence of " + formatTextParameter(yLabelMap[y[thisObj.selectedRow]]) + " (within the population under surveillance)." + "<p>" + noteText + "</p>");
             }
         }
     }
@@ -566,29 +514,6 @@ function calculatorTypeDInitialize()
     });
 
     $("#calculatorD4_input_flu_sample_size").val(calculatorTypeDInputs.fluSampleSize4);
-
-    // tab 4: MA-ILI+ sample size
-    $("#calculatorD4_input_maili_sample_size").bind('keyup mouseup change', function(e) {
-        calculatorTypeDInputs.MAILISampleSize4 = parseFloat($("#calculatorD4_input_maili_sample_size").val());
-        calculatorTypeDRefresh();
-    });
-
-    $("#calculatorD4_input_maili_sample_size").val(calculatorTypeDInputs.MAILISampleSize4);
-
-    // tab 4: assumed prevalence slider
-    $("#calculatorD4_input_p_slider").slider({
-        value:calculatorTypeDInputs.p4,
-        min: 1,
-        max: 100,
-        step: 1,
-        slide: function(event, ui) {
-            $("#calculatorD4_input_p").val(ui.value + "%");
-            calculatorTypeDInputs.p4 = parseFloat($("#calculatorD4_input_p").val());
-            calculatorTypeDRefresh();
-        }
-    });
-
-    $("#calculatorD4_input_p").val($("#calculatorD4_input_p_slider").slider("value") + "%");
 }
 
 function calculatorTypeDRefresh()
