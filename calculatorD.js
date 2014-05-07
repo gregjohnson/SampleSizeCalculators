@@ -7,7 +7,7 @@ var calculatorTypeDInputs = {
     population:1,
     surveillanceScale:'National',
     confidenceLevel1:95,
-    fluSampleSize4:1,
+    fluSampleSize2:1,
 };
 
 // tooltip text
@@ -227,7 +227,7 @@ function drawTypeDTab1()
 }
 
 // draw chart and table given labels, x series, y series
-function drawTypeDTab4()
+function drawTypeDTab2()
 {
     var labels = ['Confidence Level', 'Detection Threshold (AVR+/Flu+)'];
     var x = [];
@@ -238,7 +238,7 @@ function drawTypeDTab4()
     var parameters = new Object();
     parameters.population = calculatorTypeDInputs.population;
     parameters.surveillanceScale = calculatorTypeDInputs.surveillanceScale;
-    parameters.fluSampleSize = calculatorTypeDInputs.fluSampleSize4;
+    parameters.fluSampleSize = calculatorTypeDInputs.fluSampleSize2;
 
     // range: confidence level (%)
     // dynamically determine such that it contains resulting detection thresholds of 1/1000, 1/700, 1/600, 1/500, 1/200, 1/165, and 5%
@@ -359,16 +359,16 @@ function drawTypeDTab4()
         width: '225px'
     };
 
-    $("#calculatorD4_chart_table_description_div").html("Enter the PHL's sample sizes in the boxes above (number of Flu+ specimens to be tested). The graph and table show the best combinations of <span class='calculatorTooltip' title='" + tooltipTypeDDetectionThreshold + "'>detection threshold</span> and <span class='calculatorTooltip' title='" + tooltipTypeDConfidenceLevel + "'>confidence level</span> achievable with " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens. This calculation assumes a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + ". There is a trade-off between detection threshold and confidence level. Intuitively, the lower the prevalence of an antiviral resistant virus, the less likely it will be detected, and vice versa. Use the mouse to view values in the graph and scroll through the table.");
+    $("#calculatorD2_chart_table_description_div").html("Enter the PHL's sample sizes in the boxes above (number of Flu+ specimens to be tested). The graph and table show the best combinations of <span class='calculatorTooltip' title='" + tooltipTypeDDetectionThreshold + "'>detection threshold</span> and <span class='calculatorTooltip' title='" + tooltipTypeDConfidenceLevel + "'>confidence level</span> achievable with " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens. This calculation assumes a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + ". There is a trade-off between detection threshold and confidence level. Intuitively, the lower the prevalence of an antiviral resistant virus, the less likely it will be detected, and vice versa. Use the mouse to view values in the graph and scroll through the table.");
 
-    var chart = new google.visualization.LineChart(document.getElementById('calculatorD4_chart_div'));
+    var chart = new google.visualization.LineChart(document.getElementById('calculatorD2_chart_div'));
     chart.draw(dataChart, optionsChart);
 
-    var table = new google.visualization.Table(document.getElementById('calculatorD4_table_div'));
+    var table = new google.visualization.Table(document.getElementById('calculatorD2_table_div'));
     table.draw(dataTable, optionsTable);
 
     // selection handling
-    var thisObj = drawTypeDTab4;
+    var thisObj = drawTypeDTab2;
 
     google.visualization.events.addListener(chart, 'select', chartSelectHandler);
     google.visualization.events.addListener(table, 'select', tableSelectHandler);
@@ -399,11 +399,11 @@ function drawTypeDTab4()
 
             if(parameters.surveillanceScale == "National")
             {
-                $("#calculatorD4_chart_table_report_div").html("If the laboratory tested " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens, the PHL can be " + formatTextParameter(Math.round(x[thisObj.selectedRow]*100.)/100. + "%") + " confident that the antiviral resistant influenza would be detected at a prevalence of " + formatTextParameter(yLabelMap[y[thisObj.selectedRow]]) + " at a national level." + "<p>" + noteText + "</p>");
+                $("#calculatorD2_chart_table_report_div").html("If the laboratory tested " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens, the PHL can be " + formatTextParameter(Math.round(x[thisObj.selectedRow]*100.)/100. + "%") + " confident that the antiviral resistant influenza would be detected at a prevalence of " + formatTextParameter(yLabelMap[y[thisObj.selectedRow]]) + " at a national level." + "<p>" + noteText + "</p>");
             }
             else
             {
-                $("#calculatorD4_chart_table_report_div").html("If the laboratory tested " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens, the PHL can be " + formatTextParameter(Math.round(x[thisObj.selectedRow]*100.)/100. + "%") + " confident that the antiviral resistant influenza would be detected at a prevalence of " + formatTextParameter(yLabelMap[y[thisObj.selectedRow]]) + " (within the population under surveillance)." + "<p>" + noteText + "</p>");
+                $("#calculatorD2_chart_table_report_div").html("If the laboratory tested " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens, the PHL can be " + formatTextParameter(Math.round(x[thisObj.selectedRow]*100.)/100. + "%") + " confident that the antiviral resistant influenza would be detected at a prevalence of " + formatTextParameter(yLabelMap[y[thisObj.selectedRow]]) + " (within the population under surveillance)." + "<p>" + noteText + "</p>");
             }
         }
     }
@@ -507,13 +507,13 @@ function calculatorTypeDInitialize()
 
     $("#calculatorD1_input_confidence_level").val($("#calculatorD1_input_confidence_level_slider").slider("value") + "%");
 
-    // tab 4: Flu+ sample size
-    $("#calculatorD4_input_flu_sample_size").bind('keyup mouseup change', function(e) {
-        calculatorTypeDInputs.fluSampleSize4 = parseFloat($("#calculatorD4_input_flu_sample_size").val());
+    // tab 2: Flu+ sample size
+    $("#calculatorD2_input_flu_sample_size").bind('keyup mouseup change', function(e) {
+        calculatorTypeDInputs.fluSampleSize2 = parseFloat($("#calculatorD2_input_flu_sample_size").val());
         calculatorTypeDRefresh();
     });
 
-    $("#calculatorD4_input_flu_sample_size").val(calculatorTypeDInputs.fluSampleSize4);
+    $("#calculatorD2_input_flu_sample_size").val(calculatorTypeDInputs.fluSampleSize2);
 }
 
 function calculatorTypeDRefresh()
@@ -524,7 +524,7 @@ function calculatorTypeDRefresh()
     }
     else if(calculatorTypeDActiveTabIndex == 1)
     {
-        drawTypeDTab4();
+        drawTypeDTab2();
     }
     else
     {
