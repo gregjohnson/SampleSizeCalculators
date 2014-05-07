@@ -484,6 +484,7 @@
                     <ul>
                         <li><a href="#calculatorD_tabs-1">Flu+ Sample Size</a></li>
                         <li><a href="#calculatorD_tabs-2">Data Confidence</a></li>
+                        <li><a href="#calculatorD_tabs-3">Investigation</a></li>
                     </ul>
 
                     <div id="calculatorD_tabs-1">
@@ -530,6 +531,36 @@
 
                         <div id="calculatorD2_chart_table_report_div"> </div>
                     </div> <!-- end tabs-2 -->
+
+                    <div id="calculatorD_tabs-3">
+                        <!-- input: expected AVR+/Flu+ -->
+                        <div class="calculatorInputArea">
+                            <label for="calculatorD3_input_rare_flu_p" class="calculatorLabel calculatorTooltip tooltipTypeD2RareFluP">Expected prevalence of AVR+/Flu+</label>
+                            <div id="calculatorD3_input_rare_flu_p_slider" class="calculatorSlider"></div>
+                            <input type="text" id="calculatorD3_input_rare_flu_p" class="calculatorSliderInput" />
+                        </div>
+
+                        <!-- input: confidence level -->
+                        <div class="calculatorInputArea">
+                            <label for="calculatorD3_input_confidence_level" class="calculatorLabel calculatorTooltip tooltipTypeD2ConfidenceLevel">Confidence level</label>
+                            <div id="calculatorD3_input_confidence_level_slider" class="calculatorSlider"></div>
+                            <input type="text" id="calculatorD3_input_confidence_level" class="calculatorSliderInput" />
+                        </div>
+
+                        <br style="clear:both;" />
+                        <br style="clear:both;" />
+                        <div id="calculatorD3_chart_table_description_div"> </div>
+
+                        <!-- chart and table -->
+                        <div id="calculatorD3_chart_div" class="calculatorSmallChart"></div>
+
+                        <!-- the table ignores height specification in class so must specify it here -->
+                        <div id="calculatorD3_table_div" class="calculatorSmallTable" style="height:200px; padding-top:50px;"></div>
+
+                        <br style="clear:both;" />
+
+                        <div id="calculatorD3_chart_table_report_div"> </div>
+                    </div> <!-- end tabs-3 -->
                 </div> <!-- end tabs -->
             </div> <!-- end Calculator D -->
         </div> <!-- end accordion -->
