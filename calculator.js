@@ -205,10 +205,41 @@ function arraysToDataTable(labels, arrays)
     return google.visualization.arrayToDataTable(dataTableArray);
 }
 
+function showCalculatorPopup(calculator)
+{
+    $(function() {
+        $("#calculator" + calculator + "_popup").dialog({
+            width: 500,
+            modal: true,
+            buttons: {
+                Ok: function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+    });
+}
+
 function onLoad()
 {
     // create accordion
-    $("#calculator_accordion").accordion({ heightStyle: "content", activate: function(event, ui) { calculatorTypeARefresh(); calculatorTypeBRefresh(); calculatorTypeCRefresh(); calculatorTypeDRefresh(); } } );
+    $("#calculator_accordion").accordion({ heightStyle: "content", activate: function(event, ui) {
+        // show popup when new calculator is activated; note the weird indexing...
+        if(ui.newPanel.index() == 1)
+        {
+            showCalculatorPopup('A');
+        }
+        else if(ui.newPanel.index() == 3)
+        {
+            showCalculatorPopup('B');
+        }
+        else if(ui.newPanel.index() == 5)
+        {
+            showCalculatorPopup('C');
+        }
+
+        calculatorTypeARefresh(); calculatorTypeBRefresh(); calculatorTypeCRefresh(); calculatorTypeDRefresh();
+    } });
 
     // create individual calculator tabs; trigger a refresh on activation so charts are correctly sized
     $("#calculatorA_tabs").tabs({ activate: function(event, ui) { calculatorTypeAActiveTabIndex = ui.newTab.index(); calculatorTypeARefresh(); } });
@@ -264,10 +295,21 @@ function onLoad()
     {
         var hashInt = parseInt(window.location.hash.replace('#', ''));
 
-        // right now we only have three calculators...
-        if(hashInt >= 0 && hashInt < 3)
+        // right now we only have four calculators...
+        if(hashInt >= 0 && hashInt < 4)
         {
             $("#calculator_accordion").accordion('option', 'active', hashInt);
         }
+
+        if(hashInt == 0)
+        {
+            // show calculator A popup (since the hash won't trigger an activate event)
+            showCalculatorPopup('A');
+        }
+    }
+    else
+    {
+        // show calculator A popup (since the page load won't trigger an activate event)
+        showCalculatorPopup('A');
     }
 }

@@ -36,11 +36,44 @@
 
         <h3>Calculators</h3>
 
+        <!-- warning popups content -->
+        <div id="calculatorA_popup" title="Calculator A: Bias Warnings" style="display:none;">
+            <ul>
+                <li>Calculator assumes samples are included from all population types (ages, genders, severity, inpatient and outpatient).</li>
+                <li>Calculator assumes samples are geographically representative of the population.</li>
+                <li>Biases in any of these categories could influence the calculated sample size and should be minimized.</li>
+                <li>Calculator assumes that influenza testing is equally sensitive/specific for each virus type/subtype, for each assay type, and for all age groups. Users should be aware that these assumptions may not hold true at all times and understand the potential impact that deviations from this assumption may have on the data.</li>
+            </ul>
+        </div>
+
+        <div id="calculatorB_popup" title="Calculator B: Bias Warnings" style="display:none;">
+            <ul>
+                <li>Calculator assumes samples are included from all population types (ages, genders, severity, inpatient and outpatient).</li>
+                <li>Calculator assumes samples are geographically representative of the population.</li>
+                <li>Calculator assumes Flu+ identification is equally reliable for all samples obtained, which can change depending on proportion of prescreened positive samples.</li>
+                <li>The Rare/Novel influenza event calculators assume all specimens have been tested using the CDC Flu rRT-PCR assay.</li>
+                <li>Biases in any of these categories could influence the calculated sample size and should be minimized.</li>
+            </ul>
+        </div>
+
+        <div id="calculatorC_popup" title="Calculator C: Bias Warnings" style="display:none;">
+            <ul>
+                <li>Calculator assumes samples are included from all population types (ages, genders, severity, inpatient and outpatient).</li>
+                <li>Calculator assumes samples are geographically representative of the population.</li>
+                <li>If Rare/Novel influenza event investigation involves targeted or biased sampling near an outbreak, then the statewide or national sample sizes provided by this calculator may not be applicable.</li>
+                <li>Calculator assumes Flu+ identification is equally reliable for all samples obtained, which can change depending on proportion of prescreened positive samples.</li>
+                <li>The Rare/Novel influenza event calculators assume all specimens have been tested using the CDC Flu rRT-PCR assay.</li>
+                <li>Biases in any of these categories could influence the calculated sample size and should be minimized.</li>
+            </ul>
+        </div>
+
         <div id="calculator_accordion" class="calculatorAccordionContainer">
 
             <!-- Calculator A -->
             <h3>Calculator A: Situational Awareness for Seasonal Influenza</h3>
             <div>
+                <p>Acceptable Data Sources to reach Situational Awareness Sample Size: &#x2713; PHL Testing Data; &#x2713; Molecular Non-PHL Data; &#x2713; RIDT Non-PHL Data.</p>
+
                 <!-- input: medically attended ILI -->
                 <!-- this was (and still could be) a global input for all calculators... so it's coded a little differently -->
                 <div class="calculatorInputArea">
@@ -95,6 +128,8 @@
                         <br style="clear:both;" />
 
                         <div id="calculatorA_chart_table_report_div"> </div>
+
+                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
                     </div> <!-- end tabs-1 -->
 
                     <div id="calculatorA_tabs-2">
@@ -103,6 +138,8 @@
                         <div id="calculatorA_big_table_div" class="calculatorBigTable"> </div>
                         <br style="clear:both;"/>
                         <div id="calculatorA_big_table_report_div"> </div>
+
+                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
                     </div> <!-- end tabs-2 -->
 
                     <div id="calculatorA_tabs-3">
@@ -127,6 +164,8 @@
                         <br style="clear:both;" />
 
                         <div id="calculatorA_chart_table_2_report_div"> </div>
+
+                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
                     </div> <!-- end tabs-3 -->
                 </div> <!-- end tabs -->
             </div> <!-- end Calculator A -->
@@ -134,6 +173,8 @@
             <!-- Calculator B -->
             <h3>Calculator B: Rare/Novel Influenza Event Detection</h3>
             <div>
+                <p>Acceptable Data Sources to reach Rare/Novel Influenza Event Detection Sample Size: &#x2713; PHL Testing Data; &#x2717; Molecular Non-PHL Data; &#x2717; RIDT Non-PHL Data.</p>
+
                 <!-- input: population; select options populated in javascript -->
                 <div class="calculatorInputArea">
                     <label for="calculatorB_select_population" class="calculatorLabel calculatorTooltip tooltipTypeBTotalPopulation">Total Population</label>
@@ -184,6 +225,8 @@
                         <br style="clear:both;" />
 
                         <div id="calculatorB1_chart_table_report_div"> </div>
+
+                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
                     </div> <!-- end tabs-1 -->
 
                     <div id="calculatorB_tabs-2">
@@ -215,6 +258,8 @@
                         <br style="clear:both;" />
 
                         <div id="calculatorB2_chart_table_report_div"> </div>
+
+                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
                     </div> <!-- end tabs-2 -->
 
                     <div id="calculatorB_tabs-3">
@@ -252,6 +297,8 @@
                         <br style="clear:both;" />
 
                         <div id="calculatorB3_chart_table_report_div"> </div>
+
+                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
                     </div> <!-- end tabs-3 -->
 
                     <div id="calculatorB_tabs-4">
@@ -287,6 +334,8 @@
                         <br style="clear:both;" />
 
                         <div id="calculatorB4_chart_table_report_div"> </div>
+
+                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
                     </div> <!-- end tabs-4 -->
                 </div> <!-- end tabs -->
             </div> <!-- end Calculator B -->
@@ -294,6 +343,8 @@
             <!-- Calculator C -->
             <h3>Calculator C: Rare/Novel Event Investigation</h3>
             <div>
+                <p>Acceptable Data Sources to reach Rare/novel Event Investigation Sample Size: &#x2713; PHL Testing Data; &#x2717; Molecular Non-PHL Data; &#x2717; RIDT Non-PHL Data.</p>
+
                 <!-- input: population; select options populated in javascript -->
                 <div class="calculatorInputArea">
                     <label for="calculatorC_select_population" class="calculatorLabel calculatorTooltip tooltipTypeCTotalPopulation">Total Population</label>
@@ -353,6 +404,8 @@
                         <br style="clear:both;" />
 
                         <div id="calculatorC1_chart_table_report_div"> </div>
+
+                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
                     </div> <!-- end tabs-1 -->
 
                     <div id="calculatorC_tabs-2">
@@ -383,6 +436,8 @@
                         <br style="clear:both;" />
 
                         <div id="calculatorC2_chart_table_report_div"> </div>
+
+                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
                     </div> <!-- end tabs-2 -->
 
                     <div id="calculatorC_tabs-3">
@@ -420,6 +475,8 @@
                         <br style="clear:both;" />
 
                         <div id="calculatorC3_chart_table_report_div"> </div>
+
+                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
                     </div> <!-- end tabs-3 -->
 
                     <div id="calculatorC_tabs-4">
@@ -455,6 +512,8 @@
                         <br style="clear:both;" />
 
                         <div id="calculatorC4_chart_table_report_div"> </div>
+
+                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
                     </div> <!-- end tabs-4 -->
                 </div> <!-- end tabs -->
             </div> <!-- end Calculator C -->
@@ -510,6 +569,8 @@
                         <br style="clear:both;" />
 
                         <div id="calculatorD1_chart_table_report_div"> </div>
+
+                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
                     </div> <!-- end tabs-1 -->
 
                     <div id="calculatorD_tabs-2">
@@ -532,6 +593,8 @@
                         <br style="clear:both;" />
 
                         <div id="calculatorD2_chart_table_report_div"> </div>
+
+                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
                     </div> <!-- end tabs-2 -->
 
                     <div id="calculatorD_tabs-3">
@@ -562,6 +625,8 @@
                         <br style="clear:both;" />
 
                         <div id="calculatorD3_chart_table_report_div"> </div>
+
+                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
                     </div> <!-- end tabs-3 -->
                 </div> <!-- end tabs -->
             </div> <!-- end Calculator D -->
