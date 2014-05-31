@@ -7,8 +7,10 @@ var calculatorTypeBInputs = {
     population:1,
     surveillanceScale:'National',
     confidenceLevel1:95,
+    tableMode1:"simple",
     confidenceLevel2:95,
     p2:10,
+    tableMode2:"simple",
     confidenceLevel3:95,
     p3:10,
     detectionThreshold3:1,
@@ -198,6 +200,12 @@ function drawTypeBTab1()
         }
     }
 
+    // final value for threshold 1/4
+    value = 25.0;
+    x.push(value);
+    xChartLabelMap[value] = "Detection Threshhold: " + value + "% (1/" + Math.round(100. / value) + ")";
+    xTableLabelMap[value] = value + "% (1/" + Math.round(100. / value) + ")";
+
     // use a parameters object to pass in any other input parameters to the evaluation function
     var parameters = new Object();
     parameters.population = calculatorTypeBInputs.population;
@@ -210,6 +218,9 @@ function drawTypeBTab1()
     // separate DataTable objects for chart / table to allow for formatting
     var dataChart = arraysToDataTable(labels, [x, y]);
     var dataTable = dataChart.clone();
+
+    // remove last row (1/4 threshold) from chart, since we don't want it drawn there...
+    dataChart.removeRow(52);
 
     // chart: use xChartLabelMap as the x label
     var formatterChart = new labelFormatter(xChartLabelMap);
@@ -238,7 +249,14 @@ function drawTypeBTab1()
     chart.draw(dataChart, optionsChart);
 
     var table = new google.visualization.Table(document.getElementById('calculatorB1_table_div'));
-    table.draw(dataTable, optionsTable);
+    var tableDataView = new google.visualization.DataView(dataTable);
+
+    if(calculatorTypeBInputs.tableMode1 == "simple")
+    {
+        tableDataView.setRows([1,6,52]);
+    }
+
+    table.draw(tableDataView, optionsTable);
 
     // selection handling
     var thisObj = drawTypeBTab1;
@@ -246,14 +264,20 @@ function drawTypeBTab1()
     google.visualization.events.addListener(chart, 'select', chartSelectHandler);
     google.visualization.events.addListener(table, 'select', tableSelectHandler);
 
-    function chartSelectHandler(e) { thisObj.selectHandler(chart.getSelection()); }
-    function tableSelectHandler(e) { thisObj.selectHandler(table.getSelection()); }
+    function chartSelectHandler(e) { thisObj.selectHandler(chart.getSelection(), "chart"); }
+    function tableSelectHandler(e) { thisObj.selectHandler(table.getSelection(), "table"); }
 
-    thisObj.selectHandler = function(selectionArray)
+    thisObj.selectHandler = function(selectionArray, source)
     {
         if(selectionArray.length > 0 && selectionArray[0].row != null)
         {
             thisObj.selectedRow = selectionArray[0].row;
+
+            if(source == "table")
+            {
+                // map to selected row in underyling data table
+                thisObj.selectedRow = tableDataView.getTableRowIndex(thisObj.selectedRow);
+            }
 
             // make sure row is valid
             if(thisObj.selectedRow >= x.length)
@@ -262,11 +286,13 @@ function drawTypeBTab1()
             }
 
             // form new array with only this entry (to avoid multiple selections)
-            var newSelectionArray = [{row:selectionArray[0].row}];
+            // selection arrays are different between the chart and table...
+            var newSelectionArrayChart = [{row:thisObj.selectedRow}];
+            var newSelectionArrayTable = [{row:tableDataView.getViewRowIndex(thisObj.selectedRow)}];
 
             // select element in chart and table
-            chart.setSelection(newSelectionArray);
-            table.setSelection(newSelectionArray);
+            chart.setSelection(newSelectionArrayChart);
+            table.setSelection(newSelectionArrayTable);
 
             if(parameters.surveillanceScale == "National")
             {
@@ -330,6 +356,12 @@ function drawTypeBTab2()
         }
     }
 
+    // final value for threshold 1/4
+    value = 25.0;
+    x.push(value);
+    xChartLabelMap[value] = "Detection Threshhold: " + value + "% (1/" + Math.round(100. / value) + ")";
+    xTableLabelMap[value] = value + "% (1/" + Math.round(100. / value) + ")";
+
     // use a parameters object to pass in any other input parameters to the evaluation function
     var parameters = new Object();
     parameters.population = calculatorTypeBInputs.population;
@@ -343,6 +375,9 @@ function drawTypeBTab2()
     // separate DataTable objects for chart / table to allow for formatting
     var dataChart = arraysToDataTable(labels, [x, y]);
     var dataTable = dataChart.clone();
+
+    // remove last row (1/4 threshold) from chart, since we don't want it drawn there...
+    dataChart.removeRow(52);
 
     // chart: use xChartLabelMap as the x label
     var formatterChart = new labelFormatter(xChartLabelMap);
@@ -371,7 +406,14 @@ function drawTypeBTab2()
     chart.draw(dataChart, optionsChart);
 
     var table = new google.visualization.Table(document.getElementById('calculatorB2_table_div'));
-    table.draw(dataTable, optionsTable);
+    var tableDataView = new google.visualization.DataView(dataTable);
+
+    if(calculatorTypeBInputs.tableMode2 == "simple")
+    {
+        tableDataView.setRows([1,6,52]);
+    }
+
+    table.draw(tableDataView, optionsTable);
 
     // selection handling
     var thisObj = drawTypeBTab2;
@@ -379,14 +421,20 @@ function drawTypeBTab2()
     google.visualization.events.addListener(chart, 'select', chartSelectHandler);
     google.visualization.events.addListener(table, 'select', tableSelectHandler);
 
-    function chartSelectHandler(e) { thisObj.selectHandler(chart.getSelection()); }
-    function tableSelectHandler(e) { thisObj.selectHandler(table.getSelection()); }
+    function chartSelectHandler(e) { thisObj.selectHandler(chart.getSelection(), "chart"); }
+    function tableSelectHandler(e) { thisObj.selectHandler(table.getSelection(), "table"); }
 
-    thisObj.selectHandler = function(selectionArray)
+    thisObj.selectHandler = function(selectionArray, source)
     {
         if(selectionArray.length > 0 && selectionArray[0].row != null)
         {
             thisObj.selectedRow = selectionArray[0].row;
+
+            if(source == "table")
+            {
+                // map to selected row in underyling data table
+                thisObj.selectedRow = tableDataView.getTableRowIndex(thisObj.selectedRow);
+            }
 
             // make sure row is valid
             if(thisObj.selectedRow >= x.length)
@@ -395,11 +443,13 @@ function drawTypeBTab2()
             }
 
             // form new array with only this entry (to avoid multiple selections)
-            var newSelectionArray = [{row:selectionArray[0].row}];
+            // selection arrays are different between the chart and table...
+            var newSelectionArrayChart = [{row:thisObj.selectedRow}];
+            var newSelectionArrayTable = [{row:tableDataView.getViewRowIndex(thisObj.selectedRow)}];
 
             // select element in chart and table
-            chart.setSelection(newSelectionArray);
-            table.setSelection(newSelectionArray);
+            chart.setSelection(newSelectionArrayChart);
+            table.setSelection(newSelectionArrayTable);
 
             if(parameters.surveillanceScale == "National")
             {
@@ -839,6 +889,22 @@ function calculatorTypeBInitialize()
 
     $("#calculatorB1_input_confidence_level").val($("#calculatorB1_input_confidence_level_slider").slider("value") + "%");
 
+    // tab 1: table toggle
+    $("#calculatorB1_table_toggle").button();
+
+    $("#calculatorB1_table_toggle").change(function() {
+        if(this.checked)
+        {
+            calculatorTypeBInputs.tableMode1 = "full";
+        }
+        else
+        {
+            calculatorTypeBInputs.tableMode1 = "simple";
+        }
+
+        calculatorTypeBRefresh();
+    });
+
     // tab 2: confidence level slider
     $("#calculatorB2_input_confidence_level_slider").slider({
         value:calculatorTypeBInputs.confidenceLevel2,
@@ -868,6 +934,22 @@ function calculatorTypeBInitialize()
     });
 
     $("#calculatorB2_input_p").val($("#calculatorB2_input_p_slider").slider("value") + "%");
+
+    // tab 2: table toggle
+    $("#calculatorB2_table_toggle").button();
+
+    $("#calculatorB2_table_toggle").change(function() {
+        if(this.checked)
+        {
+            calculatorTypeBInputs.tableMode2 = "full";
+        }
+        else
+        {
+            calculatorTypeBInputs.tableMode2 = "simple";
+        }
+
+        calculatorTypeBRefresh();
+    });
 
     // tab 3: confidence level slider
     $("#calculatorB3_input_confidence_level_slider").slider({
