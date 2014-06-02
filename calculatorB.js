@@ -890,8 +890,6 @@ function calculatorTypeBInitialize()
     $("#calculatorB1_input_confidence_level").val($("#calculatorB1_input_confidence_level_slider").slider("value") + "%");
 
     // tab 1: table toggle
-    $("#calculatorB1_table_toggle").button();
-
     $("#calculatorB1_table_toggle").change(function() {
         if(this.checked)
         {
@@ -936,8 +934,6 @@ function calculatorTypeBInitialize()
     $("#calculatorB2_input_p").val($("#calculatorB2_input_p_slider").slider("value") + "%");
 
     // tab 2: table toggle
-    $("#calculatorB2_table_toggle").button();
-
     $("#calculatorB2_table_toggle").change(function() {
         if(this.checked)
         {
