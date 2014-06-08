@@ -2,17 +2,16 @@
 //////////////////////////////// CALCULATOR D /////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-var calculatorTypeD2RangeMaxRareFluP = 7.;
-var calculatorTypeD2RareFluPBuffer = 0.5;
-
 // calculator type D inputs
 var calculatorTypeDInputs = {
     population:1,
     surveillanceScale:'National',
     confidenceLevel1:95,
     fluSampleSize2:1,
-    rareFluP3:1,
-    confidenceLevel3:95,
+    detectionThreshold3:5,
+    confidenceInterval3:80,
+    falseNegativeTolerance3:10,
+    falsePositiveTolerance3:25,
 };
 
 // tooltip text
@@ -24,10 +23,10 @@ var tooltipTypeDFluSampleSize = "The number of Flu+ specimens to be tested.";
 var tooltipTypeDSurveillanceScale = "This is the scale of the surveillance effort. The default is national, meaning that all states are contributing to a national surveillance effort proportional to their population size.  The number of samples that a state PHL needs to test is apportioned based on population size. The calculator also provides the option for states to calculate the number of specimens to test for detection of an antiviral resistant influenza event at a specific threshold within their state; however, the sample size for an individual state at the same threshold (e.g. 1/500 or 1/700) will be significantly larger than that needed for the national threshold.";
 
 // type D2 tooltips, for investigation:
-var tooltipTypeD2RareFluP = "This is the estimated prevalence of the antiviral resistant influenza among all Flu+ specimens (AVR+/Flu+). Although the actual prevalence of the antiviral resistant influenza may differ from the value chosen, this approximation still provides an important baseline for determining sample sizes.";
-var tooltipTypeD2ConfidenceLevel = "The desired confidence level for testing that the prevalence of the antiviral resistant influenza (AVR+/Flu+) does not exceed the prevalence threshold. The number of samples required will increase as the desired confidence level increases and as the prevalence threshold decreases. For example, determining that an antiviral resistant influenza has prevalence less than 2% is more difficult than determining its prevalence is less than 4%, and establishing a low prevalence with 99% confidence is more difficult than doing so with 90% confidence.";
-var tooltipTypeD2PrevalenceThreshold = "This is the highest value for the prevalence of the antiviral resistant influenza (AVR+/Flu+) that the PHL hopes to establish with the specified level of confidence.";
-var tooltipTypeD2MinimumFluSampleSize = "This is the minimum number of Flu+ specimens required to confirm that the prevalence of an antiviral resistant influenza is below a specified prevalence threshold, with the specified level of confidence.";
+var tooltipTypeD2DetectionThreshold = "detection threshold tooltip"
+var tooltipTypeD2ConfidenceInterval = "confidence interval tooltip";
+var tooltipTypeD2FalseNegativeTolerance = "false negative tolerance tooltip";
+var tooltipTypeD2FalsePositiveTolerance = "false positive tolerance tooltip";
 
 // active tab index
 var calculatorTypeDActiveTabIndex = 0;
@@ -107,43 +106,87 @@ function evaluateTypeD_confidenceLevel_vs_detectionThreshold(detectionThreshold)
 
 // type D2 evaluations, for investigation:
 
-// helper function so we only have to define this once.
-// must call this with a parameters object as "this"... use function.call(parameters, arg)
-function typeD2_getFluSampleSize(prevalenceThreshold)
+function phiInverse(value)
+{
+    return Math.sqrt(2.) * erfinv(2.*value - 1.);
+}
+
+function evaluateTypeD2_prevalenceLB_vs_fluSampleSize(fluSampleSize)
 {
     // this object contains parameter values
-
-    var errorPercentile = 100. - this.confidenceLevel;
-    var alpha = 1. - errorPercentile/100.;
-
-    // this is the inverse cumulative distribution function
-    var z = Math.sqrt(2.) * erfinv(2.*alpha - 1.);
-
-    var p = this.rareFluP / 100.;
-    var puHat = prevalenceThreshold / 100.;
-
-    // using equation from mathematica screenshot
-    var psi = 2. * ( 3.*p*p - 6.*puHat*p + 3.*puHat*puHat );
-    var firstTerm = -p + 5.*p*p + p*z*z + p*p*z*z + puHat - 8.*p*puHat + 2.*z*z*puHat - 4*p*z*z*puHat + 3.*puHat*puHat;
-    var secondTerm = Math.sqrt( Math.pow(p - 5.*p*p - p*z*z - p*p*z*z - puHat + 8.*p*puHat - 2.*z*z*puHat + 4.*p*z*z*puHat - 3.*puHat*puHat, 2) - 4.*(-p + 2.*p*p - 2.*p*z*z + 4*p*p*z*z + puHat - 2.*p*puHat + 2*z*z*puHat - 4.*p*z*z*puHat) * (3*p*p - 6.*p*puHat + 3.*puHat*puHat) );
-
-    var n = 1./psi * ( firstTerm  + secondTerm );
+    var P_T = this.population;
+    var P_S;
 
     if(this.surveillanceScale == "National")
     {
-        n = n * this.population / nationalPopulation;
+        P_S = nationalPopulation;
+    }
+    else if(this.surveillanceScale == "State")
+    {
+        P_S = P_T;
+    }
+    else
+    {
+        alert("unknown surveillance scale");
     }
 
-    return n;
+    var c = this.detectionThreshold / 100.;
+    var lambda = this.confidenceInterval / 100.;
+    var FNRmax = this.falseNegativeTolerance / 100.;
+    var FPRmax = this.falsePositiveTolerance / 100.;
+
+    if(FPRmax < lambda)
+    {
+        var n = P_S / P_T * fluSampleSize;
+        var K = (phiInverse(1. - FPRmax) + phiInverse(lambda)) / Math.sqrt(n);
+
+        var value = ( (2.*c + K*K) - Math.abs(K) * Math.sqrt(K*K + 4.*c*(1. - c)) ) / ( 2.*(1. + K*K) ) * 100.;
+
+        return Math.round(value * 100.) / 100.;
+    }
+    else
+    {
+        return c * 100.;
+    }
 }
 
-function evaluateTypeD2_FluSampleSize_vs_prevalenceThreshold(prevalenceThreshold)
+function evaluateTypeD2_prevalenceUB_vs_fluSampleSize(fluSampleSize)
 {
     // this object contains parameter values
+    var P_T = this.population;
+    var P_S;
 
-    var n = typeD2_getFluSampleSize.call(this, prevalenceThreshold);
+    if(this.surveillanceScale == "National")
+    {
+        P_S = nationalPopulation;
+    }
+    else if(this.surveillanceScale == "State")
+    {
+        P_S = P_T;
+    }
+    else
+    {
+        alert("unknown surveillance scale");
+    }
 
-    return Math.ceil(n);
+    var c = this.detectionThreshold / 100.;
+    var lambda = this.confidenceInterval / 100.;
+    var FNRmax = this.falseNegativeTolerance / 100.;
+    var FPRmax = this.falsePositiveTolerance / 100.;
+
+    if(FNRmax < 1. - lambda)
+    {
+        var n = P_S / P_T * fluSampleSize;
+        var L = (phiInverse(FNRmax) + phiInverse(lambda)) / Math.sqrt(n);
+
+        var value = ( (2.*c + L*L) + Math.abs(L) * Math.sqrt(L*L + 4.*c*(1. - c)) ) / ( 2.*(1. + L*L) ) * 100.;
+
+        return Math.round(value * 100.) / 100.;
+    }
+    else
+    {
+        return c * 100.;
+    }
 }
 
 // draw chart and table given labels, x series, y series
@@ -466,7 +509,7 @@ function drawTypeDTab2()
 
 function drawTypeDTab3()
 {
-    var labels = ['Prevalence Threshold (AVR+/Flu+)', 'Minimum Flu+ Sample Size'];
+    var labels = ['Flu+ sample size', 'lower bound', 'upper bound'];
     var x = [];
     var y;
 
@@ -474,13 +517,35 @@ function drawTypeDTab3()
     var parameters = new Object();
     parameters.population = calculatorTypeDInputs.population;
     parameters.surveillanceScale = calculatorTypeDInputs.surveillanceScale;
-    parameters.rareFluP = calculatorTypeDInputs.rareFluP3;
-    parameters.confidenceLevel = calculatorTypeDInputs.confidenceLevel3;
+    parameters.detectionThreshold = calculatorTypeDInputs.detectionThreshold3;
+    parameters.confidenceInterval = calculatorTypeDInputs.confidenceInterval3;
+    parameters.falseNegativeTolerance = calculatorTypeDInputs.falseNegativeTolerance3;
+    parameters.falsePositiveTolerance = calculatorTypeDInputs.falsePositiveTolerance3;
 
-    // range: prevalence threshhold
-    var min = parameters.rareFluP + calculatorTypeD2RareFluPBuffer;
-    var max = calculatorTypeD2RangeMaxRareFluP;
-    var numValues = Math.round((max - min) / 0.1 + 1.);
+    // range: Flu+ sample size
+    // compute based on an n value of 1 to 1000
+    // however, we will at least go up to 100 Flu+ samples...
+    var P_T = parameters.population;
+    var P_S;
+
+    if(parameters.surveillanceScale == "National")
+    {
+        P_S = nationalPopulation;
+    }
+    else if(parameters.surveillanceScale == "State")
+    {
+        P_S = P_T;
+    }
+    else
+    {
+        alert("unknown surveillance scale");
+    }
+
+    var maxFluSampleSize = 1000. * P_T / P_S;
+
+    var min = 1;
+    var max = Math.max(100, Math.ceil(maxFluSampleSize));
+    var numValues = Math.round((max - min) / 1.0 + 1.);
 
     for(var i=0; i<numValues; i++)
     {
@@ -491,25 +556,34 @@ function drawTypeDTab3()
     }
 
     // evaluation for each x
-    y = x.map(evaluateTypeD2_FluSampleSize_vs_prevalenceThreshold, parameters);
+    yLB = x.map(evaluateTypeD2_prevalenceLB_vs_fluSampleSize, parameters);
+    yUB = x.map(evaluateTypeD2_prevalenceUB_vs_fluSampleSize, parameters);
 
     // separate DataTable objects for chart / table to allow for formatting
-    var dataChart = arraysToDataTable(labels, [x, y]);
+    var dataChart = arraysToDataTable(labels, [x, yLB, yUB]);
     var dataTable = dataChart.clone();
 
-    // chart: format first column as percentage with prefix
-    var formatterChart = new google.visualization.NumberFormat( {pattern: "Prevalence Threshold (AVR+/Flu+): #.##'%'"} );
-    formatterChart.format(dataChart, 0);
+    // modify legend for just the chart
+    dataChart.setColumnLabel(1, "False positive boundary");
+    dataChart.setColumnLabel(2, "False negative boundary");
 
-    // table: format first column as percentage
+    // chart: format first column as percentage with prefix
+    var formatterChart0 = new google.visualization.NumberFormat( {pattern: "Flu+ sample size: #"} );
+    var formatterChart1 = new google.visualization.NumberFormat( {pattern: "#.##'%'"} );
+    formatterChart0.format(dataChart, 0);
+    formatterChart1.format(dataChart, 1);
+    formatterChart1.format(dataChart, 2);
+
+    // table: format second column as percentage
     var formatterTable = new google.visualization.NumberFormat( {pattern: "#.##'%'"} );
-    formatterTable.format(dataTable, 0);
+    formatterTable.format(dataTable, 1);
+    formatterTable.format(dataTable, 2);
 
     var optionsChart = {
         title: '',
-        hAxis : { title: labels[0], format: "#.##'%'" },
-        vAxis : { title: labels[1] },
-        legend : { position: 'none' },
+        hAxis : { title: labels[0] }, // logScale: true
+        vAxis : { title: "Prevalence of antiviral resistance", format: "#.##'%'" },
+        legend : { position: 'top' },
         fontSize : chartFontSize
     };
 
@@ -518,7 +592,7 @@ function drawTypeDTab3()
         width: '225px'
     };
 
-    $("#calculatorD3_chart_table_description_div").html("<span class='calculatorTooltip' title='" + tooltipTypeD2MinimumFluSampleSize + "'>Minimum sample size (of Flu+ specimens)</span> required to determine that the prevalence of an antiviral resistant influenza (AVR+/Flu+) does not exceed a specified <span class='calculatorTooltip' title='" + tooltipTypeD2PrevalenceThreshold + "'>prevalence threshold (AVR+/Flu+)</span>, with a confidence of " + formatTextParameter(parameters.confidenceLevel + "%") + ". These calculations assume that the estimated prevalence of the antiviral resistant influenza event (AVR+/Flu+) will be close to " + formatTextParameter(parameters.rareFluP + "%") + ". Use the mouse to view values in the sample size graph and scroll through sample size table.");
+    $("#calculatorD3_chart_table_description_div").html("Based these inputs, an antiviral resistance alarm will be triggered when the " + formatTextParameter(parameters.confidenceInterval + "%") + " confidence interval for antiviral prevalence includes the value " + formatTextParameter(parameters.detectionThreshold + "%") + ". As sample size increases, this threshold can be more precisely determined, and the probabilities of triggering the alarm too early or too late decrease. The graph and table below show the ranges of antiviral prevalence around the " + formatTextParameter(parameters.detectionThreshold + "%") + " threshold where the false positive rate is below the specified " + formatTextParameter(parameters.falsePositiveTolerance + "%") + " tolerance (region below blue line) and the false negative rate is below the specified " + formatTextParameter(parameters.falseNegativeTolerance + "%") + " tolerance (region above the red line). For a given sample size, when the true prevalence of antiviral resistance lies between the blue and red curves, surveillance data is likely to trigger the antiviral resistance alarm. These calculations assume a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + ". Use the mouse to view values in the sample size graph and scroll through sample size table.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorD3_chart_div'));
     chart.draw(dataChart, optionsChart);
@@ -556,11 +630,11 @@ function drawTypeDTab3()
 
             if(parameters.surveillanceScale == "National")
             {
-                $("#calculatorD3_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident that the actual prevalence of the antiviral resistant virus does not exceed " + formatTextParameter(x[thisObj.selectedRow] + "%") + " of Flu+ specimens,  the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " Flu+ specimens at a national level.");
+                $("#calculatorD3_chart_table_report_div").html("To detect when antiviral resistance reaches a threshold prevalence of " + formatTextParameter(parameters.detectionThreshold + "%") + ", while limiting the probability of a false alarm to less than than " + formatTextParameter(parameters.falsePositiveTolerance + "%") + " when the prevalence is lower than " + formatTextParameter(yLB[thisObj.selectedRow] + "%") + " and limiting the probability of a missed alarm to less than " + formatTextParameter(parameters.falseNegativeTolerance + "%") + " when the prevalence is higher than " + formatTextParameter(yUB[thisObj.selectedRow] + "%") + " <i>at a national level</i>, the PHL must test " + formatTextParameter(numberWithCommas(x[thisObj.selectedRow])) + " Flu+ specimens of the given type and subtype or lineage.");
             }
             else
             {
-                $("#calculatorD3_chart_table_report_div").html("To be " + formatTextParameter(parameters.confidenceLevel + "%") + " confident that the actual prevalence of the antiviral resistant virus does not exceed " + formatTextParameter(x[thisObj.selectedRow] + "%") + " of Flu+ specimens (within the population under surveillance),  the PHL must test " + formatTextParameter(numberWithCommas(y[thisObj.selectedRow])) + " Flu+ specimens.");
+                $("#calculatorD3_chart_table_report_div").html("To detect when antiviral resistance reaches a threshold prevalence of " + formatTextParameter(parameters.detectionThreshold + "%") + ", while limiting the probability of a false alarm to less than than " + formatTextParameter(parameters.falsePositiveTolerance + "%") + " when the prevalence is lower than " + formatTextParameter(yLB[thisObj.selectedRow] + "%") + " and limiting the probability of a missed alarm to less than " + formatTextParameter(parameters.falseNegativeTolerance + "%") + " when the prevalence is higher than " + formatTextParameter(yUB[thisObj.selectedRow] + "%") + ", the PHL must test " + formatTextParameter(numberWithCommas(x[thisObj.selectedRow])) + " Flu+ specimens of the given type and subtype or lineage.");
             }
         }
     }
@@ -580,10 +654,10 @@ function calculatorTypeDInitialize()
     $(".tooltipTypeDFluSampleSize").attr("title", tooltipTypeDFluSampleSize);
     $(".tooltipTypeDSurveillanceScale").attr("title", tooltipTypeDSurveillanceScale);
 
-    $(".tooltipTypeD2RareFluP").attr("title", tooltipTypeD2RareFluP);
-    $(".tooltipTypeD2ConfidenceLevel").attr("title", tooltipTypeD2ConfidenceLevel);
-    $(".tooltipTypeD2PrevalenceThreshold").attr("title", tooltipTypeD2PrevalenceThreshold);
-    $(".tooltipTypeD2MinimumFluSampleSize").attr("title", tooltipTypeD2MinimumFluSampleSize);
+    $(".tooltipTypeD2DetectionThreshold").attr("title", tooltipTypeD2DetectionThreshold);
+    $(".tooltipTypeD2ConfidenceInterval").attr("title", tooltipTypeD2ConfidenceInterval);
+    $(".tooltipTypeD2FalseNegativeTolerance").attr("title", tooltipTypeD2FalseNegativeTolerance);
+    $(".tooltipTypeD2FalsePositiveTolerance").attr("title", tooltipTypeD2FalsePositiveTolerance);
 
     // population options
     var populationOptions = $("#calculatorD_select_population");
@@ -677,35 +751,65 @@ function calculatorTypeDInitialize()
 
     $("#calculatorD2_input_flu_sample_size").val(calculatorTypeDInputs.fluSampleSize2);
 
-    // tab 3: expected AVR+/Flu+ slider
-    $("#calculatorD3_input_rare_flu_p_slider").slider({
-        value:calculatorTypeDInputs.rareFluP3,
-        min: 0.2,
-        max: 5,
-        step: 0.1,
+    // tab 3: AVR+/Flu+ detection threshold slider
+    $("#calculatorD3_input_detection_threshold_slider").slider({
+        value:calculatorTypeDInputs.detectionThreshold3,
+        min: 1,
+        max: 50,
+        step: 1,
         slide: function(event, ui) {
-            $("#calculatorD3_input_rare_flu_p").val(ui.value + "%");
-            calculatorTypeDInputs.rareFluP3 = parseFloat($("#calculatorD3_input_rare_flu_p").val());
+            $("#calculatorD3_input_detection_threshold").val(ui.value + "%");
+            calculatorTypeDInputs.detectionThreshold3 = parseFloat($("#calculatorD3_input_detection_threshold").val());
             calculatorTypeDRefresh();
         }
     });
 
-    $("#calculatorD3_input_rare_flu_p").val($("#calculatorD3_input_rare_flu_p_slider").slider("value") + "%");
+    $("#calculatorD3_input_detection_threshold").val($("#calculatorD3_input_detection_threshold_slider").slider("value") + "%");
 
-    // tab 3: confidence level slider
-    $("#calculatorD3_input_confidence_level_slider").slider({
-        value:calculatorTypeDInputs.confidenceLevel3,
+    // tab 3: confidence interval slider
+    $("#calculatorD3_input_confidence_interval_slider").slider({
+        value:calculatorTypeDInputs.confidenceInterval3,
         min: 80,
         max: 99,
         step: 1,
         slide: function(event, ui) {
-            $("#calculatorD3_input_confidence_level").val(ui.value + "%");
-            calculatorTypeDInputs.confidenceLevel3 = parseFloat($("#calculatorD3_input_confidence_level").val());
+            $("#calculatorD3_input_confidence_interval").val(ui.value + "%");
+            calculatorTypeDInputs.confidenceInterval3 = parseFloat($("#calculatorD3_input_confidence_interval").val());
             calculatorTypeDRefresh();
         }
     });
 
-    $("#calculatorD3_input_confidence_level").val($("#calculatorD3_input_confidence_level_slider").slider("value") + "%");
+    $("#calculatorD3_input_confidence_interval").val($("#calculatorD3_input_confidence_interval_slider").slider("value") + "%");
+
+    // tab 3: false negative tolerance slider
+    $("#calculatorD3_input_false_negative_tolerance_slider").slider({
+        value:calculatorTypeDInputs.falseNegativeTolerance3,
+        min: 1,
+        max: 50,
+        step: 1,
+        slide: function(event, ui) {
+            $("#calculatorD3_input_false_negative_tolerance").val(ui.value + "%");
+            calculatorTypeDInputs.falseNegativeTolerance3 = parseFloat($("#calculatorD3_input_false_negative_tolerance").val());
+            calculatorTypeDRefresh();
+        }
+    });
+
+    $("#calculatorD3_input_false_negative_tolerance").val($("#calculatorD3_input_false_negative_tolerance_slider").slider("value") + "%");
+
+    // tab 3: false positive tolerance slider
+    $("#calculatorD3_input_false_positive_tolerance_slider").slider({
+        value:calculatorTypeDInputs.falsePositiveTolerance3,
+        min: 1,
+        max: 50,
+        step: 1,
+        slide: function(event, ui) {
+            $("#calculatorD3_input_false_positive_tolerance").val(ui.value + "%");
+            calculatorTypeDInputs.falsePositiveTolerance3 = parseFloat($("#calculatorD3_input_false_positive_tolerance").val());
+            calculatorTypeDRefresh();
+        }
+    });
+
+    $("#calculatorD3_input_false_positive_tolerance").val($("#calculatorD3_input_false_positive_tolerance_slider").slider("value") + "%");
 }
 
 function calculatorTypeDRefresh()
