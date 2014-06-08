@@ -12,5 +12,6 @@
 .calculatorSmallTable { float:left; }
 .calculatorBigTable { clear: both; float:left; width: 600px; height: 300px; }
 .calculatorTextParameter { font-weight: bold; }
+.calculatorDataTableHeaderCell { font-size: 70%; }
 body { font-size:0.8em; width:700px; } /* adjust jquery UI font sizes */
 .ui-widget{ font-size:1.0em !important; } /* adjust jquery UI font sizes */

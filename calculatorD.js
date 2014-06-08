@@ -792,7 +792,8 @@ function drawTypeDTab4()
 
     // need to specify width here (rather than in CSS) for IE
     var optionsTable = {
-        width: '225px'
+        width: '235px',
+        cssClassNames: { headerCell: 'google-visualization-table-th gradient google-visualization-table-sorthdr calculatorDataTableHeaderCell' }
     };
 
     $("#calculatorD4_chart_table_description_div").html("Based these inputs, an antiviral resistance alarm will be triggered when the " + formatTextParameter(parameters.confidenceInterval + "%") + " confidence interval for antiviral prevalence includes the value " + formatTextParameter(parameters.detectionThreshold + "%") + ". The graph and table below show the probability of detection errors corresponding to a sample size of " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens. When the prevalence of antiviral resistance is lower than the " + formatTextParameter(parameters.detectionThreshold + "%") + " threshold, there is a chance of incorrectly triggering the alarm (false positives, blue); when the prevalence of antiviral resistance is greater than or equal to the " + formatTextParameter(parameters.detectionThreshold + "%") + " threshold, there is a chance of failing to detect that prevalence has exceeded the threshold (false negatives, red).  Error rates are largest close to the " + formatTextParameter(parameters.detectionThreshold + "%") + " detection threshold, and they increase as sample size decreases. This calculation assumes a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + ".");
