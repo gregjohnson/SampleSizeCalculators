@@ -548,6 +548,7 @@
                         <li><a href="#calculatorD_tabs-1">Detection</a></li>
                         <li><a href="#calculatorD_tabs-2">Data Confidence (detection)</a></li>
                         <li><a href="#calculatorD_tabs-3">Investigation</a></li>
+                        <li><a href="#calculatorD_tabs-4">Data Confidence (investigation)</a></li>
                     </ul>
 
                     <div id="calculatorD_tabs-1">
@@ -646,6 +647,46 @@
 
                         <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
                     </div> <!-- end tabs-3 -->
+
+                    <div id="calculatorD_tabs-4">
+                        <p>This calculator determines the power a given sample size has to detect whether antiviral resistance has reached a specified threshold, for a given influenza type and subtype or lineage. It assumes that the prevalence of antiviral resistance will be estimated by calculating the proportion of specimens that test positive for antiviral resistance (AVR+/Flu+) and confidence intervals around that proportion. Enter the sample size (number of specimens positive for the given influenza subtype or lineage), the threshold prevalence for antiviral resistance you wish to detect, and the size of the confidence intervals that will be used when estimating prevalence.</p>
+
+                        <!-- input: Flu+ number of samples -->
+                        <div class="calculatorInputArea">
+                            <label for="calculatorD4_input_flu_sample_size" class="calculatorLabel calculatorTooltip tooltipTypeD2FluSampleSize">Flu+ Sample Size</label>
+                            <input id="calculatorD4_input_flu_sample_size" type="number" class="calculatorNumberInput" />
+                        </div>
+
+                        <!-- input: AVR+/Flu+ detection threshold -->
+                        <div class="calculatorInputArea">
+                            <label for="calculatorD4_input_detection_threshold" class="calculatorLabel calculatorTooltip tooltipTypeD2DetectionThreshold">AVR+/Flu+ detection threshold</label>
+                            <div id="calculatorD4_input_detection_threshold_slider" class="calculatorSlider"></div>
+                            <input type="text" id="calculatorD4_input_detection_threshold" class="calculatorSliderInput" />
+                        </div>
+
+                        <!-- input: confidence interval -->
+                        <div class="calculatorInputArea">
+                            <label for="calculatorD4_input_confidence_interval" class="calculatorLabel calculatorTooltip tooltipTypeD2ConfidenceInterval">Confidence interval</label>
+                            <div id="calculatorD4_input_confidence_interval_slider" class="calculatorSlider"></div>
+                            <input type="text" id="calculatorD4_input_confidence_interval" class="calculatorSliderInput" />
+                        </div>
+
+                        <br style="clear:both;" />
+                        <br style="clear:both;" />
+                        <div id="calculatorD4_chart_table_description_div"> </div>
+
+                        <!-- chart and table -->
+                        <div id="calculatorD4_chart_div" class="calculatorSmallChart"></div>
+
+                        <!-- the table ignores height specification in class so must specify it here -->
+                        <div id="calculatorD4_table_div" class="calculatorSmallTable" style="height:200px; padding-top:50px;"></div>
+
+                        <br style="clear:both;" />
+
+                        <div id="calculatorD4_chart_table_report_div"> </div>
+
+                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
+                    </div> <!-- end tabs-4 -->
                 </div> <!-- end tabs -->
             </div> <!-- end Calculator D -->
         </div> <!-- end accordion -->
