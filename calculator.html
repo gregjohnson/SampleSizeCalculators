@@ -545,60 +545,11 @@
 
                 <div id="calculatorD_tabs" class="calculatorTabsContainer">
                     <ul>
+                        <li><a href="#calculatorD_tabs-3">Threshold Detection</a></li>
+                        <li><a href="#calculatorD_tabs-4">Data Confidence (Threshold)</a></li>
                         <li><a href="#calculatorD_tabs-1">Detection</a></li>
                         <li><a href="#calculatorD_tabs-2">Data Confidence (detection)</a></li>
-                        <li><a href="#calculatorD_tabs-3">Investigation</a></li>
-                        <li><a href="#calculatorD_tabs-4">Data Confidence (investigation)</a></li>
                     </ul>
-
-                    <div id="calculatorD_tabs-1">
-                        <!-- input: confidence level -->
-                        <div class="calculatorInputArea">
-                            <label for="calculatorD1_input_confidence_level" class="calculatorLabel calculatorTooltip tooltipTypeDConfidenceLevel">Confidence level</label>
-                            <div id="calculatorD1_input_confidence_level_slider" class="calculatorSlider"></div>
-                            <input type="text" id="calculatorD1_input_confidence_level" class="calculatorSliderInput" />
-                        </div>
-
-                        <br style="clear:both;" />
-                        <br style="clear:both;" />
-                        <div id="calculatorD1_chart_table_description_div"> </div>
-
-                        <!-- chart and table -->
-                        <div id="calculatorD1_chart_div" class="calculatorSmallChart"></div>
-
-                        <!-- the table ignores height specification in class so must specify it here -->
-                        <div id="calculatorD1_table_div" class="calculatorSmallTable" style="height:200px; padding-top:50px;"></div>
-
-                        <br style="clear:both;" />
-
-                        <div id="calculatorD1_chart_table_report_div"> </div>
-
-                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
-                    </div> <!-- end tabs-1 -->
-
-                    <div id="calculatorD_tabs-2">
-                        <!-- input: Flu+ number of samples -->
-                        <div class="calculatorInputArea">
-                            <label for="calculatorD2_input_flu_sample_size" class="calculatorLabel calculatorTooltip tooltipTypeDFluSampleSize">Flu+ Sample Size</label>
-                            <input id="calculatorD2_input_flu_sample_size" type="number" class="calculatorNumberInput" />
-                        </div>
-
-                        <br style="clear:both;" />
-                        <br style="clear:both;" />
-                        <div id="calculatorD2_chart_table_description_div"> </div>
-
-                        <!-- chart and table -->
-                        <div id="calculatorD2_chart_div" class="calculatorSmallChart"></div>
-
-                        <!-- the table ignores height specification in class so must specify it here -->
-                        <div id="calculatorD2_table_div" class="calculatorSmallTable" style="height:200px; padding-top:50px;"></div>
-
-                        <br style="clear:both;" />
-
-                        <div id="calculatorD2_chart_table_report_div"> </div>
-
-                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
-                    </div> <!-- end tabs-2 -->
 
                     <div id="calculatorD_tabs-3">
                         <p>This calculator recommends sample sizes for detecting whether antiviral resistance has reached a specified threshold, for a given influenza type and subtype or lineage. It assumes that the prevalence of antiviral resistance will be estimated by calculating the proportion of specimens that test positive for antiviral resistance (AVR+/Flu+) and confidence intervals around that proportion. When the prevalence of antiviral resistance is lower than the desired threshold, there is a chance of incorrectly triggering the alarm (false positives). Conversely, when the prevalence of antiviral resistance is greater than or equal to the threshold, there is a chance of failing to detect that prevalence has exceeded the threshold (false negatives).  Enter the threshold prevalence for antiviral resistance you wish to detect, the size of the confidence intervals that will be used when estimating prevalence, a maximum tolerance for false positives, and a maximum tolerance for false negatives.</p>
@@ -687,6 +638,55 @@
 
                         <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
                     </div> <!-- end tabs-4 -->
+
+                    <div id="calculatorD_tabs-1">
+                        <!-- input: confidence level -->
+                        <div class="calculatorInputArea">
+                            <label for="calculatorD1_input_confidence_level" class="calculatorLabel calculatorTooltip tooltipTypeDConfidenceLevel">Confidence level</label>
+                            <div id="calculatorD1_input_confidence_level_slider" class="calculatorSlider"></div>
+                            <input type="text" id="calculatorD1_input_confidence_level" class="calculatorSliderInput" />
+                        </div>
+
+                        <br style="clear:both;" />
+                        <br style="clear:both;" />
+                        <div id="calculatorD1_chart_table_description_div"> </div>
+
+                        <!-- chart and table -->
+                        <div id="calculatorD1_chart_div" class="calculatorSmallChart"></div>
+
+                        <!-- the table ignores height specification in class so must specify it here -->
+                        <div id="calculatorD1_table_div" class="calculatorSmallTable" style="height:200px; padding-top:50px;"></div>
+
+                        <br style="clear:both;" />
+
+                        <div id="calculatorD1_chart_table_report_div"> </div>
+
+                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
+                    </div> <!-- end tabs-1 -->
+
+                    <div id="calculatorD_tabs-2">
+                        <!-- input: Flu+ number of samples -->
+                        <div class="calculatorInputArea">
+                            <label for="calculatorD2_input_flu_sample_size" class="calculatorLabel calculatorTooltip tooltipTypeDFluSampleSize">Flu+ Sample Size</label>
+                            <input id="calculatorD2_input_flu_sample_size" type="number" class="calculatorNumberInput" />
+                        </div>
+
+                        <br style="clear:both;" />
+                        <br style="clear:both;" />
+                        <div id="calculatorD2_chart_table_description_div"> </div>
+
+                        <!-- chart and table -->
+                        <div id="calculatorD2_chart_div" class="calculatorSmallChart"></div>
+
+                        <!-- the table ignores height specification in class so must specify it here -->
+                        <div id="calculatorD2_table_div" class="calculatorSmallTable" style="height:200px; padding-top:50px;"></div>
+
+                        <br style="clear:both;" />
+
+                        <div id="calculatorD2_chart_table_report_div"> </div>
+
+                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
+                    </div> <!-- end tabs-2 -->
                 </div> <!-- end tabs -->
             </div> <!-- end Calculator D -->
         </div> <!-- end accordion -->

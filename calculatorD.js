@@ -1068,19 +1068,19 @@ function calculatorTypeDRefresh()
 {
     if(calculatorTypeDActiveTabIndex == 0)
     {
-        drawTypeDTab1();
+        drawTypeDTab3();
     }
     else if(calculatorTypeDActiveTabIndex == 1)
     {
-        drawTypeDTab2();
+        drawTypeDTab4();
     }
     else if(calculatorTypeDActiveTabIndex == 2)
     {
-        drawTypeDTab3();
+        drawTypeDTab1();
     }
     else if(calculatorTypeDActiveTabIndex == 3)
     {
-        drawTypeDTab4();
+        drawTypeDTab2();
     }
     else
     {
