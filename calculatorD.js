@@ -678,7 +678,7 @@ function drawTypeDTab3()
         width: '225px'
     };
 
-    $("#calculatorD3_chart_table_description_div").html("Based these inputs, an antiviral resistance alarm will be triggered when the " + formatTextParameter(parameters.confidenceInterval + "%") + " confidence interval for antiviral prevalence includes the value " + formatTextParameter(parameters.detectionThreshold + "%") + ". As sample size increases, this threshold can be more precisely determined, and the probabilities of triggering the alarm too early or too late decrease. The graph and table below show the ranges of antiviral prevalence around the " + formatTextParameter(parameters.detectionThreshold + "%") + " threshold where the false positive rate is below the specified " + formatTextParameter(parameters.falsePositiveTolerance + "%") + " tolerance (region below blue line) and the false negative rate is below the specified " + formatTextParameter(parameters.falseNegativeTolerance + "%") + " tolerance (region above the red line). For a given sample size, when the true prevalence lies between the blue and red curves, surveillance data is likely to trigger the antiviral resistance alarm too early or too late. These calculations assume a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + ". Use the mouse to view values in the sample size graph and scroll through sample size table.");
+    $("#calculatorD3_chart_table_description_div").html("Based these inputs, an antiviral resistance alarm will be triggered when the " + formatTextParameter(parameters.confidenceInterval + "%") + " confidence interval for antiviral prevalence includes the value " + formatTextParameter(parameters.detectionThreshold + "%") + ". As sample size increases, antiviral prevalence can be determined more precisely, and the probabilities of triggering the alarm too early or too late decrease. The graph and table below show the ranges of antiviral prevalence around the " + formatTextParameter(parameters.detectionThreshold + "%") + " threshold where the false positive rate is below the specified " + formatTextParameter(parameters.falsePositiveTolerance + "%") + " tolerance (region below blue line) and the false negative rate is below the specified " + formatTextParameter(parameters.falseNegativeTolerance + "%") + " tolerance (region above the red line). For a given sample size, when the true prevalence lies between the blue and red curves, surveillance data is likely to trigger the antiviral resistance alarm too early or too late. These calculations assume a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + ". Use the mouse to view values in the sample size graph and scroll through sample size table.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorD3_chart_div'));
     chart.draw(dataChart, optionsChart);
@@ -716,11 +716,11 @@ function drawTypeDTab3()
 
             if(parameters.surveillanceScale == "National")
             {
-                $("#calculatorD3_chart_table_report_div").html("To detect when antiviral resistance reaches a threshold prevalence of " + formatTextParameter(parameters.detectionThreshold + "%") + " <i>at a national level</i>, while limiting the probability of a false alarm to less than than " + formatTextParameter(parameters.falsePositiveTolerance + "%") + " when the prevalence is lower than " + formatTextParameter(yLB[thisObj.selectedRow] + "%") + " and limiting the probability of a missed alarm to less than " + formatTextParameter(parameters.falseNegativeTolerance + "%") + " when the prevalence is higher than " + formatTextParameter(yUB[thisObj.selectedRow] + "%") + ", the PHL must test " + formatTextParameter(numberWithCommas(x[thisObj.selectedRow])) + " Flu+ specimens of the given type and subtype or lineage.");
+                $("#calculatorD3_chart_table_report_div").html("To detect when antiviral resistance reaches a threshold prevalence of " + formatTextParameter(parameters.detectionThreshold + "%") + " <i>at a national level</i>, while limiting the probability of a false alarm to less than than " + formatTextParameter(parameters.falsePositiveTolerance + "%") + " when the prevalence is lower than " + formatTextParameter(yLB[thisObj.selectedRow] + "%") + " and limiting the probability of a missed alarm to less than " + formatTextParameter(parameters.falseNegativeTolerance + "%") + " when the prevalence is higher than " + formatTextParameter(yUB[thisObj.selectedRow] + "%") + ", the PHL must test " + formatTextParameter(numberWithCommas(x[thisObj.selectedRow])) + " Flu+ specimens of the given type and subtype or lineage. If the prevalence of antiviral resistance lies between " + formatTextParameter(yLB[thisObj.selectedRow] + "%") + " and " + formatTextParameter(parameters.detectionThreshold + "%") + ", then there will be at least a " + formatTextParameter(parameters.falsePositiveTolerance + "%") + " chance of falsely concluding that the prevalence exceeds the " + formatTextParameter(parameters.detectionThreshold + "%") + " threshold; when the prevalence of antiviral resistance lies between " + formatTextParameter(parameters.detectionThreshold + "%") + " and " + formatTextParameter(yUB[thisObj.selectedRow] + "%") + ", then there will be at least a " + formatTextParameter(parameters.falseNegativeTolerance + "%") + " chance of failing to detect that prevalence exceeds the " + formatTextParameter(parameters.detectionThreshold + "%") + " threshold.");
             }
             else
             {
-                $("#calculatorD3_chart_table_report_div").html("To detect when antiviral resistance reaches a threshold prevalence of " + formatTextParameter(parameters.detectionThreshold + "%") + ", while limiting the probability of a false alarm to less than than " + formatTextParameter(parameters.falsePositiveTolerance + "%") + " when the prevalence is lower than " + formatTextParameter(yLB[thisObj.selectedRow] + "%") + " and limiting the probability of a missed alarm to less than " + formatTextParameter(parameters.falseNegativeTolerance + "%") + " when the prevalence is higher than " + formatTextParameter(yUB[thisObj.selectedRow] + "%") + ", the PHL must test " + formatTextParameter(numberWithCommas(x[thisObj.selectedRow])) + " Flu+ specimens of the given type and subtype or lineage.");
+                $("#calculatorD3_chart_table_report_div").html("To detect when antiviral resistance reaches a threshold prevalence of " + formatTextParameter(parameters.detectionThreshold + "%") + ", while limiting the probability of a false alarm to less than than " + formatTextParameter(parameters.falsePositiveTolerance + "%") + " when the prevalence is lower than " + formatTextParameter(yLB[thisObj.selectedRow] + "%") + " and limiting the probability of a missed alarm to less than " + formatTextParameter(parameters.falseNegativeTolerance + "%") + " when the prevalence is higher than " + formatTextParameter(yUB[thisObj.selectedRow] + "%") + ", the PHL must test " + formatTextParameter(numberWithCommas(x[thisObj.selectedRow])) + " Flu+ specimens of the given type and subtype or lineage. If the prevalence of antiviral resistance lies between " + formatTextParameter(yLB[thisObj.selectedRow] + "%") + " and " + formatTextParameter(parameters.detectionThreshold + "%") + ", then there will be at least a " + formatTextParameter(parameters.falsePositiveTolerance + "%") + " chance of falsely concluding that the prevalence exceeds the " + formatTextParameter(parameters.detectionThreshold + "%") + " threshold; when the prevalence of antiviral resistance lies between " + formatTextParameter(parameters.detectionThreshold + "%") + " and " + formatTextParameter(yUB[thisObj.selectedRow] + "%") + ", then there will be at least a " + formatTextParameter(parameters.falseNegativeTolerance + "%") + " chance of failing to detect that prevalence exceeds the " + formatTextParameter(parameters.detectionThreshold + "%") + " threshold.");
             }
         }
     }
@@ -832,22 +832,31 @@ function drawTypeDTab4()
             chart.setSelection(newSelectionArray);
             table.setSelection(newSelectionArray);
 
-            var nationalString = "";
-
-            if(parameters.surveillanceScale == "National")
-            {
-                nationalString = " at a national level";
-            }
+            var rateType;
+            var formattedValue;
 
             if(x[thisObj.selectedRow] < parameters.detectionThreshold)
             {
                 // false positive
-                $("#calculatorD4_chart_table_report_div").html("If the laboratory tested " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens, and the true prevalence of antiviral resistance is " + formatTextParameter(x[thisObj.selectedRow] + "%") + ", the PHL has a " + formatTextParameter(yFP[thisObj.selectedRow] + "%") + " false positive rate" + nationalString + ".");
+                rateType = "positive";
+                formattedValue = formatTextParameter(yFP[thisObj.selectedRow] + "%");
             }
             else
             {
                 // false negative
-                $("#calculatorD4_chart_table_report_div").html("If the laboratory tested " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens, and the true prevalence of antiviral resistance is " + formatTextParameter(x[thisObj.selectedRow] + "%") + ", the PHL has a " + formatTextParameter(yFN[thisObj.selectedRow] + "%") + " false negative rate" + nationalString + ".");
+                rateType = "negative";
+                formattedValue = formatTextParameter(yFN[thisObj.selectedRow] + "%");
+            }
+
+            if(parameters.surveillanceScale == "National")
+            {
+                // national
+                $("#calculatorD4_chart_table_report_div").html("If the PHL tests " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens of the given type and subtype or lineage, and the true prevalence of antiviral resistance is " + formatTextParameter(x[thisObj.selectedRow] + "%") + ", then the PHL contribution to national surveillance will correspond to a " + formattedValue + " false " + rateType + " rate. This assumes that all public health labs are undertaking similar sampling efforts (proportional to their population size).");
+            }
+            else
+            {
+                // state
+                $("#calculatorD4_chart_table_report_div").html("If the PHL tests " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens of the given type and subtype or lineage, and the true prevalence of antiviral resistance is " + formatTextParameter(x[thisObj.selectedRow] + "%") + ", then the PHL will have a " + formattedValue + " false " + rateType + " rate.");
             }
         }
     }
