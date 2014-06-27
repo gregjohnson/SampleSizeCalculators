@@ -981,7 +981,7 @@ function calculatorTypeBInitialize()
     $("#calculatorB3_input_detection_threshold_slider").slider({
         value:calculatorTypeBInputs.detectionThreshold3,
         min: -0.1,
-        max: 5,
+        max: 5.1,
         step: 0.1,
         slide: function(event, ui) {
             // we need to remap values to capture the 1/1000, 1/700, 1/600 cases
@@ -1002,6 +1002,12 @@ function calculatorTypeBInitialize()
             if(ui.value == 0.6)
             {
                 ui.value = 0.606;
+            }
+
+            // and the 1/4 case
+            if(ui.value == 5.1)
+            {
+                ui.value = 25.;
             }
 
             $("#calculatorB3_input_detection_threshold").val(ui.value + "% (1/" + Math.round(100. / ui.value) + ")");
