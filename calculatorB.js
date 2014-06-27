@@ -632,6 +632,7 @@ function drawTypeBTab4()
     detectionThresholdValues.push(100.*1./200.);
     detectionThresholdValues.push(100.*1./165.);
     detectionThresholdValues.push(100.*0.05);
+    detectionThresholdValues.push(100.*1./4.);
 
     var confidenceLevelValues = [];
 
