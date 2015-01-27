@@ -224,27 +224,11 @@ function onLoad()
 {
     // create accordion
     $("#calculator_accordion").accordion({ heightStyle: "content", activate: function(event, ui) {
-        // show popup when new calculator is activated; note the weird indexing...
-        if(ui.newPanel.index() == 1)
-        {
-            showCalculatorPopup('A');
-        }
-        else if(ui.newPanel.index() == 3)
-        {
-            showCalculatorPopup('B');
-        }
-        else if(ui.newPanel.index() == 5)
-        {
-            showCalculatorPopup('C');
-        }
 
-        calculatorTypeARefresh(); calculatorTypeBRefresh(); calculatorTypeCRefresh(); calculatorTypeDRefresh();
+        calculatorTypeDRefresh();
     } });
 
     // create individual calculator tabs; trigger a refresh on activation so charts are correctly sized
-    $("#calculatorA_tabs").tabs({ activate: function(event, ui) { calculatorTypeAActiveTabIndex = ui.newTab.index(); calculatorTypeARefresh(); } });
-    $("#calculatorB_tabs").tabs({ activate: function(event, ui) { calculatorTypeBActiveTabIndex = ui.newTab.index(); calculatorTypeBRefresh(); } });
-    $("#calculatorC_tabs").tabs({ activate: function(event, ui) { calculatorTypeCActiveTabIndex = ui.newTab.index(); calculatorTypeCRefresh(); } });
     $("#calculatorD_tabs").tabs({ activate: function(event, ui) { calculatorTypeDActiveTabIndex = ui.newTab.index(); calculatorTypeDRefresh(); } });
 
     // global tooltips
@@ -261,29 +245,12 @@ function onLoad()
         slide: function(event, ui) {
             $("#calculators_input_MAILI").val(ui.value + "%");
             inputMAILIPercentage = parseFloat($("#calculators_input_MAILI").val());
-
-            // refresh all calculators since they depend on this value
-            calculatorTypeARefresh();
-
-            // for now, it does not refresh calculators B, C, D
-            // calculatorTypeBRefresh();
-            // calculatorTypeCRefresh();
-            // calculatorTypeDRefresh();
         }
     });
 
     $("#calculators_input_MAILI").val($("#calculators_input_MAILI_slider").slider("value") + "%");
 
     // initialize and refresh individual calculators
-    calculatorTypeAInitialize();
-    calculatorTypeARefresh();
-
-    calculatorTypeBInitialize();
-    calculatorTypeBRefresh();
-
-    calculatorTypeCInitialize();
-    calculatorTypeCRefresh();
-
     calculatorTypeDInitialize();
     calculatorTypeDRefresh();
 
@@ -300,16 +267,5 @@ function onLoad()
         {
             $("#calculator_accordion").accordion('option', 'active', hashInt);
         }
-
-        if(hashInt == 0)
-        {
-            // show calculator A popup (since the hash won't trigger an activate event)
-            showCalculatorPopup('A');
-        }
-    }
-    else
-    {
-        // show calculator A popup (since the page load won't trigger an activate event)
-        showCalculatorPopup('A');
     }
 }
