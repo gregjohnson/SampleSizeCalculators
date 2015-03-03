@@ -20,7 +20,7 @@ google.setOnLoadCallback(onLoad);
 var populationToILIFactorBase = 2.5 / (52. * 100.); // corresponds to 2.5 doctor visits per year
 
 // global input: MA-ILI percentage
-var inputMAILIPercentage = 2.2;
+var inputMAILIPercentage = 2.0;
 
 // tooltip text
 var tooltipMAILI = "The proportion of outpatient visits for ILI. If known, select the proportion related to the population/jurisdiction under surveillance. Alternatively, the PHL can visit FluView and under 'Outpatient Illness Surveillance' the PHL can see the national proportion.";
