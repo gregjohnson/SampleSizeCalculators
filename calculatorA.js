@@ -415,14 +415,26 @@ function calculatorTypeAInitialize()
 
 
     // assumed prevalence slider
-    // the maximum here is 99% since at 100% the required sample size is 0
+    // the maximum here is 99.9% since at 100% the required sample size is 0
+    // note the range is [0.1, 1.0] by 0.1 increments; [1.0, 99.0] by 1.0 increments, [99.0, 99.9] by 0.1 increments
     $("#calculatorA_input_p_slider").slider({
         value:calculatorTypeAInputs.p,
-        min: 1,
-        max: 99,
+        min: -8,
+        max: 108,
         step: 1,
         slide: function(event, ui) {
-            $("#calculatorA_input_p").val(ui.value + "%");
+            var value = parseFloat(ui.value);
+
+            // transform values outside of [1.0, 99.0] for 0.1 increments
+            if(value < 1.0)
+                value = 1.0 + (value - 1.0) / 10.0;
+            else if(value > 99.0)
+                value = 99.0 + (value - 99.0) / 10.0;
+
+            // round to the nearest tenth to avoid floating point math errors
+            value = Math.round(value*10) / 10.0;
+
+            $("#calculatorA_input_p").val(value + "%");
             calculatorTypeAInputs.p = parseFloat($("#calculatorA_input_p").val());
             calculatorTypeARefresh();
         }
