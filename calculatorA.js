@@ -427,10 +427,10 @@ function calculatorTypeAInitialize()
             var value = parseFloat(ui.value);
 
             // transform values outside of [1.0, 99.0] for 0.1 increments
-            if(value < 1.0)
-                value = 1.0 + (value - 1.0) / 10.0;
-            else if(value > 99.0)
-                value = 99.0 + (value - 99.0) / 10.0;
+            //if(value < 1.0)
+            //    value = 1.0 + (value - 1.0) / 10.0;
+            //else if(value > 99.0)
+            //    value = 99.0 + (value - 99.0) / 10.0;
 
             // round to the nearest tenth to avoid floating point math errors
             value = Math.round(value*10) / 10.0;
