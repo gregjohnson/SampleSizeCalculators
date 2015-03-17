@@ -256,7 +256,7 @@ function onLoad()
     $("#calculators_input_MAILI_slider").slider({
         value:inputMAILIPercentage,
         min: 1,
-        max: 5,
+        max: 20,
         step: 0.1,
         slide: function(event, ui) {
             $("#calculators_input_MAILI").val(ui.value + "%");

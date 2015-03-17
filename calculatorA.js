@@ -420,7 +420,7 @@ function calculatorTypeAInitialize()
         value:calculatorTypeAInputs.p,
         min: 1,
         max: 99,
-        step: 1,
+        step: 0.1,
         slide: function(event, ui) {
             $("#calculatorA_input_p").val(ui.value + "%");
             calculatorTypeAInputs.p = parseFloat($("#calculatorA_input_p").val());
