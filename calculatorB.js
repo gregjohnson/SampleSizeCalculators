@@ -26,7 +26,7 @@ var tooltipTypeBExpectedFluMAILI = "This is the PHL's surveillance target; the l
 var tooltipTypeBDetectionThreshold = "The detection threshold for a rare/novel influenza is the prevalence of the rare/novel influenza (out of all Flu+ cases) at which the first rare/novel influenza specimens are expected to appear in the lab. For example, a detection threshold of 1/700 means that rare/novel influenza should be detected by the lab when it rises to a prevalence of one out of every 700 cases of influenza.";
 var tooltipTypeBMinimumFluSampleSize = "The minimum number of Flu+ specimens required to detect a rare/novel influenza when its prevalence (Rare+/Flu+) reaches the specified detection threshold, with the specified level of confidence.";
 var tooltipTypeBMinimumMAILISampleSize = "The minimum number of unscreened MA-ILI specimens required to detect a rare/novel influenza when its prevalence (Rare+/Flu+) reaches the specified detection threshold, with the specified level of confidence.";
-var tooltipTypeBFluSampleSize = "The number of Flu+ specimens to be tested. Both Flu+ and unscreened MA-ILI specimens can be used to detect rare/novel influenza specimens. However, many more unscreened MA-ILI specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI) is low.";
+var tooltipTypeBFluSampleSize = "The number of Flu+ specimens to be tested.";
 var tooltipTypeBMAILISampleSize = "The number of unscreened MA-ILI specimens to be tested. Both Flu+ and unscreened MA-ILI specimens can be used to detect rare/novel influenza specimens. However, many more unscreened MA-ILI specimens are typically required than Flu+ specimens to achieve the same power of detection, particularly when the overall prevalence of influenza (Flu+/MA-ILI) is low.";
 var tooltipTypeBSurveillanceScale = "This is the scale of the surveillance effort. The default is national, meaning that all states are contributing to a national surveillance effort proportional to their population size.  The number of samples that a state PHL needs to test is apportioned based on population size. The calculator also provides the option for states to calculate the number of specimens to test for detection of a rare/novel influenza event at a specific threshold within their state; however, the sample size for an individual state at the same threshold (e.g. 1/500 or 1/700) will be significantly larger than that needed for the national threshold.";
 
@@ -741,7 +741,7 @@ function drawTypeBTab4()
         width: '225px'
     };
 
-    $("#calculatorB4_chart_table_description_div").html("Enter the PHL's sample sizes in the boxes above (number of Flu+ and unscreened MA-ILI specimens to be tested). The graph and table show the best combinations of <span class='calculatorTooltip' title='" + tooltipTypeBDetectionThreshold + "'>detection threshold</span> and <span class='calculatorTooltip' title='" + tooltipTypeBConfidenceLevel + "'>confidence level</span> achievable with " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " unscreened MA-ILI specimens. This calculation assumes a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + " and a Flu+/MA-ILI prevalence of " + formatTextParameter(parameters.p + "%") + ". There is a trade-off between detection threshold and confidence level. Intuitively, the lower the prevalence of a rare/novel influenza, the less likely it will be detected, and vice versa. Use the mouse to view values in the graph and scroll through the table.");
+    $("#calculatorB4_chart_table_description_div").html("Enter the PHL's sample size in the box above (number of Flu+ specimens to be tested). The graph and table show the best combinations of <span class='calculatorTooltip' title='" + tooltipTypeBDetectionThreshold + "'>detection threshold</span> and <span class='calculatorTooltip' title='" + tooltipTypeBConfidenceLevel + "'>confidence level</span> achievable with " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens. This calculation assumes a total population of " + formatTextParameter(numberWithCommas(parameters.population)) + ". There is a trade-off between detection threshold and confidence level. Intuitively, the lower the prevalence of a rare/novel influenza, the less likely it will be detected, and vice versa. Use the mouse to view values in the graph and scroll through the table.");
 
     var chart = new google.visualization.LineChart(document.getElementById('calculatorB4_chart_div'));
     chart.draw(dataChart, optionsChart);
@@ -779,11 +779,11 @@ function drawTypeBTab4()
 
             if(parameters.surveillanceScale == "National")
             {
-                $("#calculatorB4_chart_table_report_div").html("If the laboratory tested " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " MA-ILI specimens and " + formatTextParameter(parameters.p + "%") + " estimated prevalence of Flu+/MA-ILI, the PHL can be " + formatTextParameter(Math.round(x[thisObj.selectedRow]*100.)/100. + "%") + " confident that the rare/novel influenza would be detected at a prevalence of " + formatTextParameter(yLabelMap[y[thisObj.selectedRow]]) + " at a national level.");
+                $("#calculatorB4_chart_table_report_div").html("If the laboratory tested " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens, the PHL can be " + formatTextParameter(Math.round(x[thisObj.selectedRow]*100.)/100. + "%") + " confident that the rare/novel influenza would be detected at a prevalence of " + formatTextParameter(yLabelMap[y[thisObj.selectedRow]]) + " at a national level.");
             }
             else
             {
-                $("#calculatorB4_chart_table_report_div").html("If the laboratory tested " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ and " + formatTextParameter(numberWithCommas(parameters.MAILISampleSize)) + " MA-ILI specimens and " + formatTextParameter(parameters.p + "%") + " estimated prevalence of Flu+/MA-ILI, the PHL can be " + formatTextParameter(Math.round(x[thisObj.selectedRow]*100.)/100. + "%") + " confident that the rare/novel influenza would be detected at a prevalence of " + formatTextParameter(yLabelMap[y[thisObj.selectedRow]]) + " (within the population under surveillance).");
+                $("#calculatorB4_chart_table_report_div").html("If the laboratory tested " + formatTextParameter(numberWithCommas(parameters.fluSampleSize)) + " Flu+ specimens, the PHL can be " + formatTextParameter(Math.round(x[thisObj.selectedRow]*100.)/100. + "%") + " confident that the rare/novel influenza would be detected at a prevalence of " + formatTextParameter(yLabelMap[y[thisObj.selectedRow]]) + " (within the population under surveillance).");
             }
         }
     }
@@ -1058,14 +1058,6 @@ function calculatorTypeBRefresh()
         drawTypeBTab1();
     }
     else if(calculatorTypeBActiveTabIndex == 1)
-    {
-        drawTypeBTab2();
-    }
-    else if(calculatorTypeBActiveTabIndex == 2)
-    {
-        drawTypeBTab3();
-    }
-    else if(calculatorTypeBActiveTabIndex == 3)
     {
         drawTypeBTab4();
     }

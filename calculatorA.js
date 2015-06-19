@@ -477,10 +477,6 @@ function calculatorTypeARefresh()
     }
     else if(calculatorTypeAActiveTabIndex == 1)
     {
-        drawTypeATab2();
-    }
-    else if(calculatorTypeAActiveTabIndex == 2)
-    {
         drawTypeATab3();
     }
     else

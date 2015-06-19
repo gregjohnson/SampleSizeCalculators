@@ -106,7 +106,6 @@
                 <div id="calculatorA_tabs" class="calculatorTabsContainer">
                     <ul>
                         <li><a href="#calculatorA_tabs-1">Sample Size</a></li>
-                        <li><a href="#calculatorA_tabs-2">Sample Size Table</a></li>
                         <li><a href="#calculatorA_tabs-3">Data Confidence</a></li>
                     </ul>
 
@@ -134,16 +133,6 @@
 
                         <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
                     </div> <!-- end tabs-1 -->
-
-                    <div id="calculatorA_tabs-2">
-                        <div id="calculatorA_big_table_description_div"> </div>
-                        <br style="clear:both;" />
-                        <div id="calculatorA_big_table_div" class="calculatorBigTable"> </div>
-                        <br style="clear:both;"/>
-                        <div id="calculatorA_big_table_report_div"> </div>
-
-                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
-                    </div> <!-- end tabs-2 -->
 
                     <div id="calculatorA_tabs-3">
                         <p>Instructions: The Data Confidence tab allows the PHL to input a sample size that already exists (e.g. the number of specimens already received in the past week in the laboratory) to determine the confidence the PHL can have in the sample size.</p>
@@ -202,8 +191,6 @@
                 <div id="calculatorB_tabs" class="calculatorTabsContainer">
                     <ul>
                         <li><a href="#calculatorB_tabs-1">Flu+ Sample Size</a></li>
-                        <li><a href="#calculatorB_tabs-2">MA-ILI Sample Size</a></li>
-                        <li><a href="#calculatorB_tabs-3">Combined Samples</a></li>
                         <li><a href="#calculatorB_tabs-4">Data Confidence</a></li>
                     </ul>
 
@@ -235,82 +222,6 @@
                         <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
                     </div> <!-- end tabs-1 -->
 
-                    <div id="calculatorB_tabs-2">
-                        <!-- input: confidence level -->
-                        <div class="calculatorInputArea">
-                            <label for="calculatorB2_input_confidence_level" class="calculatorLabel calculatorTooltip tooltipTypeBConfidenceLevel">Confidence level</label>
-                            <div id="calculatorB2_input_confidence_level_slider" class="calculatorSlider"></div>
-                            <input type="text" id="calculatorB2_input_confidence_level" class="calculatorSliderInput" />
-                        </div>
-
-                        <!-- input: assumed prevalence p -->
-                        <div class="calculatorInputArea">
-                            <label for="calculatorB2_input_p" class="calculatorLabel calculatorTooltip tooltipTypeBExpectedFluMAILI">Expected prevalence of Flu+/MA-ILI</label>
-                            <div id="calculatorB2_input_p_slider" class="calculatorSlider"></div>
-                            <input type="text" id="calculatorB2_input_p" class="calculatorSliderInput" />
-                        </div>
-
-                        <br style="clear:both;" />
-                        <br style="clear:both;" />
-                        <div id="calculatorB2_chart_table_description_div"> </div>
-
-                        <!-- chart and table -->
-                        <div id="calculatorB2_chart_div" class="calculatorSmallChart"></div>
-
-                        <!-- the table ignores height specification in class so must specify it here -->
-                        <input type="checkbox" id="calculatorB2_table_toggle"> <label for="calculatorB2_table_toggle" style="margin-top:15px;">Show full table</label>
-                        <div id="calculatorB2_table_div" class="calculatorSmallTable" style="height:200px; padding-top:10px;"></div>
-
-                        <br style="clear:both;" />
-
-                        <div id="calculatorB2_chart_table_report_div"> </div>
-
-                        <p>The recommended detection thresholds are: <i>1/700</i> during the high season, <i>1/200</i> during the low season, and <i>1/4</i> during the off season / summer.</p>
-
-                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
-                    </div> <!-- end tabs-2 -->
-
-                    <div id="calculatorB_tabs-3">
-                        <!-- input: confidence level -->
-                        <div class="calculatorInputArea">
-                            <label for="calculatorB3_input_confidence_level" class="calculatorLabel calculatorTooltip tooltipTypeBConfidenceLevel">Confidence level</label>
-                            <div id="calculatorB3_input_confidence_level_slider" class="calculatorSlider"></div>
-                            <input type="text" id="calculatorB3_input_confidence_level" class="calculatorSliderInput" />
-                        </div>
-
-                        <!-- input: assumed prevalence p -->
-                        <div class="calculatorInputArea">
-                            <label for="calculatorB3_input_p" class="calculatorLabel calculatorTooltip tooltipTypeBExpectedFluMAILI">Expected prevalence of Flu+/MA-ILI</label>
-                            <div id="calculatorB3_input_p_slider" class="calculatorSlider"></div>
-                            <input type="text" id="calculatorB3_input_p" class="calculatorSliderInput" />
-                        </div>
-
-                        <!-- input: detection threshold -->
-                        <div class="calculatorInputArea">
-                            <label for="calculatorB3_input_detection_threshold" class="calculatorLabel calculatorTooltip tooltipTypeBDetectionThreshold">Detection Threshold</label>
-                            <div id="calculatorB3_input_detection_threshold_slider" class="calculatorSlider"></div>
-                            <input type="text" id="calculatorB3_input_detection_threshold" class="calculatorSliderInput" />
-                        </div>
-
-                        <br style="clear:both;" />
-                        <br style="clear:both;" />
-                        <div id="calculatorB3_chart_table_description_div"> </div>
-
-                        <!-- chart and table -->
-                        <div id="calculatorB3_chart_div" class="calculatorSmallChart"></div>
-
-                        <!-- the table ignores height specification in class so must specify it here -->
-                        <div id="calculatorB3_table_div" class="calculatorSmallTable" style="height:200px; padding-top:50px;"></div>
-
-                        <br style="clear:both;" />
-
-                        <div id="calculatorB3_chart_table_report_div"> </div>
-
-                        <p>The recommended detection thresholds are: <i>1/700</i> during the high season, <i>1/200</i> during the low season, and <i>1/4</i> during the off season / summer.</p>
-
-                        <p><i>REMINDER</i>: These calculations assume samples are representative of age, gender, severity, inpatient, outpatient, and geographic distribution of affected populations. Biases in these categories may alter results.</p>
-                    </div> <!-- end tabs-3 -->
-
                     <div id="calculatorB_tabs-4">
                         <!-- input: Flu+ number of samples -->
                         <div class="calculatorInputArea">
@@ -318,18 +229,6 @@
                             <input id="calculatorB4_input_flu_sample_size" type="number" class="calculatorNumberInput" />
                         </div>
 
-                        <!-- input: MA-ILI+ number of samples -->
-                        <div class="calculatorInputArea">
-                            <label for="calculatorB4_input_maili_sample_size" class="calculatorLabel calculatorTooltip tooltipTypeBMAILISampleSize">MA-ILI Sample Size</label>
-                            <input id="calculatorB4_input_maili_sample_size" type="number" class="calculatorNumberInput" />
-                        </div>
-
-                        <!-- input: assumed prevalence p -->
-                        <div class="calculatorInputArea">
-                            <label for="calculatorB4_input_p" class="calculatorLabel calculatorTooltip tooltipTypeBExpectedFluMAILI">Expected prevalence of Flu+/MA-ILI</label>
-                            <div id="calculatorB4_input_p_slider" class="calculatorSlider"></div>
-                            <input type="text" id="calculatorB4_input_p" class="calculatorSliderInput" />
-                        </div>
 
                         <br style="clear:both;" />
                         <br style="clear:both;" />
