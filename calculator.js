@@ -238,13 +238,12 @@ function onLoad()
             showCalculatorPopup('C');
         }
 
-        calculatorTypeARefresh(); calculatorTypeBRefresh(); calculatorTypeCRefresh(); calculatorTypeDRefresh();
+        calculatorTypeARefresh(); calculatorTypeBRefresh(); calculatorTypeDRefresh();
     } });
 
     // create individual calculator tabs; trigger a refresh on activation so charts are correctly sized
     $("#calculatorA_tabs").tabs({ activate: function(event, ui) { calculatorTypeAActiveTabIndex = ui.newTab.index(); calculatorTypeARefresh(); } });
     $("#calculatorB_tabs").tabs({ activate: function(event, ui) { calculatorTypeBActiveTabIndex = ui.newTab.index(); calculatorTypeBRefresh(); } });
-    $("#calculatorC_tabs").tabs({ activate: function(event, ui) { calculatorTypeCActiveTabIndex = ui.newTab.index(); calculatorTypeCRefresh(); } });
     $("#calculatorD_tabs").tabs({ activate: function(event, ui) { calculatorTypeDActiveTabIndex = ui.newTab.index(); calculatorTypeDRefresh(); } });
 
     // global tooltips
@@ -280,9 +279,6 @@ function onLoad()
 
     calculatorTypeBInitialize();
     calculatorTypeBRefresh();
-
-    calculatorTypeCInitialize();
-    calculatorTypeCRefresh();
 
     calculatorTypeDInitialize();
     calculatorTypeDRefresh();
