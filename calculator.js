@@ -224,11 +224,17 @@ function onLoad()
 {
     // create accordion
     $("#calculator_accordion").accordion({ heightStyle: "content", activate: function(event, ui) {
-
+        calculatorTypeCRefresh(); 
         calculatorTypeDRefresh();
     } });
 
     // create individual calculator tabs; trigger a refresh on activation so charts are correctly sized
+    $("#calculatorC_tabs").tabs({ activate: function(event, ui) { calculatorTypeCActiveTabIndex = ui.newTab.index(); calculatorTypeCRefresh(); } });
+
+    // Somehow, this is the only way I could get the tab of Calc C to display properly
+    $("#calculatorC_tabs").tabs('option', 'active', 1);
+    $("#calculatorC_tabs").tabs('option', 'active', 0);
+
     $("#calculatorD_tabs").tabs({ activate: function(event, ui) { calculatorTypeDActiveTabIndex = ui.newTab.index(); calculatorTypeDRefresh(); } });
 
     // global tooltips
@@ -251,6 +257,11 @@ function onLoad()
     $("#calculators_input_MAILI").val($("#calculators_input_MAILI_slider").slider("value") + "%");
 
     // initialize and refresh individual calculators
+    //
+    //
+    calculatorTypeCInitialize();
+    calculatorTypeCRefresh();
+
     calculatorTypeDInitialize();
     calculatorTypeDRefresh();
 
@@ -262,8 +273,8 @@ function onLoad()
     {
         var hashInt = parseInt(window.location.hash.replace('#', ''));
 
-        // right now we only have four calculators...
-        if(hashInt >= 0 && hashInt < 4)
+        // right now we only have two calculators...
+        if(hashInt >= 0 && hashInt < 2)
         {
             $("#calculator_accordion").accordion('option', 'active', hashInt);
         }
